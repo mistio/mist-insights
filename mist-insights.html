@@ -1,0 +1,34 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`mist-insights`
+
+
+@demo demo/index.html
+-->
+
+<dom-module id="mist-insights">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]!</h2>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'mist-insights',
+
+      properties: {
+        prop1: {
+          type: String,
+          value: 'mist-insights',
+        },
+      },
+
+    });
+  </script>
+</dom-module>
