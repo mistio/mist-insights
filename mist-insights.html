@@ -68,7 +68,7 @@
                     </paper-dropdown-menu>
                     <paper-dropdown-menu id="filterbyNameDd" class="uppercase" no-label-float>
                         <paper-menu id="filterbyName" class="dropdown-content" attr-for-selected="value" selected="{{filterby.id}}">
-                            <template is="dom-repeat" items="{{filterbyItems}}">
+                            <template is="dom-repeat" items="{{clouds}}">
                                 <paper-item value="[[item.id]]" data-name$="[[item.name]][[item.title]]">[[item.name]][[item.title]]</paper-item>
                             </template>
                             <paper-item disabled hidden$="{{!filterbyDisable}}">
@@ -82,7 +82,17 @@
             </div>
         </paper-material>
 
-        <h2>[[clouds]]!</h2>
+        <!-- <h2>[[clouds]]!</h2> -->
+
+        <h2>Cost per month</h2>
+        <div id="costgraph" style="width:100%; min-height:300px;"></div>
+
+        <h2>Load</h2>
+        <div id="loadgraph" style="width:100%; min-height:300px;"></div>
+
+        <h2>Machines Count</h2>
+        <div id="machinesgraph" style="width:100%; min-height:300px;"></div>
+
 
 
         <iron-ajax id="cloudsAjax"
@@ -91,7 +101,7 @@
             headers$='{"Authorization": "[[token]]"}'
             handle-as="json"
             loading={{loading}}
-            on-response="handleResponse"
+            on-response="handleResponseClouds"
             on-error="handleError"></iron-ajax>
 
         <iron-ajax id="reportAjax"
@@ -100,7 +110,7 @@
             headers$='{"Authorization": "[[token]]"}'
             handle-as="json"
             loading="{{loadingData}}"
-            on-response="handleResponse"
+            on-response="handleResponseReport"
             on-error="handleError"
             params=[[params]]></iron-ajax>
 
@@ -148,13 +158,180 @@
             },
             filterby: {
                 type: Object,
-                value: {
-                    type: '',
-                    name: '',
-                    id: ''
+                value: function () {
+                    return {
+                        type: '',
+                        name: '',
+                        id: ''
+                    };
                 }
             },
+            clouds: Array,
+            stacks: Array,
+            report: Object,
+            reportLoad: Object,
+            costgraph: Object,
+            costgraphOptions: {
+                    type: Object,
+                    value: function () {
+                        return {
+                            tooltip : {
+                                trigger: 'axis',
+                                formatter: "{b}: <br/>${c}",
+                                axisPointer: {
+                                    type: 'cross',
+                                    label: {
+                                        backgroundColor: '#6a7985'
+                                    }
+                                }
+                            },
+                            legend: {
+                                data:['Cost per month']
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                containLabel: true
+                            },
+                            xAxis : [
+                                {
+                                    type : 'category',
+                                    boundaryGap : false,
+                                    data : []
+                                }
+                            ],
+                            yAxis : [
+                                {
+                                    type : 'value'
+                                }
+                            ],
+                            series : [
+                                {
+                                    name:'Cost',
+                                    type:'line',
+                                    stack: 'f',
+                                    areaStyle: {normal: {color: "rgba(0,155,155,0.2)"}},
+                                    lineStyle: {normal: {color: "rgba(0,155,155,1)"}},
+                                    itemStyle: {normal: {borderColor: "rgba(0,155,155,1)"}},
+                                    data:[]
+                                }
+                            ]
+                        }
+                    }
+                },
+            loadgraph: Object,
+            loadgraphOptions: {
+                    type: Object,
+                    value: function () {
+                        return {
+                            tooltip : {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'cross',
+                                    label: {
+                                        backgroundColor: '#6a7985'
+                                    }
+                                }
+                            },
+                            legend: {
+                                data:[{
+                                    name:'Load',
+                                    textStyle: "rgba(0,155,155,1)",
+                                },{
+                                    name:'Cores',
+                                    textStyle: "rgba(250,128,114,1)",
+                                }]
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                containLabel: true
+                            },
+                            xAxis : [
+                                {
+                                    type : 'category',
+                                    boundaryGap : false,
+                                    data : ['1','2','3','4']
+                                }
+                            ],
+                            yAxis : [
+                                {
+                                    type : 'value'
+                                }
+                            ],
+                            series : [
+                                {
+                                    name:'Cores',
+                                    type:'line',
+                                    stack: 'f',
+                                    areaStyle: {normal: {color: "rgba(0,155,155,0.2)"}},
+                                    lineStyle: {normal: {color: "rgba(0,155,155,1)"}},
+                                    itemStyle: {normal: {borderColor: "rgba(0,155,155,1)"}},
+                                    data:[120, 132, 101, 134]
+                                },
+                                {
+                                    name:'Load',
+                                    type:'line',
+                                    stack: 'g',
+                                    areaStyle: {normal: {color: "rgba(250,128,114,0.2)"}},
+                                    lineStyle: {normal: {color: "rgba(250,128,114,1)"}},
+                                    itemStyle: {normal: {borderColor: "rgba(250,128,114,1)"}},
+                                    data:[120, 132, 101, 134]
+                                }
+                            ]
+                        }
+                    }
+                },
+            machinesgraph: Object,
+            machinesgraphOptions: {
+                type: Object,
+                value: {
+                    color: ["rgba(0,155,155,0.2)"],
+                    borderColor: ["rgba(0,155,155,1)"],
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {
+                            type : 'shadow'
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['Mon'],
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'machines',
+                            type:'bar',
+                            barWidth: '60%',
+                            data:[10]
+                        }
+                    ]
+                }
+            }
         },
+
+        observers: [
+            'updateData(report.history)',
+            'updateLoadData(reportLoad.history)',
+        ],
 
         attached: function () {
             if (typeof echarts == 'undefined')
@@ -167,10 +344,12 @@
             if (!this.token)
                 this.uri = '';
             this.$.cloudsAjax.generateRequest();
+            this.$.reportAjax.generateRequest();
+            this.$.loadReportAjax.generateRequest();
         },
 
         initCharts: function() {
-            var colorPalette = ['#607D8B', '#d96557', '#3F51B5', '#009688', '#795548', '#8c76d1', '#795548','#0277BD', '#0099cc', '#424242', '#D48900', '#43A047', '#2F2F3E'];
+            var colorPalette = ['#607D8B', '#d96557', '#3F51B5', '#009688', '#795548', '#8c76d1', '#795548', '#0277BD', '#0099cc', '#424242', '#D48900', '#43A047', '#2F2F3E'];
             echarts.registerTheme('insights', {
                 color: colorPalette,
                 backgroundColor: 'transparent',
@@ -178,16 +357,87 @@
                     color: colorPalette
                 }
             });
-            /*this.costgraph = echarts.init(this.$.costgraph, 'insights');
+            this.costgraph = echarts.init(this.$.costgraph, 'insights');
+            this.machinesgraph = echarts.init(this.$.machinesgraph, 'insights');
             this.loadgraph = echarts.init(this.$.loadgraph, 'insights');
-            this.drillcostgraph = echarts.init(this.$.drillcostgraph);
-            this.machinesgraph = echarts.init(this.$.machinesgraph);
+            /*this.drillcostgraph = echarts.init(this.$.drillcostgraph);
             this.updateChartWidth(e);*/
             console.log('initialized charts');
         },
 
+        updateData: function (history) {
+            var costData = [],
+                machinesData = [],
+                labels = [];
+            if (history){
+                labels = history.map(function(datapoint){
+                    if (['day', 'hour'].indexOf(this.timeParams.window) != -1)
+                        return moment(datapoint.date).format('HH:mm').toString();
+                    else 
+                        return moment(datapoint.date).format('YYYY-MM-DD').toString();
+                }, this);
+                costData = history.map(function(datapoint){
+                    return datapoint.cost_per_month;
+                });
+                machinesData = history.map(function(datapoint){
+                    return datapoint.machine_count;
+                });
+            }
+
+            this.set('costgraphOptions.xAxis.0.data', labels);
+            this.set('costgraphOptions.series.0.data', costData);
+            if (this.costgraph)
+                this.costgraph.setOption(this.costgraphOptions);
+
+            this.set('machinesgraphOptions.xAxis.0.data', labels);
+            this.set('machinesgraphOptions.series.0.data', machinesData);
+            if (this.machinesgraph)
+                this.machinesgraph.setOption(this.machinesgraphOptions);
+        },
+
+        updateLoadData: function (history) {
+            var loadData = [],
+                coresData = [],
+                labels = [];
+            if (history){
+                labels = history.map(function(datapoint){
+                    if (['day', 'hour'].indexOf(this.timeParams.window) != -1)
+                        return moment(datapoint.date).format('HH:mm').toString();
+                    else 
+                        return moment(datapoint.date).format('YYYY-MM-DD').toString();
+                }, this);
+                loadData = history.map(function(datapoint){
+                    return datapoint.load;
+                });
+                coresData = history.map(function(datapoint){
+                    return datapoint.cores;
+                });
+            }
+
+            this.set('loadgraphOptions.xAxis.0.data', labels);
+            this.set('loadgraphOptions.series.0.data', coresData);
+            this.set('loadgraphOptions.series.1.data', loadData);
+            if (this.loadgraph)
+                this.loadgraph.setOption(this.loadgraphOptions);
+        },
+
         handleResponse: function (e) {
             console.log('handleResponse', e);
+        },
+
+        handleResponseClouds: function(e){
+            console.log('handleResponseClouds', e);
+            this.set('clouds', e.detail.xhr.response);
+        },
+
+        handleResponseReport: function(e){
+            console.log('handleResponseReport', e);
+            this.set('report', e.detail.xhr.response);
+        },
+
+        handleResponseLoad: function(e){
+            console.log('handleResponseLoad', e);
+            this.set('reportLoad', e.detail.xhr.response);
         },
 
         handleError: function (e) {
