@@ -7,9 +7,9 @@
     "bower.json"
   ],
   "extraDependencies": [
+    "echarts-import.html",
     "bower_components/echarts/dist/echarts.min.js"
   ],
-
   "builds": [{
     "name": "bundled",
     "bundle": true,
