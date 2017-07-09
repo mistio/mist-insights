@@ -12,7 +12,8 @@
     "paper-material": "^2.0.0",
     "paper-button": "^2.0.0",
     "paper-listbox": "^2.0.0",
-    "iron-media-query": "^2.0.0"
+    "iron-media-query": "^2.0.0",
+    "iron-icons": "^2.0.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
