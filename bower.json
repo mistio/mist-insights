@@ -12,8 +12,8 @@
     "paper-material": "^2.0.0",
     "paper-button": "^2.0.0",
     "paper-listbox": "^2.0.0",
-    "iron-media-query": "^2.0.0",
-    "iron-icons": "^2.0.1"
+    "iron-icons": "^2.0.1",
+    "iron-media-query": "PolymerElements/iron-media-query#^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
@@ -25,8 +25,7 @@
   "variants": {
     "1.x": {
       "dependencies": {
-        "polymer": "Polymer/polymer#^1.9",
-        "iron-media-query": "PolymerElements/iron-media-query#^1.0.8"
+        "polymer": "Polymer/polymer#^1.9"
       },
       "devDependencies": {
         "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
