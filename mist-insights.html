@@ -4,10 +4,12 @@
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
 <link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../paper-spinner/paper-spinner.html">
+<link rel="import" href="../paper-styles/paper-styles.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
-<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 
 <script src="../moment/moment.js"></script>
@@ -20,9 +22,10 @@
 
 <dom-module id="mist-insights">
     <template>
-        <style>
+        <style include="default-theme">
              :host {
                 display: block;
+                font-size: 16px;
             }
 
             #graphRow[largescreen] {
@@ -40,34 +43,34 @@
             <div class="container flex-horizontal">
                 <div class="flexchild">
                     <div class="smaller">Time</div>
-                    <paper-dropdown-menu class="uppercase" no-label-float>
-                        <paper-menu id="window" class="dropdown-content" attr-for-selected="value" selected="{{timeParams.window}}">
+                    <paper-dropdown-menu no-label-float>
+                        <paper-listbox id="window" slot="dropdown-content" class="uppercase" attr-for-selected="value" selected="{{timeParams.window}}">
                             <paper-item value="hour">hourly</paper-item>
                             <paper-item value="day">daily</paper-item>
                             <paper-item value="week">weekly</paper-item>
                             <paper-item value="month">monthly</paper-item>
                             <paper-item value="quarter">quarterly</paper-item>
-                        </paper-menu>
+                        </paper-listbox>
                     </paper-dropdown-menu>
-                    <paper-dropdown-menu class="uppercase" no-label-float>
-                        <paper-menu id="past" class="dropdown-content" attr-for-selected="value" selected="{{timeParams.past}}">
+                    <paper-dropdown-menu no-label-float>
+                        <paper-listbox id="past" slot="dropdown-content" class="uppercase" attr-for-selected="value" selected="{{timeParams.past}}">
                             <template is="dom-repeat" items="{{pastItems}}" as="past">
                                 <paper-item value="[[past.value]]">[[past.text]]</paper-item>
                             </template>
-                        </paper-menu>
+                        </paper-listbox>
                     </paper-dropdown-menu>
                 </div>
                 <div class="flexchild">
                     <div class="smaller">Filter by</div>
-                    <paper-dropdown-menu class="uppercase" no-label-float>
-                        <paper-menu id="filterbyType" class="dropdown-content" attr-for-selected="value" selected="{{filterby.type}}">
+                    <paper-dropdown-menu class="uppercase" class="uppercase" no-label-float>
+                        <paper-listbox id="filterbyType" slot="dropdown-content" attr-for-selected="value" selected="{{filterby.type}}">
                             <paper-item value="stack">Stack</paper-item>
                             <paper-item value="cloud">Cloud</paper-item>
                             <paper-item value="tag">Tag</paper-item>
-                        </paper-menu>
+                        </paper-listbox>
                     </paper-dropdown-menu>
                     <paper-dropdown-menu id="filterbyNameDd" class="uppercase" no-label-float>
-                        <paper-menu id="filterbyName" class="dropdown-content" attr-for-selected="value" selected="{{filterby.id}}">
+                        <paper-listbox id="filterbyName" slot="dropdown-content" attr-for-selected="value" selected="{{filterby.id}}">
                             <template is="dom-repeat" items="{{filterbyItems}}">
                                 <paper-item value="[[item.id]]" data-name$="[[item.name]][[item.title]]">[[item.name]][[item.title]]</paper-item>
                             </template>
@@ -75,14 +78,24 @@
                                 <span hidden$="{{!filterby.type}}">no {{filterby.type}}s</span>
                                 <span hidden$="{{filterby.type.length}}">Select type</span>
                             </paper-item>
-                        </paper-menu>
+                        </paper-listbox>
                     </paper-dropdown-menu>
                     <paper-button class="inline baseline smaller" on-tap="clearFilter" disabled$="{{!filterby.id.length}}">clear</paper-button>
                 </div>
             </div>
         </paper-material>
 
-        <h2>[[clouds]]!</h2>
+        <!-- <h2>[[clouds]]!</h2> -->
+
+        <h2>Cost per month</h2>
+        <div id="costgraph" style="width:100%; min-height:300px;"></div>
+
+        <h2>Load</h2>
+        <div id="loadgraph" style="width:100%; min-height:300px;"></div>
+
+        <h2>Machines Count</h2>
+        <div id="machinesgraph" style="width:100%; min-height:300px;"></div>
+
 
 
         <iron-ajax id="cloudsAjax"
@@ -91,7 +104,7 @@
             headers$='{"Authorization": "[[token]]"}'
             handle-as="json"
             loading={{loading}}
-            on-response="handleResponse"
+            on-response="handleResponseClouds"
             on-error="handleError"></iron-ajax>
 
         <iron-ajax id="reportAjax"
@@ -100,7 +113,7 @@
             headers$='{"Authorization": "[[token]]"}'
             handle-as="json"
             loading="{{loadingData}}"
-            on-response="handleResponse"
+            on-response="handleResponseReport"
             on-error="handleError"
             params=[[params]]></iron-ajax>
 
@@ -141,20 +154,191 @@
             },
             timeParams: {
                 type: Object,
-                value: {
-                    window: "day",
-                    past: "0"
+                value: function () {
+                    return {
+                        window: "day",
+                        past: "0"
+                    }
                 }
             },
             filterby: {
                 type: Object,
-                value: {
-                    type: '',
-                    name: '',
-                    id: ''
+                value: function () {
+                    return {
+                        type: '',
+                        name: '',
+                        id: ''
+                    };
                 }
             },
+            clouds: Array,
+            stacks: Array,
+            report: Object,
+            reportLoad: Object,
+            costgraph: Object,
+            costgraphOptions: {
+                    type: Object,
+                    value: function () {
+                        return {
+                            tooltip : {
+                                trigger: 'axis',
+                                formatter: "{b}: <br/>${c}",
+                                axisPointer: {
+                                    type: 'cross',
+                                    label: {
+                                        backgroundColor: '#6a7985'
+                                    }
+                                }
+                            },
+                            legend: {
+                                data:['Cost per month']
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                containLabel: true
+                            },
+                            xAxis : [
+                                {
+                                    type : 'category',
+                                    boundaryGap : false,
+                                    data : []
+                                }
+                            ],
+                            yAxis : [
+                                {
+                                    type : 'value'
+                                }
+                            ],
+                            series : [
+                                {
+                                    name:'Cost',
+                                    type:'line',
+                                    stack: 'f',
+                                    areaStyle: {normal: {color: "rgba(0,155,155,0.2)"}},
+                                    lineStyle: {normal: {color: "rgba(0,155,155,1)"}},
+                                    itemStyle: {normal: {borderColor: "rgba(0,155,155,1)"}},
+                                    data:[]
+                                }
+                            ]
+                        }
+                    }
+                },
+            loadgraph: Object,
+            loadgraphOptions: {
+                    type: Object,
+                    value: function () {
+                        return {
+                            tooltip : {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'cross',
+                                    label: {
+                                        backgroundColor: '#6a7985'
+                                    }
+                                }
+                            },
+                            legend: {
+                                data:[{
+                                    name:'Load',
+                                    textStyle: "rgba(0,155,155,1)",
+                                },{
+                                    name:'Cores',
+                                    textStyle: "rgba(250,128,114,1)",
+                                }]
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                containLabel: true
+                            },
+                            xAxis : [
+                                {
+                                    type : 'category',
+                                    boundaryGap : false,
+                                    data : ['1','2','3','4']
+                                }
+                            ],
+                            yAxis : [
+                                {
+                                    type : 'value'
+                                }
+                            ],
+                            series : [
+                                {
+                                    name:'Cores',
+                                    type:'line',
+                                    stack: 'f',
+                                    areaStyle: {normal: {color: "rgba(0,155,155,0.2)"}},
+                                    lineStyle: {normal: {color: "rgba(0,155,155,1)"}},
+                                    itemStyle: {normal: {borderColor: "rgba(0,155,155,1)"}},
+                                    data:[120, 132, 101, 134]
+                                },
+                                {
+                                    name:'Load',
+                                    type:'line',
+                                    stack: 'g',
+                                    areaStyle: {normal: {color: "rgba(250,128,114,0.2)"}},
+                                    lineStyle: {normal: {color: "rgba(250,128,114,1)"}},
+                                    itemStyle: {normal: {borderColor: "rgba(250,128,114,1)"}},
+                                    data:[120, 132, 101, 134]
+                                }
+                            ]
+                        }
+                    }
+                },
+            machinesgraph: Object,
+            machinesgraphOptions: {
+                type: Object,
+                value: {
+                    color: ["rgba(0,155,155,0.2)"],
+                    borderColor: ["rgba(0,155,155,1)"],
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {
+                            type : 'shadow'
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['Mon'],
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'machines',
+                            type:'bar',
+                            barWidth: '60%',
+                            data:[10]
+                        }
+                    ]
+                }
+            }
         },
+
+        observers: [
+            'computePastItems(timeParams.*)',
+            'updateData(report.history)',
+            'updateLoadData(reportLoad.history)',
+            'computeFilterbyItems(filterby.*)'
+        ],
 
         attached: function () {
             if (typeof echarts == 'undefined')
@@ -167,10 +351,12 @@
             if (!this.token)
                 this.uri = '';
             this.$.cloudsAjax.generateRequest();
+            this.$.reportAjax.generateRequest();
+            this.$.loadReportAjax.generateRequest();
         },
 
         initCharts: function() {
-            var colorPalette = ['#607D8B', '#d96557', '#3F51B5', '#009688', '#795548', '#8c76d1', '#795548','#0277BD', '#0099cc', '#424242', '#D48900', '#43A047', '#2F2F3E'];
+            var colorPalette = ['#607D8B', '#d96557', '#3F51B5', '#009688', '#795548', '#8c76d1', '#795548', '#0277BD', '#0099cc', '#424242', '#D48900', '#43A047', '#2F2F3E'];
             echarts.registerTheme('insights', {
                 color: colorPalette,
                 backgroundColor: 'transparent',
@@ -178,16 +364,232 @@
                     color: colorPalette
                 }
             });
-            /*this.costgraph = echarts.init(this.$.costgraph, 'insights');
+            this.costgraph = echarts.init(this.$.costgraph, 'insights');
+            this.machinesgraph = echarts.init(this.$.machinesgraph, 'insights');
             this.loadgraph = echarts.init(this.$.loadgraph, 'insights');
-            this.drillcostgraph = echarts.init(this.$.drillcostgraph);
-            this.machinesgraph = echarts.init(this.$.machinesgraph);
+            /*this.drillcostgraph = echarts.init(this.$.drillcostgraph);
             this.updateChartWidth(e);*/
             console.log('initialized charts');
         },
 
+        updateData: function (history) {
+            var costData = [],
+                machinesData = [],
+                labels = [];
+            if (history){
+                labels = history.map(function(datapoint){
+                    if (['day', 'hour'].indexOf(this.timeParams.window) != -1)
+                        return moment(datapoint.date).format('HH:mm').toString();
+                    else 
+                        return moment(datapoint.date).format('YYYY-MM-DD').toString();
+                }, this);
+                costData = history.map(function(datapoint){
+                    return datapoint.cost_per_month;
+                });
+                machinesData = history.map(function(datapoint){
+                    return datapoint.machine_count;
+                });
+            }
+
+            this.set('costgraphOptions.xAxis.0.data', labels);
+            this.set('costgraphOptions.series.0.data', costData);
+            if (this.costgraph)
+                this.costgraph.setOption(this.costgraphOptions);
+
+            this.set('machinesgraphOptions.xAxis.0.data', labels);
+            this.set('machinesgraphOptions.series.0.data', machinesData);
+            if (this.machinesgraph)
+                this.machinesgraph.setOption(this.machinesgraphOptions);
+        },
+
+        updateLoadData: function (history) {
+            var loadData = [],
+                coresData = [],
+                labels = [];
+            if (history){
+                labels = history.map(function(datapoint){
+                    if (['day', 'hour'].indexOf(this.timeParams.window) != -1)
+                        return moment(datapoint.date).format('HH:mm').toString();
+                    else 
+                        return moment(datapoint.date).format('YYYY-MM-DD').toString();
+                }, this);
+                loadData = history.map(function(datapoint){
+                    return datapoint.load;
+                });
+                coresData = history.map(function(datapoint){
+                    return datapoint.cores;
+                });
+            }
+
+            this.set('loadgraphOptions.xAxis.0.data', labels);
+            this.set('loadgraphOptions.series.0.data', coresData);
+            this.set('loadgraphOptions.series.1.data', loadData);
+            if (this.loadgraph)
+                this.loadgraph.setOption(this.loadgraphOptions);
+        },
+
+        computePastItems: function (timeParamsChangeRecord) {
+            // console.log("loadingData", this.loadingData);
+            var items = [];
+            if (this.timeParams.window == "hour") {
+                items.push({value: 0, text: "this hour"});
+                items.push({value: 1, text: "last hour"});
+                for (var i=2; i<11; i++) {
+                    items.push({value: i, text: i + " hours ago"});
+                }
+            }
+            else if (this.timeParams.window == "day") {
+                items.push({value: 0, text: "today"});
+                items.push({value: 1, text: "yesterday"});
+                for (var i=2; i<11; i++) {
+                    items.push({value: i, text: i + " days ago"});
+                }
+            }
+            else if (this.timeParams.window == "week") {
+                items = [{
+                    value: '0',
+                    text: 'this week'
+                },{
+                    value: '1',
+                    text: 'last week'
+                },{
+                    value: '2',
+                    text: 'two weeks ago'
+                },{
+                    value: '3',
+                    text: 'three weeks ago'
+                }]
+            }
+            else if (this.timeParams.window == "month") {
+                for (var i=0; i<12; i++){
+                    var t = '';
+                    if (i==0)
+                        t = 'this month';
+                    else if (i==1)
+                        t = 'last month';
+                    else
+                        t = i+' months ago';
+
+                    items.push({
+                        value: i,
+                        text: t
+                    })
+                }
+            }
+            else if (this.timeParams.window == "quarter") {
+                items = [{
+                    value: '0',
+                    text: 'current quarter'
+                },{
+                    value: '1',
+                    text: 'previous quarter'
+                },{
+                    value: '2',
+                    text: '2 quarters ago'
+                },{
+                    value: '3',
+                    text: '3 quarters ago'
+                }]
+            }
+
+            this.set('pastItems',items);
+
+            // if window changed reset selected past
+            if (timeParamsChangeRecord.path == 'timeParams.window'){
+                this.set('timeParams.past', '0');
+                this.async(function(){
+                    this.$.past.selected = -1;
+                    this.$.past.selected = 0;
+                }, 100, this)
+            }
+        },
+
+        computeFilterbyItems: function(filterby){
+            // var items = [], clouds = [], stacks = [], tokentags = [];
+            // if (this.token && this.report && this.report.history){
+            //     clouds = this.report.history.group_by.cloud.map(function(c){
+            //         return {name: c.name, id: c.id};
+            //     });
+            //     stacks = this.report.history.group_by.stack.map(function(c){
+            //         return {name: c.name, id: c.id};
+            //     });
+            //     tokentags = this.report.history.group_by.tag.map(function(c){
+            //         return {name: c.name, id: c.name};
+            //     });
+            // }
+            // if (this.filterby.type == 'stack')
+            //     items = this.model.stacksArray || stacks;
+            // else if (this.filterby.type == 'cloud')
+            //     items = this.model.cloudsArray || clouds;
+            // else if (this.filterby.type == 'tag'){
+            //     var tags = [];
+            //     if (!token) {
+            //         tags = this.model.machinesArray.filter(function(m){
+            //                 return m.tags.length > 0
+            //             }).map(function(m){
+            //                 for (var i=0; i < m.tags.length; i++){
+            //                     var postfix = '';
+            //                     if (m.tags[i].value != ''){
+            //                         postfix = '='+m.tags[i].value;
+            //                     }
+            //                     return {
+            //                         'name': m.tags[i].key+postfix,
+            //                         'id': m.tags[i].key+postfix,
+            //                         'val': m.tags[i].val
+            //                     };
+            //                 }
+            //             });
+            //         var names = tags.map(function(t){
+            //             return t.name;
+            //         })
+            //     }
+            //     items = tags.filter(function(t, ind){
+            //         return names.indexOf(t.name) == ind;
+            //     }) || tokentags;
+            // }
+            // else
+            //     items = [];
+
+            // if (!items.length){
+            //     this.set('filterbyDisable', true);
+            // }
+            // else {
+            //     this.set('filterbyDisable', false);
+            // }
+
+            // this.set('filterbyItems',items);
+
+            // // if filterby changed reset selected item
+            // if (filterby.path == 'filterby.type'){
+            //     this.set('filterby.name', '');
+            //     this.async(function(){
+            //         this.$.filterbyName.selected = '';
+            //     }, 100, this)
+            // }
+            // // if filterby id changed update name
+            // if (filterby.path == 'filterby.id'){
+            //     this.set('filterby.name', this.computeName(filterby.value));
+            // }
+
+        },
+
         handleResponse: function (e) {
             console.log('handleResponse', e);
+        },
+
+        handleResponseClouds: function(e){
+            console.log('handleResponseClouds', e);
+            this.set('clouds', e.detail.xhr.response);
+        },
+
+        handleResponseReport: function(e){
+            console.log('handleResponseReport', e);
+            this.set('report', e.detail.xhr.response);
+        },
+
+        handleResponseLoad: function(e){
+            console.log('handleResponseLoad', e);
+            this.set('reportLoad', e.detail.xhr.response);
         },
 
         handleError: function (e) {
