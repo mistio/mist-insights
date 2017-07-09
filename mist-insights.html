@@ -35,6 +35,11 @@
             #graphRow[largescreen] .block+.block {
                 padding-left: 48px;
             }
+
+            .graph {
+                width:100%;
+                min-height:300px;
+            }
         </style>
 
         <iron-media-query query="(min-width: 1180px)" query-matches="{{largescreen}}"></iron-media-query>
@@ -88,24 +93,24 @@
         <!-- <h2>[[clouds]]!</h2> -->
 
         <h2>Cost per month</h2>
-        <div id="costgraph" style="width:100%; min-height:300px;"></div>
+        <div id="costGraph" class="graph"></div>
 
         <h2>Load</h2>
-        <div id="loadgraph" style="width:100%; min-height:300px;"></div>
+        <div id="usageGraph" class="graph"></div>
 
         <h2>Machines Count</h2>
-        <div id="machinesgraph" style="width:100%; min-height:300px;"></div>
+        <div id="machinesGraph" class="graph"></div>
 
 
 
         <iron-ajax id="cloudsAjax" method="GET" url$="[[uri]]/api/v1/clouds" headers$='{"Authorization": "[[token]]"}' handle-as="json"
             loading={{loading}} on-response="handleResponseClouds" on-error="handleError"></iron-ajax>
 
-        <iron-ajax id="reportAjax" method="GET" url$="[[uri]]/api/v1/report" headers$='{"Authorization": "[[token]]"}' handle-as="json"
-            loading="{{loadingData}}" on-response="handleResponseReport" on-error="handleError" params=[[params]]></iron-ajax>
+        <iron-ajax id="costReportAjax" method="GET" url$="[[uri]]/api/v1/report" headers$='{"Authorization": "[[token]]"}' handle-as="json"
+            loading="{{loadingDataCost}}" on-response="handleResponseCostReport" on-error="handleError" params=[[params]]></iron-ajax>
 
-        <iron-ajax id="loadReportAjax" method="GET" url="[[uri]]/api/v1/report?type=load" headers$='{"Authorization": "[[token]]"}'
-            handle-as="json" loading="{{loadingDataLoad}}" on-response="handleResponseLoad" on-error="handleError" params=[[params]]></iron-ajax>
+        <iron-ajax id="usageReportAjax" method="GET" url="[[uri]]/api/v1/report?type=load" headers$='{"Authorization": "[[token]]"}'
+            handle-as="json" loading="{{loadingDataUsage}}" on-response="handleResponseUsageReport" on-error="handleError" params=[[params]]></iron-ajax>
 
     </template>
 
@@ -153,10 +158,10 @@
             },
             clouds: Array,
             stacks: Array,
-            report: Object,
-            reportLoad: Object,
-            costgraph: Object,
-            costgraphOptions: {
+            costReport: Object,
+            usageReport: Object,
+            costGraph: Object,
+            costGraphOptions: {
                 type: Object,
                 value: function () {
                     return {
@@ -211,8 +216,8 @@
                     }
                 }
             },
-            loadgraph: Object,
-            loadgraphOptions: {
+            usageGraph: Object,
+            usageGraphOptions: {
                 type: Object,
                 value: function () {
                     return {
@@ -294,8 +299,8 @@
                     }
                 }
             },
-            machinesgraph: Object,
-            machinesgraphOptions: {
+            machinesGraph: Object,
+            machinesGraphOptions: {
                 type: Object,
                 value: {
                     color: ["rgba(0,155,155,0.2)"],
@@ -334,8 +339,8 @@
 
         observers: [
             'computePastItems(timeParams.*)',
-            'updateData(report.history)',
-            'updateLoadData(reportLoad.history)',
+            'updateCostData(costReport.history)',
+            'updateUsageData(usageReport.history)',
             'computeFilterbyItems(filterby.*)'
         ],
 
@@ -349,9 +354,8 @@
 
             if (!this.token)
                 this.uri = '';
-            this.$.cloudsAjax.generateRequest();
-            this.$.reportAjax.generateRequest();
-            this.$.loadReportAjax.generateRequest();
+            //this.$.cloudsAjax.generateRequest();
+            this.$.costReportAjax.generateRequest();
         },
 
         initCharts: function () {
@@ -363,15 +367,15 @@
                     color: colorPalette
                 }
             });
-            this.costgraph = echarts.init(this.$.costgraph, 'insights');
-            this.machinesgraph = echarts.init(this.$.machinesgraph, 'insights');
-            this.loadgraph = echarts.init(this.$.loadgraph, 'insights');
+            this.costGraph = echarts.init(this.$.costGraph, 'insights');
+            this.machinesGraph = echarts.init(this.$.machinesGraph, 'insights');
+            this.usageGraph = echarts.init(this.$.usageGraph, 'insights');
             /*this.drillcostgraph = echarts.init(this.$.drillcostgraph);
             this.updateChartWidth(e);*/
             console.log('initialized charts');
         },
 
-        updateData: function (history) {
+        updateCostData: function (history) {
             var costData = [],
                 machinesData = [],
                 labels = [];
@@ -390,19 +394,19 @@
                 });
             }
 
-            this.set('costgraphOptions.xAxis.0.data', labels);
-            this.set('costgraphOptions.series.0.data', costData);
-            if (this.costgraph)
-                this.costgraph.setOption(this.costgraphOptions);
+            this.set('costGraphOptions.xAxis.0.data', labels);
+            this.set('costGraphOptions.series.0.data', costData);
+            if (this.costGraph)
+                this.costGraph.setOption(this.costGraphOptions);
 
-            this.set('machinesgraphOptions.xAxis.0.data', labels);
-            this.set('machinesgraphOptions.series.0.data', machinesData);
-            if (this.machinesgraph)
-                this.machinesgraph.setOption(this.machinesgraphOptions);
+            this.set('machinesGraphOptions.xAxis.0.data', labels);
+            this.set('machinesGraphOptions.series.0.data', machinesData);
+            if (this.machinesGraph)
+                this.machinesGraph.setOption(this.machinesGraphOptions);
         },
 
-        updateLoadData: function (history) {
-            var loadData = [],
+        updateUsageData: function (history) {
+            var usageData = [],
                 coresData = [],
                 labels = [];
             if (history) {
@@ -412,7 +416,7 @@
                     else
                         return moment(datapoint.date).format('YYYY-MM-DD').toString();
                 }, this);
-                loadData = history.map(function (datapoint) {
+                usageData = history.map(function (datapoint) {
                     return datapoint.load;
                 });
                 coresData = history.map(function (datapoint) {
@@ -420,11 +424,12 @@
                 });
             }
 
-            this.set('loadgraphOptions.xAxis.0.data', labels);
-            this.set('loadgraphOptions.series.0.data', coresData);
-            this.set('loadgraphOptions.series.1.data', loadData);
-            if (this.loadgraph)
-                this.loadgraph.setOption(this.loadgraphOptions);
+            this.set('usageGraphOptions.xAxis.0.data', labels);
+            this.set('usageGraphOptions.series.0.data', coresData);
+            this.set('usageGraphOptions.series.1.data', usageData);
+            if (this.usageGraph)
+                this.usageGraph.setOption(this.usageGraphOptions);
+            console.log('updated usage data');
         },
 
         computePastItems: function (timeParamsChangeRecord) {
@@ -595,14 +600,15 @@
             this.set('clouds', e.detail.xhr.response);
         },
 
-        handleResponseReport: function (e) {
-            console.log('handleResponseReport', e);
-            this.set('report', e.detail.xhr.response);
+        handleResponseCostReport: function (e) {
+            console.log('handleResponseCostReport', e);
+            this.set('costReport', e.detail.xhr.response);
+            this.$.usageReportAjax.generateRequest();
         },
 
-        handleResponseLoad: function (e) {
-            console.log('handleResponseLoad', e);
-            this.set('reportLoad', e.detail.xhr.response);
+        handleResponseUsageReport: function (e) {
+            console.log('handleResponseUsageReport', e);
+            this.set('usageReport', e.detail.xhr.response);
         },
 
         handleError: function (e) {
