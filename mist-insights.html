@@ -98,34 +98,14 @@
 
 
 
-        <iron-ajax id="cloudsAjax"
-            method="GET"
-            url$="[[uri]]/api/v1/clouds"
-            headers$='{"Authorization": "[[token]]"}'
-            handle-as="json"
-            loading={{loading}}
-            on-response="handleResponseClouds"
-            on-error="handleError"></iron-ajax>
+        <iron-ajax id="cloudsAjax" method="GET" url$="[[uri]]/api/v1/clouds" headers$='{"Authorization": "[[token]]"}' handle-as="json"
+            loading={{loading}} on-response="handleResponseClouds" on-error="handleError"></iron-ajax>
 
-        <iron-ajax id="reportAjax"
-            method="GET"
-            url$="[[uri]]/api/v1/report"
-            headers$='{"Authorization": "[[token]]"}'
-            handle-as="json"
-            loading="{{loadingData}}"
-            on-response="handleResponseReport"
-            on-error="handleError"
-            params=[[params]]></iron-ajax>
+        <iron-ajax id="reportAjax" method="GET" url$="[[uri]]/api/v1/report" headers$='{"Authorization": "[[token]]"}' handle-as="json"
+            loading="{{loadingData}}" on-response="handleResponseReport" on-error="handleError" params=[[params]]></iron-ajax>
 
-        <iron-ajax id="loadReportAjax"
-            method="GET"
-            url="[[uri]]/api/v1/report?type=load"
-            headers$='{"Authorization": "[[token]]"}'
-            handle-as="json"
-            loading="{{loadingDataLoad}}"
-            on-response="handleResponseLoad"
-            on-error="handleError"
-            params=[[params]]></iron-ajax>
+        <iron-ajax id="loadReportAjax" method="GET" url="[[uri]]/api/v1/report?type=load" headers$='{"Authorization": "[[token]]"}'
+            handle-as="json" loading="{{loadingDataLoad}}" on-response="handleResponseLoad" on-error="handleError" params=[[params]]></iron-ajax>
 
     </template>
 
@@ -177,128 +157,153 @@
             reportLoad: Object,
             costgraph: Object,
             costgraphOptions: {
-                    type: Object,
-                    value: function () {
-                        return {
-                            tooltip : {
-                                trigger: 'axis',
-                                formatter: "{b}: <br/>${c}",
-                                axisPointer: {
-                                    type: 'cross',
-                                    label: {
-                                        backgroundColor: '#6a7985'
-                                    }
+                type: Object,
+                value: function () {
+                    return {
+                        tooltip: {
+                            trigger: 'axis',
+                            formatter: "{b}: <br/>${c}",
+                            axisPointer: {
+                                type: 'cross',
+                                label: {
+                                    backgroundColor: '#6a7985'
+                                }
+                            }
+                        },
+                        legend: {
+                            data: ['Cost per month']
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            boundaryGap: false,
+                            data: []
+                        }],
+                        yAxis: [{
+                            type: 'value'
+                        }],
+                        series: [{
+                            name: 'Cost',
+                            type: 'line',
+                            stack: 'f',
+                            areaStyle: {
+                                normal: {
+                                    color: "rgba(0,155,155,0.2)"
                                 }
                             },
-                            legend: {
-                                data:['Cost per month']
+                            lineStyle: {
+                                normal: {
+                                    color: "rgba(0,155,155,1)"
+                                }
                             },
-                            grid: {
-                                left: '3%',
-                                right: '4%',
-                                bottom: '3%',
-                                containLabel: true
+                            itemStyle: {
+                                normal: {
+                                    borderColor: "rgba(0,155,155,1)"
+                                }
                             },
-                            xAxis : [
-                                {
-                                    type : 'category',
-                                    boundaryGap : false,
-                                    data : []
-                                }
-                            ],
-                            yAxis : [
-                                {
-                                    type : 'value'
-                                }
-                            ],
-                            series : [
-                                {
-                                    name:'Cost',
-                                    type:'line',
-                                    stack: 'f',
-                                    areaStyle: {normal: {color: "rgba(0,155,155,0.2)"}},
-                                    lineStyle: {normal: {color: "rgba(0,155,155,1)"}},
-                                    itemStyle: {normal: {borderColor: "rgba(0,155,155,1)"}},
-                                    data:[]
-                                }
-                            ]
-                        }
+                            data: []
+                        }]
                     }
-                },
+                }
+            },
             loadgraph: Object,
             loadgraphOptions: {
-                    type: Object,
-                    value: function () {
-                        return {
-                            tooltip : {
-                                trigger: 'axis',
-                                axisPointer: {
-                                    type: 'cross',
-                                    label: {
-                                        backgroundColor: '#6a7985'
+                type: Object,
+                value: function () {
+                    return {
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'cross',
+                                label: {
+                                    backgroundColor: '#6a7985'
+                                }
+                            }
+                        },
+                        legend: {
+                            data: [{
+                                name: 'Load',
+                                textStyle: "rgba(0,155,155,1)",
+                            }, {
+                                name: 'Cores',
+                                textStyle: "rgba(250,128,114,1)",
+                            }]
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            boundaryGap: false,
+                            data: ['1', '2', '3', '4']
+                        }],
+                        yAxis: [{
+                            type: 'value'
+                        }],
+                        series: [{
+                                name: 'Cores',
+                                type: 'line',
+                                stack: 'f',
+                                areaStyle: {
+                                    normal: {
+                                        color: "rgba(0,155,155,0.2)"
                                     }
-                                }
-                            },
-                            legend: {
-                                data:[{
-                                    name:'Load',
-                                    textStyle: "rgba(0,155,155,1)",
-                                },{
-                                    name:'Cores',
-                                    textStyle: "rgba(250,128,114,1)",
-                                }]
-                            },
-                            grid: {
-                                left: '3%',
-                                right: '4%',
-                                bottom: '3%',
-                                containLabel: true
-                            },
-                            xAxis : [
-                                {
-                                    type : 'category',
-                                    boundaryGap : false,
-                                    data : ['1','2','3','4']
-                                }
-                            ],
-                            yAxis : [
-                                {
-                                    type : 'value'
-                                }
-                            ],
-                            series : [
-                                {
-                                    name:'Cores',
-                                    type:'line',
-                                    stack: 'f',
-                                    areaStyle: {normal: {color: "rgba(0,155,155,0.2)"}},
-                                    lineStyle: {normal: {color: "rgba(0,155,155,1)"}},
-                                    itemStyle: {normal: {borderColor: "rgba(0,155,155,1)"}},
-                                    data:[120, 132, 101, 134]
                                 },
-                                {
-                                    name:'Load',
-                                    type:'line',
-                                    stack: 'g',
-                                    areaStyle: {normal: {color: "rgba(250,128,114,0.2)"}},
-                                    lineStyle: {normal: {color: "rgba(250,128,114,1)"}},
-                                    itemStyle: {normal: {borderColor: "rgba(250,128,114,1)"}},
-                                    data:[120, 132, 101, 134]
-                                }
-                            ]
-                        }
+                                lineStyle: {
+                                    normal: {
+                                        color: "rgba(0,155,155,1)"
+                                    }
+                                },
+                                itemStyle: {
+                                    normal: {
+                                        borderColor: "rgba(0,155,155,1)"
+                                    }
+                                },
+                                data: [120, 132, 101, 134]
+                            },
+                            {
+                                name: 'Load',
+                                type: 'line',
+                                stack: 'g',
+                                areaStyle: {
+                                    normal: {
+                                        color: "rgba(250,128,114,0.2)"
+                                    }
+                                },
+                                lineStyle: {
+                                    normal: {
+                                        color: "rgba(250,128,114,1)"
+                                    }
+                                },
+                                itemStyle: {
+                                    normal: {
+                                        borderColor: "rgba(250,128,114,1)"
+                                    }
+                                },
+                                data: [120, 132, 101, 134]
+                            }
+                        ]
                     }
-                },
+                }
+            },
             machinesgraph: Object,
             machinesgraphOptions: {
                 type: Object,
                 value: {
                     color: ["rgba(0,155,155,0.2)"],
                     borderColor: ["rgba(0,155,155,1)"],
-                    tooltip : {
+                    tooltip: {
                         trigger: 'axis',
-                        axisPointer : {
-                            type : 'shadow'
+                        axisPointer: {
+                            type: 'shadow'
                         }
                     },
                     grid: {
@@ -307,28 +312,22 @@
                         bottom: '3%',
                         containLabel: true
                     },
-                    xAxis : [
-                        {
-                            type : 'category',
-                            data : ['Mon'],
-                            axisTick: {
-                                alignWithLabel: true
-                            }
+                    xAxis: [{
+                        type: 'category',
+                        data: ['Mon'],
+                        axisTick: {
+                            alignWithLabel: true
                         }
-                    ],
-                    yAxis : [
-                        {
-                            type : 'value'
-                        }
-                    ],
-                    series : [
-                        {
-                            name:'machines',
-                            type:'bar',
-                            barWidth: '60%',
-                            data:[10]
-                        }
-                    ]
+                    }],
+                    yAxis: [{
+                        type: 'value'
+                    }],
+                    series: [{
+                        name: 'machines',
+                        type: 'bar',
+                        barWidth: '60%',
+                        data: [10]
+                    }]
                 }
             }
         },
@@ -342,7 +341,7 @@
 
         attached: function () {
             if (typeof echarts == 'undefined')
-                this.importHref(this.resolveUrl('echarts-import.html'), this.initCharts, function(e) {
+                this.importHref(this.resolveUrl('echarts-import.html'), this.initCharts, function (e) {
                     console.error('Failed to load echarts', e);
                 }, true);
             else
@@ -355,7 +354,7 @@
             this.$.loadReportAjax.generateRequest();
         },
 
-        initCharts: function() {
+        initCharts: function () {
             var colorPalette = ['#607D8B', '#d96557', '#3F51B5', '#009688', '#795548', '#8c76d1', '#795548', '#0277BD', '#0099cc', '#424242', '#D48900', '#43A047', '#2F2F3E'];
             echarts.registerTheme('insights', {
                 color: colorPalette,
@@ -376,17 +375,17 @@
             var costData = [],
                 machinesData = [],
                 labels = [];
-            if (history){
-                labels = history.map(function(datapoint){
+            if (history) {
+                labels = history.map(function (datapoint) {
                     if (['day', 'hour'].indexOf(this.timeParams.window) != -1)
                         return moment(datapoint.date).format('HH:mm').toString();
-                    else 
+                    else
                         return moment(datapoint.date).format('YYYY-MM-DD').toString();
                 }, this);
-                costData = history.map(function(datapoint){
+                costData = history.map(function (datapoint) {
                     return datapoint.cost_per_month;
                 });
-                machinesData = history.map(function(datapoint){
+                machinesData = history.map(function (datapoint) {
                     return datapoint.machine_count;
                 });
             }
@@ -406,17 +405,17 @@
             var loadData = [],
                 coresData = [],
                 labels = [];
-            if (history){
-                labels = history.map(function(datapoint){
+            if (history) {
+                labels = history.map(function (datapoint) {
                     if (['day', 'hour'].indexOf(this.timeParams.window) != -1)
                         return moment(datapoint.date).format('HH:mm').toString();
-                    else 
+                    else
                         return moment(datapoint.date).format('YYYY-MM-DD').toString();
                 }, this);
-                loadData = history.map(function(datapoint){
+                loadData = history.map(function (datapoint) {
                     return datapoint.load;
                 });
-                coresData = history.map(function(datapoint){
+                coresData = history.map(function (datapoint) {
                     return datapoint.cores;
                 });
             }
@@ -432,79 +431,93 @@
             // console.log("loadingData", this.loadingData);
             var items = [];
             if (this.timeParams.window == "hour") {
-                items.push({value: 0, text: "this hour"});
-                items.push({value: 1, text: "last hour"});
-                for (var i=2; i<11; i++) {
-                    items.push({value: i, text: i + " hours ago"});
+                items.push({
+                    value: 0,
+                    text: "this hour"
+                });
+                items.push({
+                    value: 1,
+                    text: "last hour"
+                });
+                for (var i = 2; i < 11; i++) {
+                    items.push({
+                        value: i,
+                        text: i + " hours ago"
+                    });
                 }
-            }
-            else if (this.timeParams.window == "day") {
-                items.push({value: 0, text: "today"});
-                items.push({value: 1, text: "yesterday"});
-                for (var i=2; i<11; i++) {
-                    items.push({value: i, text: i + " days ago"});
+            } else if (this.timeParams.window == "day") {
+                items.push({
+                    value: 0,
+                    text: "today"
+                });
+                items.push({
+                    value: 1,
+                    text: "yesterday"
+                });
+                for (var i = 2; i < 11; i++) {
+                    items.push({
+                        value: i,
+                        text: i + " days ago"
+                    });
                 }
-            }
-            else if (this.timeParams.window == "week") {
+            } else if (this.timeParams.window == "week") {
                 items = [{
                     value: '0',
                     text: 'this week'
-                },{
+                }, {
                     value: '1',
                     text: 'last week'
-                },{
+                }, {
                     value: '2',
                     text: 'two weeks ago'
-                },{
+                }, {
                     value: '3',
                     text: 'three weeks ago'
                 }]
-            }
-            else if (this.timeParams.window == "month") {
-                for (var i=0; i<12; i++){
+            } else if (this.timeParams.window == "month") {
+                for (var i = 0; i < 12; i++) {
                     var t = '';
-                    if (i==0)
+                    if (i == 0)
                         t = 'this month';
-                    else if (i==1)
+                    else if (i == 1)
                         t = 'last month';
                     else
-                        t = i+' months ago';
+                        t = i + ' months ago';
 
                     items.push({
                         value: i,
                         text: t
                     })
                 }
-            }
-            else if (this.timeParams.window == "quarter") {
+            } else if (this.timeParams.window == "quarter") {
                 items = [{
                     value: '0',
                     text: 'current quarter'
-                },{
+                }, {
                     value: '1',
                     text: 'previous quarter'
-                },{
+                }, {
                     value: '2',
                     text: '2 quarters ago'
-                },{
+                }, {
                     value: '3',
                     text: '3 quarters ago'
                 }]
             }
 
-            this.set('pastItems',items);
+            this.set('pastItems', items);
 
             // if window changed reset selected past
-            if (timeParamsChangeRecord.path == 'timeParams.window'){
+            if (timeParamsChangeRecord.path == 'timeParams.window') {
                 this.set('timeParams.past', '0');
-                this.async(function(){
+                this.async(function () {
                     this.$.past.selected = -1;
                     this.$.past.selected = 0;
                 }, 100, this)
             }
         },
 
-        computeFilterbyItems: function(filterby){
+        computeFilterbyItems: function (filterby) {
             // var items = [], clouds = [], stacks = [], tokentags = [];
             // if (this.token && this.report && this.report.history){
             //     clouds = this.report.history.group_by.cloud.map(function(c){
@@ -577,17 +590,17 @@
             console.log('handleResponse', e);
         },
 
-        handleResponseClouds: function(e){
+        handleResponseClouds: function (e) {
             console.log('handleResponseClouds', e);
             this.set('clouds', e.detail.xhr.response);
         },
 
-        handleResponseReport: function(e){
+        handleResponseReport: function (e) {
             console.log('handleResponseReport', e);
             this.set('report', e.detail.xhr.response);
         },
 
-        handleResponseLoad: function(e){
+        handleResponseLoad: function (e) {
             console.log('handleResponseLoad', e);
             this.set('reportLoad', e.detail.xhr.response);
         },
