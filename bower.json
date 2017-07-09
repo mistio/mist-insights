@@ -25,7 +25,8 @@
   "variants": {
     "1.x": {
       "dependencies": {
-        "polymer": "Polymer/polymer#^1.9"
+        "polymer": "Polymer/polymer#^1.9",
+        "iron-media-query": "PolymerElements/iron-media-query#^1.0.8"
       },
       "devDependencies": {
         "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
