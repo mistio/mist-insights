@@ -22,9 +22,10 @@
 
 <dom-module id="mist-insights">
     <template>
-        <style include="default-theme">
+        <style include="default-theme iron-flex iron-flex-alignment iron-flex-factors">
              :host {
                 display: block;
+                font-family: 'Roboto', 'Noto', sans-serif;
                 font-size: 16px;
             }
 
@@ -41,7 +42,9 @@
                 min-height:300px;
             }
 
-            .uppercase, paper-item {
+            .uppercase,
+            paper-dropdown-menu.uppercase paper-item,
+            paper-dropdown-menu.uppercase ::content #input {
                 text-transform: uppercase;
             }
 
@@ -70,15 +73,37 @@
                 z-index: 2;
             }
 
+            .filter {
+                padding: 0 16px 0 0;
+            }
+
+            #filtering .container {
+                align-items: flex-end;
+            }
+
+            .machines-column {
+                opacity: 0.54;
+                padding-right: 16px;
+                text-align: right;
+            }
+
+            .cost-column {
+                text-align: right;
+            }
+
+            #doughnut .cost-column {
+                width: 70px;
+            }
+
         </style>
 
         <iron-media-query query="(min-width: 1180px)" query-matches="{{largescreen}}"></iron-media-query>
 
         <paper-material id="filtering" class="margin-botttom">
             <div class="container layout horizontal">
-                <div class="flexchild">
+                <div class="filter">
                     <div class="smaller">Time</div>
-                    <paper-dropdown-menu no-label-float>
+                    <paper-dropdown-menu class="uppercase" no-label-float>
                         <paper-listbox id="window" slot="dropdown-content" class="uppercase" attr-for-selected="value" selected="{{timeParams.window}}">
                             <paper-item value="hour">hourly</paper-item>
                             <paper-item value="day">daily</paper-item>
@@ -95,9 +120,9 @@
                         </paper-listbox>
                     </paper-dropdown-menu>
                 </div>
-                <div class="flexchild">
+                <div class="filter">
                     <div class="smaller">Filter by</div>
-                    <paper-dropdown-menu class="uppercase" class="uppercase" no-label-float>
+                    <paper-dropdown-menu class="uppercase" no-label-float>
                         <paper-listbox id="filterbyType" slot="dropdown-content" attr-for-selected="value" selected="{{filterby.type}}">
                             <paper-item value="stack">Stack</paper-item>
                             <paper-item value="cloud">Cloud</paper-item>
@@ -120,15 +145,45 @@
             </div>
         </paper-material>
 
-        <!-- <h2>[[clouds]]!</h2> -->
-
-        <paper-material>
+        <paper-material id="graphRow">
             <div class="loading-data" hidden="{{!loadingDataCost}}">
                 <paper-spinner active="{{loadingDataCost}}"></paper-spinner>
             </div>
             <div>
                 <h2>Cost per month</h2>
-                <div id="costGraph" class="graph"></div>
+                <div class="layout horizontal">
+                    <div class="flex-2">
+                        <div id="costGraph" class="graph"></div>
+                    </div>
+                    <div class="flex-1">
+                        <div id="drillcostgraph" class="graph"></div>
+                    </div>
+                    <div class="flex-1">
+                        <div id="drillcostlist" class="flex">
+                            <div class="list">
+                                <template is="dom-repeat" items="{{costDrillList}}">
+                                    <div class="layout horizontal">
+                                        <span>[[_index(index)]].</span>
+                                        <span class="flexchild name-col flex-1">
+                                            [[item.name]]
+                                            <span hidden$="[[item.name.length]]">
+                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
+                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                            </span>
+                                        </span>
+                                        <div class="machines-column flex-1" title="machines">
+                                            [[item.machine_count.unique]] 
+                                            machines
+                                        </div>
+                                        <span class="cost-column">
+                                            $[[item.cost]]
+                                        </span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </paper-material>
 
@@ -138,7 +193,10 @@
             </div>
             <div>
                 <h2>Load</h2>
-                <div id="usageGraph" class="graph"></div>
+                <div class="layout horizontal wrap">
+                    <div id="usageGraph" class="graph"></div>
+                    <div>test</div>
+                </div>
             </div>
         </paper-material>
 
@@ -148,10 +206,12 @@
             </div>
             <div>
                 <h2>Machines Count</h2>
-                <div id="machinesGraph" class="graph"></div>
+                <div class="layout horizontal">
+                    <div id="machinesGraph" class="graph"></div>
+                    <div>test</div>
+                </div>
             </div>
         </paper-material>
-
 
 
         <iron-ajax id="cloudsAjax" method="GET" url$="[[uri]]/api/v1/clouds" headers$='{"Authorization": "[[token]]"}' handle-as="json"
@@ -271,6 +331,49 @@
                     }
                 }
             },
+            drillcostgraph: Object,
+            drillcostgraphOptions: {
+                type: Object,
+                value: {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{b} {a}: <br/>${c} ({d}%)"
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        x: 'left',
+                        data:[1,2,3]
+                    },
+                    series: [
+                        {
+                            name:'cost',
+                            type:'pie',
+                            radius: ['50%', '70%'],
+                            avoidLabelOverlap: false,
+                            label: {
+                                normal: {
+                                    show: false,
+                                    position: 'center'
+                                },
+                                emphasis: {
+                                    show: true,
+                                    textStyle: {
+                                        fontSize: '30',
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data:[1,2,3]
+                        }
+                    ]
+                }
+            },
+            costDrillList: Array,
             usageGraph: Object,
             usageGraphOptions: {
                 type: Object,
@@ -392,12 +495,17 @@
             }
         },
 
+        listeners: {
+            'resize' : 'updateChartWidth'
+        },
+
         observers: [
             'computePastItems(timeParams.*)',
             'updateCostData(costReport.history)',
             'updateUsageData(usageReport.history)',
             'computeFilterbyItems(filterby.*)',
-            'combineParams(timeParams.*, filterby.*)'
+            'combineParams(timeParams.*, filterby.*)',
+            'updateCostDrillData(costReport.group_by, filterby.id)',
         ],
 
         attached: function () {
@@ -433,8 +541,8 @@
             this.costGraph = echarts.init(this.$.costGraph, 'insights');
             this.machinesGraph = echarts.init(this.$.machinesGraph, 'insights');
             this.usageGraph = echarts.init(this.$.usageGraph, 'insights');
-            /*this.drillcostgraph = echarts.init(this.$.drillcostgraph);
-            this.updateChartWidth(e);*/
+            this.drillcostgraph = echarts.init(this.$.drillcostgraph);
+            // this.updateChartWidth(e);
             console.log('initialized charts');
         },
 
@@ -493,6 +601,126 @@
             if (this.usageGraph)
                 this.usageGraph.setOption(this.usageGraphOptions);
             console.log('updated usage data');
+        },
+
+        updateCostDrillData: function(groupby, filterbyname) {
+            var drillData = [],
+                drillLabels = [],
+                drill, //Array
+                drillList1, //String
+                drillList2, //String
+                plural = "",
+                plural1 = "",
+                plural2 = "";
+
+            // show all categories when no filterby set : clouds in ring / stacks list / tags list
+            // show stacks in ring + tags list if filterby cloud
+            // show clouds in ring + tags list if filterby stack
+            // show clouds in ring + stacks in list if filterby tag
+
+            // var dataMap = [],
+            //     key;
+            
+            // if (this.costReport && this.costReport.group_by)
+            //     dataMap = Object.keys(this.costReport.group_by)
+
+            // if (this.filterby.type == '' || (this.filterby.type == "tag" && this.costReport.group_by['tag'])) {
+            //     drill = groupby['cloud'] || groupby['stack'] || groupby['tag'];
+
+            //     if (groupby['cloud'])       { key = 'cloud' }
+            //     else if (groupby['stack'])  { key = 'stack' }
+            //     else if (groupby['tag'])    { key = 'tag' }
+
+            //     dataMap.splice(dataMap.indexOf(key), 1);
+                
+            //     if (dataMap.length > 0 ) 
+            //         drillList1 = dataMap[0];
+                
+            //     if (dataMap.length > 1 )
+            //         drillList2 = dataMap[1];
+            // }
+            // else if (this.filterby.type == 'stack' || this.filterby.type == "cloud") {
+            //     drill = this.filterby.type == 'stack' ? groupby['cloud'] : groupby['stack'];
+            //     key =  this.filterby.type == 'stack' ? 'cloud' : 'stack';
+
+            //     dataMap.splice(dataMap.indexOf(key), 1);
+
+            //     if (dataMap.length)
+            //         drillList1 = dataMap[0];
+            // }
+            
+            // console.log("dataMap", this.filterby.type, dataMap, drillList1, drillList2);
+
+            // if (drill){
+            //     if (drill.length > 1)
+            //         plural = "s";
+
+            //     this.set('showRing', true);
+            //     this.set('ringTitle', this.filterby.name +" "+ drill.length +" "+ key+plural);
+                
+            //     drillData = drill.map(function(point){
+            //         return Number.prototype.formatMoney(point.cost);
+            //     }, this);
+            //     drillLabels = drill.map(function(point){
+            //         return point.name.length ? point.name : 'untagged';
+            //     });
+
+            // }
+            // else {
+            //     this.set('showRing', false);
+            //     this.set('ringTitle', "");
+            // }
+            
+            var costRingData = [],
+                costRingLabels = [],
+                costDrillData = [];
+            if (this.costReport && this.costReport.group_by) {
+                costRingData = this.costReport.group_by['cloud'].map(function(point){
+                    return {value: point.cost, name: point.name};
+                }, this);
+                costRingLabels = this.costReport.group_by['cloud'].map(function(point){
+                    return point.name;
+                }, this);
+                costDrillData = this.costReport.group_by['cloud'].sort(function(a,b){ return a.cost < b.cost});
+            }
+
+            // fill in ring
+            this.set('drillcostgraphOptions.series.0.data', costRingData);
+            this.set('drillcostgraphOptions.legend.data', costRingLabels);
+            if (this.drillcostgraph)
+                this.drillcostgraph.setOption(this.drillcostgraphOptions);
+
+            this.set('costDrillList', costDrillData);
+
+            // // fill in first list
+            // if (this.costReport.group_by[drillList1] && drillList1 && drillList1.length) {
+            //     if (this.costReport.group_by[drillList1].length > 1)
+            //         plural1 = "s";
+
+            //     this.set('showFirstList', true);
+            //     this.set('firstListTitle', this.filterby.name +" "+ this.costReport.group_by[drillList1].length +" "+ drillList1+plural1);
+
+            //     this.set('costDrillList1', this.costReport.group_by[drillList1] ? this.costReport.group_by[drillList1].sort(function(a,b){ return a.cost < b.cost}) : [])
+            // }
+            // else {
+            //     this.set('showFirstList', false);
+            //     this.set('firstListTitle', "");
+            // }
+
+            // fill in second list if needed
+            // if (this.costReport.group_by[drillList2] && drillList2 && drillList2.length){
+            //     if (this.costReport.group_by[drillList2].length > 1)
+            //         plural2 = "s";
+
+            //     this.set('showSecondList', true);
+            //     this.set('secondListTitle', this.filterby.name +" "+ this.costReport.group_by[drillList2].length +" "+ drillList2+plural2);
+
+            //     this.set('costDrillList2', this.costReport.group_by[drillList2] ? this.costReport.group_by[drillList2].sort(function(a,b){ return a.cost < b.cost}) : [])
+            // }
+            // else {
+            //     this.set('showSecondList', false);
+            //     this.set('secondListTitle', "");
+            // }
         },
 
         computePastItems: function (timeParamsChangeRecord) {
@@ -719,6 +947,35 @@
             });
         },
 
+        updateChartWidth: function(e){
+            var parentWidth = this.$.graphRow.offsetWidth;
+            var halph = parentWidth/2, 
+                third = parentWidth/3, 
+                quarter = parentWidth/4;
+
+            this.resizeGraphs();
+        },
+
+        resizeGraphs: function(){
+            console.log('resizeGraphs');
+            if (this.costgraph)
+                this.costgraph.resize();
+            if (this.drillcostgraph)
+                this.drillcostgraph.resize();
+            if (this.loadgraph)
+                this.loadgraph.resize();
+            if (this.machinesgraph)
+                this.machinesgraph.resize();
+        },
+
+        _index: function(ind) {
+            return ind+1;
+        },
+
+        _toFixed: function(inp) {
+            return Number.prototype.formatMoney(inp);
+        },
+
         handleResponse: function (e) {
             console.log('handleResponse', e);
         },
@@ -752,5 +1009,40 @@
             console.log('handleError', e);
         }
     });
+
+(function() {
+    var throttle = function(type, name, obj) {
+        obj = obj || window;
+        var running = false;
+        var func = function() {
+            if (running) { return; }
+            running = true;
+             requestAnimationFrame(function() {
+                obj.dispatchEvent(new CustomEvent(name));
+                running = false;
+            });
+        };
+        obj.addEventListener(type, func);
+    };
+
+    /* init - you can init any event */
+    // throttle("resize", "optimizedResize");
+})();
+
+// handle event
+window.addEventListener("optimizedResize", function() {
+    document.querySelector('mist-insights').fire('resize')
+});
+
+Number.prototype.formatMoney = function(c, d, t){
+var n = this,
+    c = isNaN(c = Math.abs(c)) ? 2 : c,
+    d = d == undefined ? "." : d,
+    t = t == undefined ? "," : t,
+    s = n < 0 ? "-" : "",
+    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+    j = (j = i.length) > 3 ? j % 3 : 0;
+   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+ };
   </script>
 </dom-module>
