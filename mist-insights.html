@@ -635,31 +635,39 @@
         },
 
         computeName: function(id){
-                if (id){
-                    if (this.filterby.type == 'tag') {
-                        return id;
-                    }
-                    else if (this.filterby.type == 'cloud') {
-                        if (!this.token)
-                            return this.model.clouds[id].title;
-                        else 
-                            return this.clouds && this.clouds.find(function(c){
-                                return c.id == id;
-                            }).title;
-                    }
-                    else if (this.filterby.type == 'stack') {
-                        if (!this.token)
-                            return this.model.stacks[id].name;
-                        else
-                            return this.stacks && this.stacks.find(function(s){
-                                return s.id == id;
-                            }).name;
-                    }
+            if (id){
+                if (this.filterby.type == 'tag') {
+                    return id;
                 }
-                else {
-                    return '';
+                else if (this.filterby.type == 'cloud') {
+                    if (!this.token)
+                        return this.model.clouds[id].title;
+                    else 
+                        return this.clouds && this.clouds.find(function(c){
+                            return c.id == id;
+                        }).title;
                 }
-            },
+                else if (this.filterby.type == 'stack') {
+                    if (!this.token)
+                        return this.model.stacks[id].name;
+                    else
+                        return this.stacks && this.stacks.find(function(s){
+                            return s.id == id;
+                        }).name;
+                }
+            }
+            else {
+                return '';
+            }
+        },
+
+        clearFilter: function(e){
+            this.set('filterby', {
+                type: '',
+                name: '',
+                id: ''
+            });
+        },
 
         handleResponse: function (e) {
             console.log('handleResponse', e);
