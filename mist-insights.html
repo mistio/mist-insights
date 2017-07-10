@@ -619,8 +619,8 @@
             }
 
             this.set('clouds', clouds);
-            this.set('stacks', stacks);
-            this.set('tags', tags);
+            this.set('stacks', stacks.filter(function(c){return c.name != ""}));
+            this.set('tags', tags.filter(function(c){return c.name != ""}));
 
         },
         computeFilterbyItems: function (filterby) {
@@ -737,7 +737,7 @@
             console.log('handleResponseCostReport', e);
             this.set('costReport', e.detail.xhr.response);
             
-            if (this.filterby.type == '' || this.filterby.id == '')
+            if (this.filterby.type == '')
                 this.updateFilterItems(this.costReport.group_by);
 
             this.$.usageReportAjax.generateRequest();
