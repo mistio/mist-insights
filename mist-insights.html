@@ -3,6 +3,7 @@
 <link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
 <link rel="import" href="../paper-listbox/paper-listbox.html">
 <link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../paper-spinner/paper-spinner.html">
@@ -42,6 +43,31 @@
 
             .uppercase, paper-item {
                 text-transform: uppercase;
+            }
+
+            paper-material {
+                position: relative;
+                display: block;
+                padding: 24px;
+                margin-bottom: 16px;
+            }
+
+            paper-spinner {
+                margin: 10% calc(50% - 40px);
+                width: 80px !important;
+                height: 80px !important;
+            }
+
+            .loading-data {
+                position: absolute;
+                background-color: rgba(255,255,255,0.9);
+                width: 100%;
+                height: 100%;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                z-index: 2;
             }
 
         </style>
@@ -96,14 +122,35 @@
 
         <!-- <h2>[[clouds]]!</h2> -->
 
-        <h2>Cost per month</h2>
-        <div id="costGraph" class="graph"></div>
+        <paper-material>
+            <div class="loading-data" hidden="{{!loadingDataCost}}">
+                <paper-spinner active="{{loadingDataCost}}"></paper-spinner>
+            </div>
+            <div>
+                <h2>Cost per month</h2>
+                <div id="costGraph" class="graph"></div>
+            </div>
+        </paper-material>
 
-        <h2>Load</h2>
-        <div id="usageGraph" class="graph"></div>
+        <paper-material>
+            <div class="loading-data" hidden="{{!loadingDataUsage}}">
+                <paper-spinner active="{{loadingDataUsage}}"></paper-spinner>
+            </div>
+            <div>
+                <h2>Load</h2>
+                <div id="usageGraph" class="graph"></div>
+            </div>
+        </paper-material>
 
-        <h2>Machines Count</h2>
-        <div id="machinesGraph" class="graph"></div>
+        <paper-material>
+            <div class="loading-data" hidden="{{!loadingDataCost}}">
+                <paper-spinner active="{{loadingDataCost}}"></paper-spinner>
+            </div>
+            <div>
+                <h2>Machines Count</h2>
+                <div id="machinesGraph" class="graph"></div>
+            </div>
+        </paper-material>
 
 
 
