@@ -39,6 +39,11 @@
                 width:100%;
                 min-height:300px;
             }
+
+            .uppercase, paper-item {
+                text-transform: uppercase;
+            }
+
         </style>
 
         <iron-media-query query="(min-width: 1180px)" query-matches="{{largescreen}}"></iron-media-query>
@@ -340,7 +345,8 @@
             'computePastItems(timeParams.*)',
             'updateCostData(costReport.history)',
             'updateUsageData(usageReport.history)',
-            'computeFilterbyItems(filterby.*)'
+            'computeFilterbyItems(filterby.*)',
+            'combineParams(timeParams.*, filterby.*)'
         ],
 
         attached: function () {
@@ -353,8 +359,15 @@
 
             if (!this.token)
                 this.uri = '';
-            //this.$.cloudsAjax.generateRequest();
+
+            if (this.token) {
+                this.$.cloudsAjax.generateRequest();
+                // this.$.stacksAjax.generateRequest();
+                // this.$.tagsAjax.generateRequest();
+            }
+
             this.$.costReportAjax.generateRequest();
+            this.$.usageReportAjax.generateRequest();
         },
 
         initCharts: function () {
@@ -522,73 +535,131 @@
         },
 
         computeFilterbyItems: function (filterby) {
-            // var items = [], clouds = [], stacks = [], tokentags = [];
-            // if (this.token && this.report && this.report.history){
-            //     clouds = this.report.history.group_by.cloud.map(function(c){
-            //         return {name: c.name, id: c.id};
-            //     });
-            //     stacks = this.report.history.group_by.stack.map(function(c){
-            //         return {name: c.name, id: c.id};
-            //     });
-            //     tokentags = this.report.history.group_by.tag.map(function(c){
-            //         return {name: c.name, id: c.name};
-            //     });
-            // }
-            // if (this.filterby.type == 'stack')
-            //     items = this.model.stacksArray || stacks;
-            // else if (this.filterby.type == 'cloud')
-            //     items = this.model.cloudsArray || clouds;
-            // else if (this.filterby.type == 'tag'){
-            //     var tags = [];
-            //     if (!token) {
-            //         tags = this.model.machinesArray.filter(function(m){
-            //                 return m.tags.length > 0
-            //             }).map(function(m){
-            //                 for (var i=0; i < m.tags.length; i++){
-            //                     var postfix = '';
-            //                     if (m.tags[i].value != ''){
-            //                         postfix = '='+m.tags[i].value;
-            //                     }
-            //                     return {
-            //                         'name': m.tags[i].key+postfix,
-            //                         'id': m.tags[i].key+postfix,
-            //                         'val': m.tags[i].val
-            //                     };
-            //                 }
-            //             });
-            //         var names = tags.map(function(t){
-            //             return t.name;
-            //         })
-            //     }
-            //     items = tags.filter(function(t, ind){
-            //         return names.indexOf(t.name) == ind;
-            //     }) || tokentags;
-            // }
-            // else
-            //     items = [];
+            var items = [], 
+                clouds = [], stacks = [], tokentags = [];
+            if (this.token){
+                if (this.clouds)
+                    clouds = this.clouds.map(function(c){
+                        return {name: c.title, id: c.id};
+                    });
+                if (this.stacks) {
+                    stacks = this.stacks.map(function(c){
+                        return {name: c.name, id: c.id};
+                    });
+                }
+                if (this.tags) {
+                    tokentags = this.tags.map(function(c){
+                        return {name: c.name, id: c.name};
+                    });
+                }
+            }
+            if (this.filterby.type == 'stack')
+                items = this.model.stacksArray || stacks;
+            else if (this.filterby.type == 'cloud')
+                items = this.model.cloudsArray || clouds;
+            else if (this.filterby.type == 'tag'){
+                var tags = [];
+                if (!token) {
+                    tags = this.model.machinesArray.filter(function(m){
+                            return m.tags.length > 0
+                        }).map(function(m){
+                            for (var i=0; i < m.tags.length; i++){
+                                var postfix = '';
+                                if (m.tags[i].value != ''){
+                                    postfix = '='+m.tags[i].value;
+                                }
+                                return {
+                                    'name': m.tags[i].key+postfix,
+                                    'id': m.tags[i].key+postfix,
+                                    'val': m.tags[i].val
+                                };
+                            }
+                        });
+                    var names = tags.map(function(t){
+                        return t.name;
+                    })
+                }
+                items = tags.filter(function(t, ind){
+                    return names.indexOf(t.name) == ind;
+                });
+            }
+            else
+                items = [];
 
-            // if (!items.length){
-            //     this.set('filterbyDisable', true);
-            // }
-            // else {
-            //     this.set('filterbyDisable', false);
-            // }
+            if (!items.length){
+                this.set('filterbyDisable', true);
+            }
+            else {
+                this.set('filterbyDisable', false);
+            }
 
-            // this.set('filterbyItems',items);
+            this.set('filterbyItems',items);
 
-            // // if filterby changed reset selected item
-            // if (filterby.path == 'filterby.type'){
-            //     this.set('filterby.name', '');
-            //     this.async(function(){
-            //         this.$.filterbyName.selected = '';
-            //     }, 100, this)
-            // }
-            // // if filterby id changed update name
-            // if (filterby.path == 'filterby.id'){
-            //     this.set('filterby.name', this.computeName(filterby.value));
-            // }
+            // if filterby changed reset selected item
+            if (filterby.path == 'filterby.type'){
+                this.set('filterby.name', '');
+                this.async(function(){
+                    this.$.filterbyName.selected = '';
+                }, 100, this)
+            }
+            // if filterby id changed update name
+            if (filterby.path == 'filterby.id'){
+                this.set('filterby.name', this.computeName(filterby.value));
+            }
 
         },
+
+        combineParams: function(time, filter) {
+            // console.log('p send ', filter);
+            
+            // dont update params so dont request, if user changes window, type, name or has not specified filter by id
+            // also dont request for past = -1
+            if (filter.path == 'filterby.type' || filter.path == 'filterby.name' || time.path == 'timeParams.window' || (filter.path == 'filterby.id' && filter.value == "") || time.value == "-1") {
+                // console.log('dont send ', this.params);
+            }
+            else {
+                var p = {
+                    window: this.timeParams.window,
+                    past: this.timeParams.past
+                };
+
+                if (this.filterby.type != '' && this.filterby.id != ''){
+                    p[this.filterby.type] = this.filterby.id;
+                }
+                
+                // console.log('p send ', p, this.params);
+                this.set('params', p);
+                this.$.costReportAjax.generateRequest();
+                this.$.usageReportAjax.generateRequest();
+            }
+        },
+
+        computeName: function(id){
+                if (id){
+                    if (this.filterby.type == 'tag') {
+                        return id;
+                    }
+                    else if (this.filterby.type == 'cloud') {
+                        if (!this.token)
+                            return this.model.clouds[id].title;
+                        else 
+                            return this.clouds && this.clouds.find(function(c){
+                                return c.id == id;
+                            }).title;
+                    }
+                    else if (this.filterby.type == 'stack') {
+                        if (!this.token)
+                            return this.model.stacks[id].name;
+                        else
+                            return this.stacks && this.stacks.find(function(s){
+                                return s.id == id;
+                            }).name;
+                    }
+                }
+                else {
+                    return '';
+                }
+            },
 
         handleResponse: function (e) {
             console.log('handleResponse', e);
