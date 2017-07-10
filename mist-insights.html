@@ -75,7 +75,7 @@
         <iron-media-query query="(min-width: 1180px)" query-matches="{{largescreen}}"></iron-media-query>
 
         <paper-material id="filtering" class="margin-botttom">
-            <div class="container flex-horizontal">
+            <div class="container layout horizontal">
                 <div class="flexchild">
                     <div class="smaller">Time</div>
                     <paper-dropdown-menu no-label-float>
@@ -157,6 +157,9 @@
         <iron-ajax id="cloudsAjax" method="GET" url$="[[uri]]/api/v1/clouds" headers$='{"Authorization": "[[token]]"}' handle-as="json"
             loading={{loading}} on-response="handleResponseClouds" on-error="handleError"></iron-ajax>
 
+        <iron-ajax id="stacksAjax" method="GET" url$="[[uri]]/api/v1/stacks" headers$='{"Authorization": "[[token]]"}' handle-as="json"
+            loading={{loading}} on-response="handleResponseStacks" on-error="handleError"></iron-ajax>
+
         <iron-ajax id="costReportAjax" method="GET" url$="[[uri]]/api/v1/report" headers$='{"Authorization": "[[token]]"}' handle-as="json"
             loading="{{loadingDataCost}}" on-response="handleResponseCostReport" on-error="handleError" params=[[params]]></iron-ajax>
 
@@ -209,6 +212,7 @@
             },
             clouds: Array,
             stacks: Array,
+            tags: Array,
             costReport: Object,
             usageReport: Object,
             costGraph: Object,
@@ -408,13 +412,13 @@
                 this.uri = '';
 
             if (this.token) {
-                this.$.cloudsAjax.generateRequest();
+                // this.$.cloudsAjax.generateRequest();
                 // this.$.stacksAjax.generateRequest();
                 // this.$.tagsAjax.generateRequest();
             }
 
-            this.$.costReportAjax.generateRequest();
-            this.$.usageReportAjax.generateRequest();
+            // this.$.costReportAjax.generateRequest();
+            // this.$.usageReportAjax.generateRequest();
         },
 
         initCharts: function () {
@@ -580,67 +584,66 @@
                 }, 100, this)
             }
         },
-
-        computeFilterbyItems: function (filterby) {
+        updateFilterItems: function(group_by) {
             var items = [], 
-                clouds = [], stacks = [], tokentags = [];
+                clouds = [], stacks = [], tags = [];
             if (this.token){
-                if (this.clouds)
-                    clouds = this.clouds.map(function(c){
-                        return {name: c.title, id: c.id};
-                    });
-                if (this.stacks) {
-                    stacks = this.stacks.map(function(c){
-                        return {name: c.name, id: c.id};
-                    });
-                }
-                if (this.tags) {
-                    tokentags = this.tags.map(function(c){
-                        return {name: c.name, id: c.name};
-                    });
-                }
+                clouds = this.costReport.group_by.cloud || [];
+                stacks = this.costReport.group_by.stack || [];
+                tags = this.costReport.group_by.tag || [];
             }
-            if (this.filterby.type == 'stack')
-                items = this.model.stacksArray || stacks;
-            else if (this.filterby.type == 'cloud')
-                items = this.model.cloudsArray || clouds;
-            else if (this.filterby.type == 'tag'){
-                var tags = [];
-                if (!token) {
-                    tags = this.model.machinesArray.filter(function(m){
-                            return m.tags.length > 0
-                        }).map(function(m){
-                            for (var i=0; i < m.tags.length; i++){
-                                var postfix = '';
-                                if (m.tags[i].value != ''){
-                                    postfix = '='+m.tags[i].value;
-                                }
-                                return {
-                                    'name': m.tags[i].key+postfix,
-                                    'id': m.tags[i].key+postfix,
-                                    'val': m.tags[i].val
-                                };
+            else if (this.model) {
+                clouds = this.model.cloudsArray;
+                stacks = this.model.stacksArray;
+                tags = this.model.machinesArray.filter(function(m){
+                        return m.tags.length > 0
+                    }).map(function(m){
+                        for (var i=0; i < m.tags.length; i++){
+                            var postfix = '';
+                            if (m.tags[i].value != ''){
+                                postfix = '='+m.tags[i].value;
                             }
-                        });
-                    var names = tags.map(function(t){
-                        return t.name;
-                    })
-                }
-                items = tags.filter(function(t, ind){
+                            return {
+                                'name': m.tags[i].key+postfix,
+                                'id': m.tags[i].key+postfix,
+                                'val': m.tags[i].val
+                            };
+                        }
+                    });
+                var names = tags.map(function(t){
+                    return t.name;
+                });
+                tags = tags.filter(function(t, ind){
                     return names.indexOf(t.name) == ind;
                 });
             }
-            else
-                items = [];
 
-            if (!items.length){
-                this.set('filterbyDisable', true);
-            }
-            else {
-                this.set('filterbyDisable', false);
-            }
+            this.set('clouds', clouds);
+            this.set('stacks', stacks);
+            this.set('tags', tags);
 
-            this.set('filterbyItems',items);
+        },
+        computeFilterbyItems: function (filterby) {
+            var items = [];
+            if (filterby.path == 'filterby.type'){
+                if (this.filterby.type == 'stack')
+                    items = this.stacks;
+                else if (this.filterby.type == 'cloud')
+                    items = this.clouds;
+                else if (this.filterby.type == 'tag')
+                    items = this.tags;
+                else
+                    items = [];
+
+                if (!items.length){
+                    this.set('filterbyDisable', true);
+                }
+                else {
+                    this.set('filterbyDisable', false);
+                }
+
+                this.set('filterbyItems',items);
+            }
 
             // if filterby changed reset selected item
             if (filterby.path == 'filterby.type'){
@@ -658,7 +661,7 @@
 
         combineParams: function(time, filter) {
             // console.log('p send ', filter);
-            
+
             // dont update params so dont request, if user changes window, type, name or has not specified filter by id
             // also dont request for past = -1
             if (filter.path == 'filterby.type' || filter.path == 'filterby.name' || time.path == 'timeParams.window' || (filter.path == 'filterby.id' && filter.value == "") || time.value == "-1") {
@@ -692,7 +695,7 @@
                     else 
                         return this.clouds && this.clouds.find(function(c){
                             return c.id == id;
-                        }).title;
+                        }).name;
                 }
                 else if (this.filterby.type == 'stack') {
                     if (!this.token)
@@ -725,9 +728,18 @@
             this.set('clouds', e.detail.xhr.response);
         },
 
+        handleResponseStacks: function (e) {
+            console.log('handleResponseStacks', e);
+            this.set('stacks', e.detail.xhr.response);
+        },
+
         handleResponseCostReport: function (e) {
             console.log('handleResponseCostReport', e);
             this.set('costReport', e.detail.xhr.response);
+            
+            if (this.filterby.type == '' || this.filterby.id == '')
+                this.updateFilterItems(this.costReport.group_by);
+
             this.$.usageReportAjax.generateRequest();
         },
 
