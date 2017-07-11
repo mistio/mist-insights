@@ -12,6 +12,8 @@
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 
+<link rel="import" href="insights-list.html">
+
 <script src="../moment/moment.js"></script>
 <!--
 `mist-insights`
@@ -23,7 +25,7 @@
 <dom-module id="mist-insights">
     <template>
         <style include="default-theme iron-flex iron-flex-alignment iron-flex-factors">
-             :host {
+            :host {
                 display: block;
                 font-family: 'Roboto', 'Noto', sans-serif;
                 font-size: 16px;
@@ -42,6 +44,12 @@
             .graph {
                 width:100%;
                 min-height:300px;
+            }
+
+            .smaller {
+                text-transform: uppercase;
+                font-size: 0.9em;
+                color: rgba(0,0,0,0.54)
             }
 
             .uppercase,
@@ -92,6 +100,11 @@
             .cost-column {
                 text-align: right;
                 width: 70px;
+            }
+
+            .list {
+                margin-top: 16px;
+                margin-bottom: 32px;
             }
 
         </style>
@@ -155,12 +168,16 @@
                         <div id="costGraph" class="graph"></div>
                     </div>
                     <div class="flex-1">
-                        <div id="drillcostgraph" class="graph"></div>
+                        <div class="flex-1">
+                            <div class="smaller">Cost by Cloud</div>
+                            <div id="drillcostgraph" class="graph"></div>
+                        </div>
                     </div>
                     <div class="flex-1">
-                        <div id="drillcostlist" class="flex">
+
+                        <div id="costListByCloud" class="flex">
                             <div class="list">
-                                <template is="dom-repeat" items="{{costDrillList}}">
+                                <template is="dom-repeat" items="{{costListByCloud}}">
                                     <div class="layout horizontal">
                                         <span>[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
@@ -181,6 +198,57 @@
                                 </template>
                             </div>
                         </div>
+
+                        <div id="costListByStack" class="flex">
+                            <div class="smaller">Cost by Stack</div>
+                            <div class="list">
+                                <template is="dom-repeat" items="{{costListByStack}}">
+                                    <div class="layout horizontal">
+                                        <span>[[_index(index)]]. </span>
+                                        <span class="flexchild name-col flex-2">
+                                            [[item.name]]
+                                            <span hidden$="[[item.name.length]]">
+                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
+                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                            </span>
+                                        </span>
+                                        <div class="machines-column flex-1" title="machines">
+                                            [[item.machine_count.unique]] 
+                                            machines
+                                        </div>
+                                        <span class="cost-column">
+                                            $[[item.cost]]
+                                        </span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <div id="costListByTag" class="flex">
+                            <div class="smaller">Cost by Tag</div>
+                            <div class="list">
+                                <template is="dom-repeat" items="{{costListByTag}}">
+                                    <div class="layout horizontal">
+                                        <span>[[_index(index)]]. </span>
+                                        <span class="flexchild name-col flex-2">
+                                            [[item.name]]
+                                            <span hidden$="[[item.name.length]]">
+                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
+                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                            </span>
+                                        </span>
+                                        <div class="machines-column flex-1" title="machines">
+                                            [[item.machine_count.unique]] 
+                                            machines
+                                        </div>
+                                        <span class="cost-column">
+                                            $[[item.cost]]
+                                        </span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -370,7 +438,9 @@
                     ]
                 }
             },
-            costDrillList: Array,
+            costListByCloud: Array,
+            costListByStack: Array,
+            costListByTag: Array,
             usageGraph: Object,
             usageGraphOptions: {
                 type: Object,
@@ -489,7 +559,8 @@
                         data: [10]
                     }]
                 }
-            }
+            },
+            period: String
         },
 
         listeners: {
@@ -520,6 +591,10 @@
                 // this.$.cloudsAjax.generateRequest();
                 // this.$.stacksAjax.generateRequest();
                 // this.$.tagsAjax.generateRequest();
+            }
+
+            if (this.period) {
+                this.set('timeParams.window', this.period);
             }
 
             // this.$.costReportAjax.generateRequest();
@@ -670,7 +745,9 @@
             
             var costRingData = [],
                 costRingLabels = [],
-                costDrillData = [];
+                costListByCloud = [],
+                costListByStack = [],
+                costListByTag = [];
             if (this.costReport && this.costReport.group_by) {
                 costRingData = this.costReport.group_by['cloud'].map(function(point){
                     return {value: point.cost, name: point.name};
@@ -678,7 +755,11 @@
                 costRingLabels = this.costReport.group_by['cloud'].map(function(point){
                     return point.name;
                 }, this);
-                costDrillData = this.costReport.group_by['cloud'].sort(function(a,b){ return a.cost < b.cost});
+                costListByCloud = this.costReport.group_by['cloud'].sort(function(a,b){ return a.cost < b.cost});
+                if (this.costReport.group_by['stack'])
+                    costListByStack = this.costReport.group_by['stack'].sort(function(a,b){ return a.cost < b.cost});
+                if (this.costReport.group_by['tag'])
+                    costListByTag = this.costReport.group_by['tag'].sort(function(a,b){ return a.cost < b.cost});
             }
 
             // fill in ring
@@ -687,7 +768,9 @@
             if (this.drillcostgraph)
                 this.drillcostgraph.setOption(this.drillcostgraphOptions);
 
-            this.set('costDrillList', costDrillData);
+            this.set('costListByCloud', costListByCloud);
+            this.set('costListByStack', costListByStack);
+            this.set('costListByTag', costListByTag);
 
             // // fill in first list
             // if (this.costReport.group_by[drillList1] && drillList1 && drillList1.length) {
