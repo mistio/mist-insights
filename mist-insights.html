@@ -131,6 +131,10 @@
                 padding: 0;
             }
 
+            .comparative {
+                margin-bottom: 24px;
+            }
+
         </style>
 
         <iron-media-query query="(min-width: 1180px)" query-matches="{{largescreen}}"></iron-media-query>
@@ -187,8 +191,7 @@
             </div>
             <div>
                 <h2>Cost per month</h2>
-                <div class="comparative">Comparative cost: [[costReport.comparative_cost]]% from previous [[timeParams.window]] | Current cost: $[[costReport.cost]]</div>
-                <div class="comparative">Cost per month: max: $[[costReport.cost_per_month.max]], avg: $[[costReport.cost_per_month.mean]], min: $[[costReport.cost_per_month.min]]</div>
+                <div class="comparative">Current cost: $[[costReport.cost]] ([[costReport.comparative_cost]]% from previous [[timeParams.window]]) | Cost per month: max: $[[costReport.cost_per_month.max]], avg: $[[costReport.cost_per_month.mean]], min: $[[costReport.cost_per_month.min]]</div>
                 <div class="layout horizontal wrap"> <!-- TODO: vertical in small screens -->
                     <div class="flex-2">
                         <div id="costGraph" class="graph"></div>
@@ -283,8 +286,21 @@
             </div>
             <div>
                 <h2>Load</h2>
-                <div class="comparative">Comparative load: max: [[usageReport.comparative_load.max]]%, avg: [[usageReport.comparative_load.mean]]%, min: [[usageReport.comparative_load.min]]% from previous [[timeParams.window]]</div>
-                <div class="comparative">Comparative cores: max: [[usageReport.comparative_cores.max]]%, avg: [[usageReport.comparative_cores.mean]]%, min: [[usageReport.comparative_cores.min]]% from previous [[timeParams.window]]</div>
+                <div class="comparative">
+                    [[usageReport.load.max]] MAX Load
+                    ([[usageReport.comparative_load.max]]% from previous [[timeParams.window]]) |
+                    [[usageReport.load.max]] MIN Load
+                    ([[usageReport.comparative_load.min]]% from previous [[timeParams.window]]) |
+                    [[usageReport.load.max]] AVG Load
+                    ([[usageReport.comparative_load.mean]]% from previous [[timeParams.window]]) 
+                    <br/>
+                    [[usageReport.load.max]] MAX cores
+                    ([[usageReport.comparative_cores.max]]% from previous [[timeParams.window]]) |
+                    [[usageReport.load.max]] MIN cores
+                    ([[usageReport.comparative_cores.min]]% from previous [[timeParams.window]]) |
+                    [[usageReport.load.max]] AVG Load
+                    ([[usageReport.comparative_cores.mean]]% from previous [[timeParams.window]])
+                </div>
                 
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
@@ -379,10 +395,11 @@
             </div>
             <div>
                 <h2>Machines Count</h2>
-                <div class="comparative">UNIQUE: Comparative count: [[costReport.comparative_machine_count.unique]]% machines from previous [[timeParams.window]] | Current count: [[costReport.machine_count.unique]] machines</div>
-                <div class="comparative">MAX: Comparative count: [[costReport.comparative_machine_count.max]]% machines from previous [[timeParams.window]] | Current count: [[costReport.machine_count.max]] machines</div>
-                <div class="comparative">MIN: Comparative count: [[costReport.comparative_machine_count.min]]% machines from previous [[timeParams.window]] | Current count: [[costReport.machine_count.min]] machines</div>
-                <div class="comparative">AVG: Comparative count: [[costReport.comparative_machine_count.mean]]% machines from previous [[timeParams.window]] | Current count: [[costReport.machine_count.mean]] machines</div>
+                <div class="comparative">
+                    [[costReport.machine_count.unique]] UNIQUE machines ([[costReport.comparative_machine_count.unique]]% from previous [[timeParams.window]]) | MAX [[costReport.machine_count.max]] machines ([[costReport.comparative_machine_count.max]]% from previous [[timeParams.window]]) 
+                    <br/>
+                    MIN [[costReport.machine_count.min]] machines ([[costReport.comparative_machine_count.min]]% from previous [[timeParams.window]]) | AVG [[costReport.machine_count.mean]] machines ([[costReport.comparative_machine_count.mean]]% from previous [[timeParams.window]])
+                </div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
                         <div id="machinesGraph" class="graph"></div>
