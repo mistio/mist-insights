@@ -191,7 +191,7 @@
             </div>
             <div>
                 <h2>Cost per month</h2>
-                <div class="comparative">Current cost: $[[costReport.cost]] ([[costReport.comparative_cost]]% from previous [[timeParams.window]]) | Cost per month: max: $[[costReport.cost_per_month.max]], avg: $[[costReport.cost_per_month.mean]], min: $[[costReport.cost_per_month.min]]</div>
+                <div class="comparative">Current cost: $[[_formatMoney(costReport.cost)]] ([[costReport.comparative_cost]]% from previous [[timeParams.window]]) | Cost per month: max: $[[_formatMoney(costReport.cost_per_month.max)]], avg: $[[_formatMoney(costReport.cost_per_month.mean)]], min: $[[_formatMoney(costReport.cost_per_month.min)]]</div>
                 <div class="layout horizontal wrap"> <!-- TODO: vertical in small screens -->
                     <div class="flex-2">
                         <div id="costGraph" class="graph"></div>
