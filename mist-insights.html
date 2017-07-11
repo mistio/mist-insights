@@ -100,13 +100,11 @@
                 width: 30%;
             }
 
-            /*#costListByCloud .cost-column {
-                width: 70px;
-            }*/
-
             .list {
                 margin-top: 16px;
                 margin-bottom: 32px;
+                min-width: 300px;
+                max-width: 600px;
             }
 
             .tag {
@@ -188,7 +186,7 @@
             </div>
             <div>
                 <h2>Cost per month</h2>
-                <div class="layout horizontal"> <!-- TODO: vertical in small screens -->
+                <div class="layout horizontal wrap"> <!-- TODO: vertical in small screens -->
                     <div class="flex-2">
                         <div id="costGraph" class="graph"></div>
                     </div>
@@ -375,7 +373,7 @@
             </div>
             <div>
                 <h2>Machines Count</h2>
-                <div class="layout horizontal">
+                <div class="layout horizontal wrap">
                     <div class="flex-1">
                         <div id="machinesGraph" class="graph"></div>
                     </div>
