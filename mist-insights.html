@@ -194,13 +194,13 @@
                 <div class="comparative">Current cost: $[[_formatMoney(costReport.cost)]] ([[costReport.comparative_cost]]% from previous [[timeParams.window]]) | Cost per month: max: $[[_formatMoney(costReport.cost_per_month.max)]], avg: $[[_formatMoney(costReport.cost_per_month.mean)]], min: $[[_formatMoney(costReport.cost_per_month.min)]]</div>
                 <div class="layout horizontal wrap"> <!-- TODO: vertical in small screens -->
                     <div class="flex-2">
-                        <div id="costGraph" class="graph"></div>
+                        <div id="costGraph" class="graph" style$="width: [[costWidth]]px;"></div>
                     </div>
                     <div class="flex-2">
                         <div class="smaller">Cost by Cloud</div>
                         <div class="layout vertical"> <!-- TODO: horizontal in large screens -->
                             <div class="flex-1">
-                                <div id="drillcostgraph" class="graph"></div>
+                                <div id="drillcostgraph" class="graph" style$="width: [[drillCostWidth]]px;"></div>
                             </div>
                             <div class="flex-1">
 
@@ -304,7 +304,7 @@
                 
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
-                        <div id="usageGraph" class="graph"></div>
+                        <div id="usageGraph" class="graph" style$="width: [[usageWidth]]px;"></div>
                     </div>
                     <div class="flex-1">
 
@@ -402,7 +402,7 @@
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
-                        <div id="machinesGraph" class="graph"></div>
+                        <div id="machinesGraph" class="graph" style$="width: [[machinesWidth]]px;"></div>
                     </div>
                     <div class="flex-1">
 
@@ -768,11 +768,15 @@
                     }]
                 }
             },
-            period: String
+            period: String,
+            costWidth: Number,
+            drillCostWidth: Number,
+            usageWidth: Number,
+            machinesWidth: Number
         },
 
         listeners: {
-            'resize' : 'updateChartWidth'
+            'resize-insights-graphs' : 'updateChartWidth'
         },
 
         observers: [
@@ -822,7 +826,7 @@
             this.machinesGraph = echarts.init(this.$.machinesGraph, 'insights');
             this.usageGraph = echarts.init(this.$.usageGraph, 'insights');
             this.drillcostgraph = echarts.init(this.$.drillcostgraph);
-            // this.updateChartWidth(e);
+            this.updateChartWidth();
             console.log('initialized charts');
         },
 
@@ -1174,25 +1178,35 @@
             });
         },
 
-        updateChartWidth: function(e){
-            var parentWidth = this.$.graphRow.offsetWidth;
-            var halph = parentWidth/2, 
-                third = parentWidth/3, 
-                quarter = parentWidth/4;
+        updateChartWidth: function(){
+            var parentWidth = this.$.graphRow.offsetWidth - 50;
+
+            if (parentWidth/2 > 400) {
+                this.set('costWidth',parentWidth/2);
+                this.set('drillCostWidth',parentWidth/2);
+                this.set('usageWidth',parentWidth/2);
+                this.set('machinesWidth',parentWidth/2);
+            }
+            else {
+                this.set('costWidth',parentWidth);
+                this.set('drillCostWidth',parentWidth);
+                this.set('usageWidth',parentWidth);
+                this.set('machinesWidth',parentWidth);
+            }
 
             this.resizeGraphs();
         },
 
         resizeGraphs: function(){
             console.log('resizeGraphs');
-            if (this.costgraph)
-                this.costgraph.resize();
+            if (this.costGraph)
+                this.costGraph.resize();
             if (this.drillcostgraph)
                 this.drillcostgraph.resize();
-            if (this.loadgraph)
-                this.loadgraph.resize();
-            if (this.machinesgraph)
-                this.machinesgraph.resize();
+            if (this.usageGraph)
+                this.usageGraph.resize();
+            if (this.machinesGraph)
+                this.machinesGraph.resize();
         },
 
         _index: function(ind) {
@@ -1253,12 +1267,12 @@
     };
 
     /* init - you can init any event */
-    // throttle("resize", "optimizedResize");
+    throttle("resize", "optimizedResize");
 })();
 
 // handle event
 window.addEventListener("optimizedResize", function() {
-    document.querySelector('mist-insights').fire('resize')
+    document.querySelector('mist-insights').fire('resize-insights-graphs')
 });
 
 Number.prototype.formatMoney = function(c, d, t){
