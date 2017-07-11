@@ -184,36 +184,38 @@
             </div>
             <div>
                 <h2>Cost per month</h2>
-                <div class="layout horizontal">
+                <div class="layout horizontal"> <!-- TODO: vertical in small screens -->
                     <div class="flex-2">
                         <div id="costGraph" class="graph"></div>
                     </div>
-                    <div class="flex-1">
-                        <div class="flex-1">
-                            <div class="smaller">Cost by Cloud</div>
-                            <div id="drillcostgraph" class="graph"></div>
-                        </div>
-                    </div>
-                    <div class="flex-1">
+                    <div class="flex-2">
+                        <div class="smaller">Cost by Cloud</div>
+                        <div class="layout vertical"> <!-- TODO: horizontal in large screens -->
+                            <div class="flex-1">
+                                <div id="drillcostgraph" class="graph"></div>
+                            </div>
+                            <div class="flex-1">
 
-                        <div id="costListByCloud" class="flex" hidden$="{{!costListByCloud}}">
-                            <div class="smaller">Cost by Cloud</div>
-                            <div class="list">
-                                <template is="dom-repeat" items="{{costListByCloud}}">
-                                    <div class="layout horizontal">
-                                        <span>[[_index(index)]]. </span>
-                                        <span class="flexchild name-col flex-2">
-                                            [[item.name]]
-                                        </span>
-                                        <div class="machines-column flex-1" title="machines">
-                                            [[item.machine_count.unique]] 
-                                            machines
-                                        </div>
-                                        <span class="cost-column">
-                                            $[[item.cost]]
-                                        </span>
+                                <div id="costListByCloud" class="flex" hidden$="{{!costListByCloud}}">
+                                    <div class="list">
+                                        <template is="dom-repeat" items="{{costListByCloud}}">
+                                            <div class="layout horizontal">
+                                                <span>[[_index(index)]]. </span>
+                                                <span class="flexchild name-col flex-2">
+                                                    [[item.name]]
+                                                </span>
+                                                <div class="machines-column flex-1" title="machines">
+                                                    [[item.machine_count.unique]] 
+                                                    machines
+                                                </div>
+                                                <span class="cost-column">
+                                                    $[[item.cost]]
+                                                </span>
+                                            </div>
+                                        </template>
                                     </div>
-                                </template>
+                                </div>
+
                             </div>
                         </div>
 
@@ -264,7 +266,7 @@
                                 </template>
                             </div>
                         </div>
-
+                        
                     </div>
                 </div>
             </div>
