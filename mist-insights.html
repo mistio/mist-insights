@@ -902,9 +902,9 @@
             this.set('costListByTag', costListByTag || false);
 
             // fill in machines list
-            this.set('machinesListByCloud', costListByCloud.sort(function(a,b){ return a.machine_count.mean < b.machine_count.mean}) || false);
-            this.set('machinesListByStack', costListByStack.sort(function(a,b){ return a.machine_count.mean < b.machine_count.mean}) || false);
-            this.set('machinesListByTag', costListByTag.sort(function(a,b){ return a.machine_count.mean < b.machine_count.mean}) || false);            
+            this.set('machinesListByCloud', costListByCloud.sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique}) || false);
+            this.set('machinesListByStack', costListByStack.sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique}) || false);
+            this.set('machinesListByTag', costListByTag.sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique}) || false);            
         },
 
         computePastItems: function (timeParamsChangeRecord) {
