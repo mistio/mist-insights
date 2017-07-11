@@ -111,6 +111,25 @@
                 margin-bottom: 32px;
             }
 
+            .tag {
+                vertical-align: middle;
+                line-height: 1.6em;
+                display: inline-block;
+                background-color: #888;
+                color: #fff;
+                font-size: 14px;
+                padding: 0 0.5em;
+                margin: 0 1px;
+                border-radius: 2px;
+                letter-spacing: .4px;
+                font-weight: 400;
+                word-break: break-all;
+                max-width: 250px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
         </style>
 
         <iron-media-query query="(min-width: 1180px)" query-matches="{{largescreen}}"></iron-media-query>
@@ -187,10 +206,6 @@
                                         <span>[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
-                                            <span hidden$="[[item.name.length]]">
-                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
-                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
-                                            </span>
                                         </span>
                                         <div class="machines-column flex-1" title="machines">
                                             [[item.machine_count.unique]] 
@@ -213,8 +228,7 @@
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
                                             <span hidden$="[[item.name.length]]">
-                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
-                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                                not in a stack
                                             </span>
                                         </span>
                                         <div class="machines-column flex-1" title="machines">
@@ -236,10 +250,9 @@
                                     <div class="layout horizontal">
                                         <span>[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
-                                            [[item.name]]
+                                            <span hidden$="[[!item.name.length]]" class="tag">[[item.name]]</span>
                                             <span hidden$="[[item.name.length]]">
-                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
-                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                                untagged
                                             </span>
                                         </span>
                                         <div class="machines-column flex-1" title="machines">
@@ -279,10 +292,6 @@
                                         <span>[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
-                                            <span hidden$="[[item.name.length]]">
-                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
-                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
-                                            </span>
                                         </span>
                                         <div class="machines-column">
                                             [[item.machine_count.unique]] machines
@@ -307,8 +316,7 @@
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
                                             <span hidden$="[[item.name.length]]">
-                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
-                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                                not in a stack
                                             </span>
                                         </span>
                                         <div class="machines-column">
@@ -331,11 +339,10 @@
                                 <template is="dom-repeat" items="{{usageListByTag}}">
                                     <div class="layout horizontal">
                                         <span>[[_index(index)]]. </span>
-                                        <span class="flexchild name-col flex-2">
-                                            [[item.name]]
+                                        <span class="flexchild name-col flex-2 tags">
+                                            <span hidden$="[[!item.name.length]]" class="tag">[[item.name]]</span>
                                             <span hidden$="[[item.name.length]]">
-                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
-                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                                untagged
                                             </span>
                                         </span>
                                         <div class="machines-column">
@@ -378,10 +385,6 @@
                                         <span>[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
-                                            <span hidden$="[[item.name.length]]">
-                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
-                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
-                                            </span>
                                         </span>
                                         <div class="machines-column flex-1" title="machines">
                                             [[item.machine_count.unique]] 
@@ -404,8 +407,7 @@
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
                                             <span hidden$="[[item.name.length]]">
-                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
-                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                                not in a stack
                                             </span>
                                         </span>
                                         <div class="machines-column flex-1" title="machines">
@@ -427,10 +429,9 @@
                                     <div class="layout horizontal">
                                         <span>[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
-                                            [[item.name]]
+                                            <span hidden$="[[!item.name.length]]" class="tag">[[item.name]]</span>
                                             <span hidden$="[[item.name.length]]">
-                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
-                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                                untagged
                                             </span>
                                         </span>
                                         <div class="machines-column flex-1" title="machines">
