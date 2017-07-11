@@ -99,8 +99,12 @@
 
             .cost-column {
                 text-align: right;
-                width: 70px;
+                width: 30%;
             }
+
+            /*#costListByCloud .cost-column {
+                width: 70px;
+            }*/
 
             .list {
                 margin-top: 16px;
@@ -175,7 +179,8 @@
                     </div>
                     <div class="flex-1">
 
-                        <div id="costListByCloud" class="flex">
+                        <div id="costListByCloud" class="flex" hidden$="{{!costListByCloud}}">
+                            <div class="smaller">Cost by Cloud</div>
                             <div class="list">
                                 <template is="dom-repeat" items="{{costListByCloud}}">
                                     <div class="layout horizontal">
@@ -199,7 +204,7 @@
                             </div>
                         </div>
 
-                        <div id="costListByStack" class="flex">
+                        <div id="costListByStack" class="flex" hidden$="{{!costListByStack}}">
                             <div class="smaller">Cost by Stack</div>
                             <div class="list">
                                 <template is="dom-repeat" items="{{costListByStack}}">
@@ -224,7 +229,7 @@
                             </div>
                         </div>
 
-                        <div id="costListByTag" class="flex">
+                        <div id="costListByTag" class="flex" hidden$="{{!costListByTag}}">
                             <div class="smaller">Cost by Tag</div>
                             <div class="list">
                                 <template is="dom-repeat" items="{{costListByTag}}">
@@ -261,7 +266,94 @@
             <div>
                 <h2>Load</h2>
                 <div class="layout horizontal wrap">
-                    <div id="usageGraph" class="graph"></div>
+                    <div class="flex-1">
+                        <div id="usageGraph" class="graph"></div>
+                    </div>
+                    <div class="flex-1">
+
+                        <div id="usageListByCloud" class="flex" hidden$="{{!usageListByCloud}}">
+                            <div class="smaller">Load by Cloud</div>
+                            <div class="list">
+                                <template is="dom-repeat" items="{{usageListByCloud}}">
+                                    <div class="layout horizontal">
+                                        <span>[[_index(index)]]. </span>
+                                        <span class="flexchild name-col flex-2">
+                                            [[item.name]]
+                                            <span hidden$="[[item.name.length]]">
+                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
+                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                            </span>
+                                        </span>
+                                        <div class="machines-column">
+                                            [[item.machine_count.unique]] machines
+                                        </div>
+                                        <div class="machines-column">
+                                            [[item.cores.mean]] cores
+                                        </div>
+                                        <span class="cost-column">
+                                            [[item.load.mean]] load
+                                        </span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <div id="usageListByStack" class="flex" hidden$="{{!usageListByStack}}">
+                            <div class="smaller">Load by Stack</div>
+                            <div class="list">
+                                <template is="dom-repeat" items="{{usageListByStack}}">
+                                    <div class="layout horizontal">
+                                        <span>[[_index(index)]]. </span>
+                                        <span class="flexchild name-col flex-2">
+                                            [[item.name]]
+                                            <span hidden$="[[item.name.length]]">
+                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
+                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                            </span>
+                                        </span>
+                                        <div class="machines-column">
+                                            [[item.machine_count.unique]] machines
+                                        </div>
+                                        <div class="machines-column">
+                                            [[item.cores.mean]] cores
+                                        </div>
+                                        <span class="cost-column">
+                                            [[item.load.mean]] load
+                                        </span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <div id="usageListByTag" class="flex" hidden$="{{!usageListByTag}}">
+                            <div class="smaller">Load by Tag</div>
+                            <div class="list">
+                                <template is="dom-repeat" items="{{usageListByTag}}">
+                                    <div class="layout horizontal">
+                                        <span>[[_index(index)]]. </span>
+                                        <span class="flexchild name-col flex-2">
+                                            [[item.name]]
+                                            <span hidden$="[[item.name.length]]">
+                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
+                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                            </span>
+                                        </span>
+                                        <div class="machines-column">
+                                            [[item.machine_count.unique]] machines
+                                        </div>
+                                        <div class="machines-column">
+                                            [[item.cores.mean]] cores
+                                        </div>
+                                        <span class="cost-column">
+                                            [[item.load.mean]] load
+                                        </span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </paper-material>
@@ -273,7 +365,87 @@
             <div>
                 <h2>Machines Count</h2>
                 <div class="layout horizontal">
-                    <div id="machinesGraph" class="graph"></div>
+                    <div class="flex-1">
+                        <div id="machinesGraph" class="graph"></div>
+                    </div>
+                    <div class="flex-1">
+
+                        <div id="machinesListByCloud" class="flex" hidden$="{{!machinesListByCloud}}">
+                            <div class="smaller">Machines by Cloud</div>
+                            <div class="list">
+                                <template is="dom-repeat" items="{{costListByCloud}}">
+                                    <div class="layout horizontal">
+                                        <span>[[_index(index)]]. </span>
+                                        <span class="flexchild name-col flex-2">
+                                            [[item.name]]
+                                            <span hidden$="[[item.name.length]]">
+                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
+                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                            </span>
+                                        </span>
+                                        <div class="machines-column flex-1" title="machines">
+                                            [[item.machine_count.unique]] 
+                                            machines
+                                        </div>
+                                        <span class="cost-column">
+                                            $[[item.cost]]
+                                        </span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <div id="machinesListByStack" class="flex" hidden$="{{!machinesListByStack}}">
+                            <div class="smaller">Machines by Stack</div>
+                            <div class="list">
+                                <template is="dom-repeat" items="{{costListByStack}}">
+                                    <div class="layout horizontal">
+                                        <span>[[_index(index)]]. </span>
+                                        <span class="flexchild name-col flex-2">
+                                            [[item.name]]
+                                            <span hidden$="[[item.name.length]]">
+                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
+                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                            </span>
+                                        </span>
+                                        <div class="machines-column flex-1" title="machines">
+                                            [[item.machine_count.unique]] 
+                                            machines
+                                        </div>
+                                        <span class="cost-column">
+                                            $[[item.cost]]
+                                        </span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <div id="machinesListByTag" class="flex" hidden$="{{!machinesListByTag}}">
+                            <div class="smaller">Machines by Tag</div>
+                            <div class="list">
+                                <template is="dom-repeat" items="{{costListByTag}}">
+                                    <div class="layout horizontal">
+                                        <span>[[_index(index)]]. </span>
+                                        <span class="flexchild name-col flex-2">
+                                            [[item.name]]
+                                            <span hidden$="[[item.name.length]]">
+                                                <span hidden$="[[!isTag(ringTitle)]]">untagged</span>
+                                                <span hidden$="[[isTag(ringTitle)]]">not in a stack</span>
+                                            </span>
+                                        </span>
+                                        <div class="machines-column flex-1" title="machines">
+                                            [[item.machine_count.unique]] 
+                                            machines
+                                        </div>
+                                        <span class="cost-column">
+                                            $[[item.cost]]
+                                        </span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </paper-material>
@@ -441,6 +613,9 @@
             costListByCloud: Array,
             costListByStack: Array,
             costListByTag: Array,
+            usageListByCloud: Array,
+            usageListByStack: Array,
+            usageListByTag: Array,
             usageGraph: Object,
             usageGraphOptions: {
                 type: Object,
@@ -524,6 +699,9 @@
                     }
                 }
             },
+            machinesListByCloud: Array,
+            machinesListByStack: Array,
+            machinesListByTag: Array,
             machinesGraph: Object,
             machinesGraphOptions: {
                 type: Object,
@@ -651,7 +829,11 @@
         updateUsageData: function (history) {
             var usageData = [],
                 coresData = [],
-                labels = [];
+                labels = [],
+                usageListByCloud,
+                usageListByStack,
+                usageListByTag;
+
             if (history) {
                 labels = history.map(function (datapoint) {
                     if (['day', 'hour'].indexOf(this.timeParams.window) != -1)
@@ -672,77 +854,23 @@
             this.set('usageGraphOptions.series.1.data', usageData);
             if (this.usageGraph)
                 this.usageGraph.setOption(this.usageGraphOptions);
+
+            if (this.usageReport.group_by['stack'])
+                usageListByCloud = this.usageReport.group_by['cloud'].sort(function(a,b){ return a.load.mean < b.load.mean});
+            if (this.usageReport.group_by['stack'])
+                usageListByStack = this.usageReport.group_by['stack'].sort(function(a,b){ return a.load.mean < b.load.mean});
+            if (this.usageReport.group_by['tag'])
+                usageListByTag = this.usageReport.group_by['tag'].sort(function(a,b){ return a.load.mean < b.load.mean});
+
+            // fill in cost lists
+            this.set('usageListByCloud', usageListByCloud || false);
+            this.set('usageListByStack', usageListByStack || false);
+            this.set('usageListByTag', usageListByTag || false);
+
             console.log('updated usage data');
         },
 
-        updateCostDrillData: function(groupby, filterbyname) {
-            var drillData = [],
-                drillLabels = [],
-                drill, //Array
-                drillList1, //String
-                drillList2, //String
-                plural = "",
-                plural1 = "",
-                plural2 = "";
-
-            // show all categories when no filterby set : clouds in ring / stacks list / tags list
-            // show stacks in ring + tags list if filterby cloud
-            // show clouds in ring + tags list if filterby stack
-            // show clouds in ring + stacks in list if filterby tag
-
-            // var dataMap = [],
-            //     key;
-            
-            // if (this.costReport && this.costReport.group_by)
-            //     dataMap = Object.keys(this.costReport.group_by)
-
-            // if (this.filterby.type == '' || (this.filterby.type == "tag" && this.costReport.group_by['tag'])) {
-            //     drill = groupby['cloud'] || groupby['stack'] || groupby['tag'];
-
-            //     if (groupby['cloud'])       { key = 'cloud' }
-            //     else if (groupby['stack'])  { key = 'stack' }
-            //     else if (groupby['tag'])    { key = 'tag' }
-
-            //     dataMap.splice(dataMap.indexOf(key), 1);
-                
-            //     if (dataMap.length > 0 ) 
-            //         drillList1 = dataMap[0];
-                
-            //     if (dataMap.length > 1 )
-            //         drillList2 = dataMap[1];
-            // }
-            // else if (this.filterby.type == 'stack' || this.filterby.type == "cloud") {
-            //     drill = this.filterby.type == 'stack' ? groupby['cloud'] : groupby['stack'];
-            //     key =  this.filterby.type == 'stack' ? 'cloud' : 'stack';
-
-            //     dataMap.splice(dataMap.indexOf(key), 1);
-
-            //     if (dataMap.length)
-            //         drillList1 = dataMap[0];
-            // }
-            
-            // console.log("dataMap", this.filterby.type, dataMap, drillList1, drillList2);
-
-            // if (drill){
-            //     if (drill.length > 1)
-            //         plural = "s";
-
-            //     this.set('showRing', true);
-            //     this.set('ringTitle', this.filterby.name +" "+ drill.length +" "+ key+plural);
-                
-            //     drillData = drill.map(function(point){
-            //         return Number.prototype.formatMoney(point.cost);
-            //     }, this);
-            //     drillLabels = drill.map(function(point){
-            //         return point.name.length ? point.name : 'untagged';
-            //     });
-
-            // }
-            // else {
-            //     this.set('showRing', false);
-            //     this.set('ringTitle', "");
-            // }
-            
+        updateCostDrillData: function(groupby, filterbyname) {            
             var costRingData = [],
                 costRingLabels = [],
                 costListByCloud = [],
@@ -768,39 +896,15 @@
             if (this.drillcostgraph)
                 this.drillcostgraph.setOption(this.drillcostgraphOptions);
 
-            this.set('costListByCloud', costListByCloud);
-            this.set('costListByStack', costListByStack);
-            this.set('costListByTag', costListByTag);
+            // fill in cost lists
+            this.set('costListByCloud', costListByCloud || false);
+            this.set('costListByStack', costListByStack || false);
+            this.set('costListByTag', costListByTag || false);
 
-            // // fill in first list
-            // if (this.costReport.group_by[drillList1] && drillList1 && drillList1.length) {
-            //     if (this.costReport.group_by[drillList1].length > 1)
-            //         plural1 = "s";
-
-            //     this.set('showFirstList', true);
-            //     this.set('firstListTitle', this.filterby.name +" "+ this.costReport.group_by[drillList1].length +" "+ drillList1+plural1);
-
-            //     this.set('costDrillList1', this.costReport.group_by[drillList1] ? this.costReport.group_by[drillList1].sort(function(a,b){ return a.cost < b.cost}) : [])
-            // }
-            // else {
-            //     this.set('showFirstList', false);
-            //     this.set('firstListTitle', "");
-            // }
-
-            // fill in second list if needed
-            // if (this.costReport.group_by[drillList2] && drillList2 && drillList2.length){
-            //     if (this.costReport.group_by[drillList2].length > 1)
-            //         plural2 = "s";
-
-            //     this.set('showSecondList', true);
-            //     this.set('secondListTitle', this.filterby.name +" "+ this.costReport.group_by[drillList2].length +" "+ drillList2+plural2);
-
-            //     this.set('costDrillList2', this.costReport.group_by[drillList2] ? this.costReport.group_by[drillList2].sort(function(a,b){ return a.cost < b.cost}) : [])
-            // }
-            // else {
-            //     this.set('showSecondList', false);
-            //     this.set('secondListTitle', "");
-            // }
+            // fill in machines list
+            this.set('machinesListByCloud', costListByCloud.sort(function(a,b){ return a.machine_count.mean < b.machine_count.mean}) || false);
+            this.set('machinesListByStack', costListByStack.sort(function(a,b){ return a.machine_count.mean < b.machine_count.mean}) || false);
+            this.set('machinesListByTag', costListByTag.sort(function(a,b){ return a.machine_count.mean < b.machine_count.mean}) || false);            
         },
 
         computePastItems: function (timeParamsChangeRecord) {
