@@ -136,7 +136,7 @@
 
         <paper-material id="filtering" class="margin-botttom">
             <div class="container layout horizontal">
-                <div class="filter">
+                <div class="filter flex-1">
                     <div class="smaller">Time</div>
                     <paper-dropdown-menu no-label-float>
                         <paper-listbox id="window" slot="dropdown-content" attr-for-selected="value" selected="{{timeParams.window}}">
@@ -155,7 +155,7 @@
                         </paper-listbox>
                     </paper-dropdown-menu>
                 </div>
-                <div class="filter">
+                <div class="filter flex-1">
                     <div class="smaller">Filter by</div>
                     <paper-dropdown-menu no-label-float>
                         <paper-listbox id="filterbyType" slot="dropdown-content" attr-for-selected="value" selected="{{filterby.type}}">
