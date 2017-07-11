@@ -217,7 +217,7 @@
                                                     machines
                                                 </div>
                                                 <span class="cost-column">
-                                                    $[[item.cost]]
+                                                    $[[_formatMoney(item.cost)]]
                                                 </span>
                                             </div>
                                         </template>
@@ -244,7 +244,7 @@
                                             machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[item.cost]]
+                                            $[[_formatMoney(item.cost)]]
                                         </span>
                                     </div>
                                 </template>
@@ -268,7 +268,7 @@
                                             machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[item.cost]]
+                                            $[[_formatMoney(item.cost)]]
                                         </span>
                                     </div>
                                 </template>
@@ -420,7 +420,7 @@
                                             machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[item.cost]]
+                                            $[[_formatMoney(item.cost)]]
                                         </span>
                                     </div>
                                 </template>
@@ -444,7 +444,7 @@
                                             machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[item.cost]]
+                                            $[[_formatMoney(item.cost)]]
                                         </span>
                                     </div>
                                 </template>
@@ -468,7 +468,7 @@
                                             machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[item.cost]]
+                                            $[[_formatMoney(item.cost)]]
                                         </span>
                                     </div>
                                 </template>
@@ -1199,8 +1199,8 @@
             return ind+1;
         },
 
-        _toFixed: function(inp) {
-            return Number.prototype.formatMoney(inp);
+        _formatMoney: function(inp){
+            return inp.formatMoney(2);
         },
 
         handleResponse: function (e) {
