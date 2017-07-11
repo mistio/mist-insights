@@ -872,9 +872,9 @@
         updateCostDrillData: function(groupby, filterbyname) {            
             var costRingData = [],
                 costRingLabels = [],
-                costListByCloud = [],
-                costListByStack = [],
-                costListByTag = [];
+                costListByCloud,
+                costListByStack,
+                costListByTag;
             if (this.costReport && this.costReport.group_by) {
                 costRingData = this.costReport.group_by['cloud'].map(function(point){
                     return {value: point.cost, name: point.name};
@@ -901,9 +901,9 @@
             this.set('costListByTag', costListByTag || false);
 
             // fill in machines list
-            this.set('machinesListByCloud', costListByCloud.sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique}) || false);
-            this.set('machinesListByStack', costListByStack.sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique}) || false);
-            this.set('machinesListByTag', costListByTag.sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique}) || false);            
+            this.set('machinesListByCloud', costListByCloud ? costListByCloud.sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique}) : false);
+            this.set('machinesListByStack', costListByStack ? costListByStack.sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique}) : false);
+            this.set('machinesListByTag', costListByTag ? costListByTag.sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique}) : false);            
         },
 
         computePastItems: function (timeParamsChangeRecord) {
