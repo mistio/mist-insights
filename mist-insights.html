@@ -27,7 +27,7 @@
                 display: block;
                 font-family: 'Roboto', 'Noto', sans-serif;
                 font-size: 16px;
-                line-height: 1.6em;
+                line-height: 1.8em;
                 color: rgba(0,0,0,0.87);
             }
 
@@ -105,8 +105,12 @@
                 margin-top: 16px;
                 margin-bottom: 32px;
                 min-width: 300px;
-                max-width: 600px;
+                /*max-width: 600px;*/
             }
+
+            /*.list > .layout.horizontal:nth-of-type(2n+1) {
+                background-color: #f6f6f6;
+            }*/
 
             .tag {
                 vertical-align: middle;
@@ -135,13 +139,22 @@
                 margin-bottom: 24px;
             }
 
+            #test .test {
+                margin: 20px;
+                background-color: #eee;
+            }
+
+            .index {
+                margin-right: 4px;
+            }
+
         </style>
 
         <iron-media-query query="(min-width: 1180px)" query-matches="{{largescreen}}"></iron-media-query>
 
         <paper-material id="filtering" class="margin-botttom">
-            <div class="container layout horizontal">
-                <div class="filter flex-1">
+            <div class="container layout horizontal start">
+                <div class="filter flex-1 self-start">
                     <div class="smaller">Time</div>
                     <paper-dropdown-menu no-label-float>
                         <paper-listbox id="window" slot="dropdown-content" attr-for-selected="value" selected="{{timeParams.window}}">
@@ -180,8 +193,8 @@
                             </paper-item>
                         </paper-listbox>
                     </paper-dropdown-menu>
-                    <paper-button class="inline baseline smaller" on-tap="clearFilter" disabled$="{{!filterby.id.length}}">clear</paper-button>
                 </div>
+                <paper-button class="inline baseline smaller" on-tap="clearFilter" disabled$="{{!filterby.id.length}}">clear</paper-button>
             </div>
         </paper-material>
 
@@ -192,47 +205,45 @@
             <div>
                 <h2>Cost per month</h2>
                 <div class="comparative">Current cost: $[[_formatMoney(costReport.cost)]] ([[costReport.comparative_cost]]% from previous [[timeParams.window]]) | Cost per month: max: $[[_formatMoney(costReport.cost_per_month.max)]], avg: $[[_formatMoney(costReport.cost_per_month.mean)]], min: $[[_formatMoney(costReport.cost_per_month.min)]]</div>
-                <div class="layout horizontal wrap"> <!-- TODO: vertical in small screens -->
-                    <div class="flex-2">
-                        <div id="costGraph" class="graph" style$="width: [[costWidth]]px;"></div>
-                    </div>
-                    <div class="flex-2">
-                        <div class="smaller">Cost by Cloud</div>
-                        <div class="layout vertical"> <!-- TODO: horizontal in large screens -->
-                            <div class="flex-1">
-                                <div id="drillcostgraph" class="graph" style$="width: [[drillCostWidth]]px;"></div>
-                            </div>
-                            <div class="flex-1">
-
-                                <div id="costListByCloud" class="flex" hidden$="{{!costListByCloud}}">
-                                    <div class="list">
-                                        <template is="dom-repeat" items="{{costListByCloud}}">
-                                            <div class="layout horizontal">
-                                                <span>[[_index(index)]]. </span>
-                                                <span class="flexchild name-col flex-2">
-                                                    [[item.name]]
-                                                </span>
-                                                <div class="machines-column flex-1" title="machines">
-                                                    [[item.machine_count.unique]] 
-                                                    machines
-                                                </div>
-                                                <span class="cost-column">
-                                                    $[[_formatMoney(item.cost)]]
-                                                </span>
+                <div class="layout horizontal wrap">
+                <div class="flex-1">
+                    <div id="costGraph" class="graph" style$="width: [[costWidth]]px;"></div>
+                </div>
+                <div class="flex-1 layout vertical">
+                    <div class="horizontal layout wrap">
+                        <div class="flex-1">
+                            <div class="smaller">Cost by Cloud</div>
+                            <div id="drillcostgraph" class="graph" style$="width: [[drillCostWidth]]px;"></div>
+                        </div>
+                        <div class="flex-1">
+                            <div id="costListByCloud" class="flex" hidden$="{{!costListByCloud}}">
+                                <div class="list">
+                                    <template is="dom-repeat" items="{{costListByCloud}}">
+                                        <div class="layout horizontal">
+                                            <span class="index">[[_index(index)]]. </span>
+                                            <span class="flexchild name-col flex-2">
+                                                [[item.name]]
+                                            </span>
+                                            <div class="machines-column flex-1" title="machines">
+                                                [[item.machine_count.unique]]
+                                                m.
                                             </div>
-                                        </template>
-                                    </div>
+                                            <span class="cost-column">
+                                                $[[_formatMoney(item.cost)]]
+                                            </span>
+                                        </div>
+                                    </template>
                                 </div>
-
                             </div>
                         </div>
-
+                    </div>
+                    <div>
                         <div id="costListByStack" class="flex" hidden$="{{!costListByStack}}">
                             <div class="smaller">Cost by Stack</div>
                             <div class="list">
                                 <template is="dom-repeat" items="{{costListByStack}}">
                                     <div class="layout horizontal">
-                                        <span>[[_index(index)]]. </span>
+                                        <span class="index">[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
                                             <span hidden$="[[item.name.length]]">
@@ -256,7 +267,7 @@
                             <div class="list">
                                 <template is="dom-repeat" items="{{costListByTag}}">
                                     <div class="layout horizontal">
-                                        <span>[[_index(index)]]. </span>
+                                        <span class="index">[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
                                             <span hidden$="[[!item.name.length]]" class$="tag hidden-[[!item.name.length]]">[[item.name]]</span>
                                             <span hidden$="[[item.name.length]]">
@@ -274,9 +285,12 @@
                                 </template>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
+            </div>
+
+
             </div>
         </paper-material>
 
@@ -313,7 +327,7 @@
                             <div class="list">
                                 <template is="dom-repeat" items="{{usageListByCloud}}">
                                     <div class="layout horizontal">
-                                        <span>[[_index(index)]]. </span>
+                                        <span class="index">[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
                                         </span>
@@ -336,7 +350,7 @@
                             <div class="list">
                                 <template is="dom-repeat" items="{{usageListByStack}}">
                                     <div class="layout horizontal">
-                                        <span>[[_index(index)]]. </span>
+                                        <span class="index">[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
                                             <span hidden$="[[item.name.length]]">
@@ -362,7 +376,7 @@
                             <div class="list">
                                 <template is="dom-repeat" items="{{usageListByTag}}">
                                     <div class="layout horizontal">
-                                        <span>[[_index(index)]]. </span>
+                                        <span class="index">[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2 tags">
                                             <span hidden$="[[!item.name.length]]" class$="tag hidden-[[!item.name.length]]">[[item.name]]</span>
                                             <span hidden$="[[item.name.length]]">
@@ -411,7 +425,7 @@
                             <div class="list">
                                 <template is="dom-repeat" items="{{costListByCloud}}">
                                     <div class="layout horizontal">
-                                        <span>[[_index(index)]]. </span>
+                                        <span class="index">[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
                                         </span>
@@ -432,7 +446,7 @@
                             <div class="list">
                                 <template is="dom-repeat" items="{{costListByStack}}">
                                     <div class="layout horizontal">
-                                        <span>[[_index(index)]]. </span>
+                                        <span class="index">[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
                                             <span hidden$="[[item.name.length]]">
@@ -456,7 +470,7 @@
                             <div class="list">
                                 <template is="dom-repeat" items="{{costListByTag}}">
                                     <div class="layout horizontal">
-                                        <span>[[_index(index)]]. </span>
+                                        <span class="index">[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
                                             <span hidden$="[[!item.name.length]]" class$="tag hidden-[[!item.name.length]]">[[item.name]]</span>
                                             <span hidden$="[[item.name.length]]">
@@ -514,7 +528,10 @@
                 type: String,
                 value: 'https://mist.io'
             },
-            largescreen: Boolean,
+            largescreen: {
+                type: Boolean,
+                reflectToAttribute: true
+            },
             params: {
                 type: Object
             },
@@ -615,7 +632,7 @@
                         {
                             name:'cost',
                             type:'pie',
-                            center: ['65%', '50%'],
+                            center: ['65%', '40%'],
                             radius: ['50%', '70%'],
                             avoidLabelOverlap: false,
                             label: {
@@ -1184,9 +1201,12 @@
 
             if (parentWidth/2 > 400) {
                 this.set('costWidth',parentWidth/2);
-                this.set('drillCostWidth',parentWidth/2);
                 this.set('usageWidth',parentWidth/2);
                 this.set('machinesWidth',parentWidth/2);
+                if (parentWidth/4 > 300)
+                    this.set('drillCostWidth',parentWidth/4);
+                else
+                    this.set('drillCostWidth',parentWidth/2);
             }
             else {
                 this.set('costWidth',parentWidth);
