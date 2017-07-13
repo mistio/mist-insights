@@ -93,7 +93,13 @@
             .machines-column {
                 opacity: 0.54;
                 padding-right: 16px;
-                text-align: right;
+                text-align: left;
+
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                text-align-last: right;
             }
 
             .cost-column {
@@ -226,7 +232,7 @@
                                             </span>
                                             <div class="machines-column flex-1" title="machines">
                                                 [[item.machine_count.unique]]
-                                                m.
+                                                machines
                                             </div>
                                             <span class="cost-column">
                                                 $[[_formatMoney(item.cost)]]
@@ -747,9 +753,18 @@
                     }
                 }
             },
-            machinesListByCloud: Array,
-            machinesListByStack: Array,
-            machinesListByTag: Array,
+            machinesListByCloud: {
+                type: Array,
+                compute: 'sortByMachines(costListByCloud)'
+            },
+            machinesListByStack: {
+                type: Array,
+                compute: 'sortByMachines(costListByStack)'
+            },
+            machinesListByTag: {
+                type: Array,
+                compute: 'sortByMachines(costListByTag)'
+            },
             machinesGraph: Object,
             machinesGraphOptions: {
                 type: Object,
@@ -928,9 +943,6 @@
                 costListByCloud,
                 costListByStack,
                 costListByTag;
-            var machinesListByCloud,
-                machinesListByStack,
-                machinesListByTag;
 
             if (this.costReport && this.costReport.group_by) {
                 costRingData = this.costReport.group_by['cloud'].map(function(point){
@@ -941,17 +953,14 @@
                 }, this);
 
                 if (this.costReport.group_by['cloud']){
-                    costListByCloud = this.costReport.group_by['cloud'].slice(0).sort(function(a,b){ return a.cost < b.cost});
-                    machinesListByCloud = this.costReport.group_by['cloud'].slice(0).sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique});
+                    costListByCloud = this.sortByCost(this.costReport.group_by['cloud']);
                 }
 
                 if (this.costReport.group_by['stack']){
-                    costListByStack = this.costReport.group_by['stack'].slice(0).sort(function(a,b){ return a.cost < b.cost});
-                    machinesListByStack = this.costReport.group_by['stack'].slice(0).sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique});
+                    costListByStack = this.sortByCost(this.costReport.group_by['stack']);
                 }
                 if (this.costReport.group_by['tag']){
-                    costListByTag = this.costReport.group_by['tag'].slice(0).sort(function(a,b){ return a.cost < b.cost});
-                    machinesListByTag = this.costReport.group_by['tag'].slice(0).sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique});
+                    costListByTag = this.sortByCost(this.costReport.group_by['tag']);
                 }
             }
 
@@ -966,10 +975,22 @@
             this.set('costListByStack', costListByStack || false);
             this.set('costListByTag', costListByTag || false);
 
-            // fill in machines list
-            this.set('machinesListByCloud', machinesListByCloud || false);
-            this.set('machinesListByStack', machinesListByStack || false);
-            this.set('machinesListByTag', machinesListByTag || false);
+        },
+
+        sortByMachines: function(array){
+            if (array) {
+                var ret = array.slice(0);
+                return ret.sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique})
+            }
+            return false;
+        },
+
+        sortByCost: function(array){
+            if (array) {
+                var ret = array.slice(0);
+                return ret.sort(function(a,b){ return a.cost < b.cost})
+            }
+            return false;
         },
 
         computePastItems: function (timeParamsChangeRecord) {
