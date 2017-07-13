@@ -429,7 +429,7 @@
                         <div id="machinesListByCloud" class="flex" hidden$="{{!machinesListByCloud}}">
                             <div class="smaller">Machines by Cloud</div>
                             <div class="list">
-                                <template is="dom-repeat" items="{{costListByCloud}}">
+                                <template is="dom-repeat" items="{{machinesListByCloud}}">
                                     <div class="layout horizontal">
                                         <span class="index">[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
@@ -450,7 +450,7 @@
                         <div id="machinesListByStack" class="flex" hidden$="{{!machinesListByStack}}">
                             <div class="smaller">Machines by Stack</div>
                             <div class="list">
-                                <template is="dom-repeat" items="{{costListByStack}}">
+                                <template is="dom-repeat" items="{{machinesListByStack}}">
                                     <div class="layout horizontal">
                                         <span class="index">[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
@@ -474,7 +474,7 @@
                         <div id="machinesListByTag" class="flex" hidden$="{{!machinesListByTag}}">
                             <div class="smaller">Machines by Tag</div>
                             <div class="list">
-                                <template is="dom-repeat" items="{{costListByTag}}">
+                                <template is="dom-repeat" items="{{machinesListByTag}}">
                                     <div class="layout horizontal">
                                         <span class="index">[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
@@ -755,15 +755,15 @@
             },
             machinesListByCloud: {
                 type: Array,
-                compute: 'sortByMachines(costListByCloud)'
+                computed: 'sortByMachines(costListByCloud)'
             },
             machinesListByStack: {
                 type: Array,
-                compute: 'sortByMachines(costListByStack)'
+                computed: 'sortByMachines(costListByStack)'
             },
             machinesListByTag: {
                 type: Array,
-                compute: 'sortByMachines(costListByTag)'
+                computed: 'sortByMachines(costListByTag)'
             },
             machinesGraph: Object,
             machinesGraphOptions: {
