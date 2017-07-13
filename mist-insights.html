@@ -209,7 +209,7 @@
                 <paper-spinner active="{{loadingDataCost}}"></paper-spinner>
             </div>
             <div>
-                <h2>Cost per month</h2>
+                <h2>Cost overview</h2>
                 <div class="comparative">Current cost: $[[_formatMoney(costReport.cost)]] ([[costReport.comparative_cost]]% from previous [[timeParams.window]]) | Cost per month: max: $[[_formatMoney(costReport.cost_per_month.max)]], avg: $[[_formatMoney(costReport.cost_per_month.mean)]], min: $[[_formatMoney(costReport.cost_per_month.min)]]</div>
                 <div class="layout horizontal wrap">
                 <div class="flex-1">
@@ -305,7 +305,7 @@
                 <paper-spinner active="{{loadingDataUsage}}"></paper-spinner>
             </div>
             <div>
-                <h2>Load</h2>
+                <h2>Utilisation Overview</h2>
                 <div class="comparative">
                     [[usageReport.load.max]] MAX Load
                     ([[usageReport.comparative_load.max]]% from previous [[timeParams.window]]) |
@@ -414,7 +414,7 @@
                 <paper-spinner active="{{loadingDataCost}}"></paper-spinner>
             </div>
             <div>
-                <h2>Machines Count</h2>
+                <h2>Machines Overview</h2>
                 <div class="comparative">
                     [[costReport.machine_count.unique]] UNIQUE machines ([[costReport.comparative_machine_count.unique]]% from previous [[timeParams.window]]) | MAX [[costReport.machine_count.max]] machines ([[costReport.comparative_machine_count.max]]% from previous [[timeParams.window]]) 
                     <br/>
@@ -955,7 +955,6 @@
                 if (this.costReport.group_by['cloud']){
                     costListByCloud = this.sortByCost(this.costReport.group_by['cloud']);
                 }
-
                 if (this.costReport.group_by['stack']){
                     costListByStack = this.sortByCost(this.costReport.group_by['stack']);
                 }
@@ -987,7 +986,7 @@
 
         sortByCost: function(array){
             if (array) {
-                var ret = array.slice(0);
+                var ret = array.slice(0);                
                 return ret.sort(function(a,b){ return a.cost < b.cost})
             }
             return false;
