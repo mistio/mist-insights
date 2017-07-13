@@ -31,6 +31,23 @@
                 color: rgba(0,0,0,0.87);
             }
 
+            h2 {
+                font-size: 2.4em;
+                margin: 0 !important;
+                font-weight: 400;
+                letter-spacing: 0;
+                line-height: 48px;
+            }
+
+            h2.title {
+                font-size: 1.6em;
+                margin: 0 !important;
+            }
+
+            *[hidden] {
+                display: none;
+            }
+
             #graphRow[largescreen] {
                 display: flex;
             }
@@ -68,6 +85,33 @@
                 margin: 10% calc(50% - 40px);
                 width: 80px !important;
                 height: 80px !important;
+            }
+
+            .red, .above {
+                color: var(--red-color);
+            }
+
+            .green, .below {
+                color: var(--green-color);
+            }
+
+            .sup {
+                vertical-align: super;
+                font-size: 0.55em;
+                opacity: 0.34;
+            }
+
+            .opaque {
+                opacity: 0.34
+            }
+
+            .filterby {
+                display: inline-block;
+            }
+
+            .highlight {
+                background-color: #ffff8d;
+                padding: 2px;
             }
 
             .loading-data {
@@ -204,12 +248,53 @@
             </div>
         </paper-material>
 
+        <paper-material id="quick-overview" class="margin-botttom">
+            <div class="loading-data" hidden="{{!loadingDataCost}}">
+            </div>
+            <div id="quick-overview-data" class="quick-overview container layout horizontal">
+                <div id="quick-overview-cost" class="flex-1">
+                    <div class="smaller">Cost</div>
+                    <h2 class="cost"><span class="sup">$</span>[[_formatMoney(costReport.cost)]]</h2>
+                    <div class="smaller" hidden$="[[!isNotNull(costReport.comparative_cost)]]">
+                        <span class$="[[diffText(costReport.comparative_cost)]]">
+                            <span hidden$="[[!costReport.comparative_cost]]">[[abs(costReport.comparative_cost)]]%</span> [[diffText(costReport.comparative_cost)]]
+                        </span> 
+                        previous [[timeParams.window]]
+                    </div>
+                </div>
+                <div id="quick-overview-machine_count" class="flex-1">
+                    <div class="smaller">Machine Count</div>
+                    <h2 class="cost"><span class="sup"></span>[[costReport.machine_count.unique]]</h2>
+                    <!-- <div class="smaller">X more this [[timeParams.window]]</div> -->
+                    <div class="smaller" hidden$="[[!isNotNull(costReport.comparative_machine_count.unique)]]">
+                        <span class$="[[diffText(costReport.comparative_machine_count.unique)]]">
+                            <span hidden$="[[!costReport.comparative_machine_count.unique]]">[[abs(costReport.comparative_machine_count.unique)]]%</span> [[diffText(costReport.comparative_machine_count.unique)]]
+                        </span> 
+                        previous [[timeParams.window]]
+                    </div>
+                </div>
+                <div id="quick-overview-average_load" class="flex-1">
+                    <div class="smaller">Average load</div>
+                    <h2 class="cost"><span class="sup"></span>[[usageReport.load.mean]]</h2>
+                    <div class="smaller" hidden$="[[!isNotNull(usageReport.comparative_load.mean)]]">
+                        <span class$="[[diffText(usageReport.comparative_load.mean)]]">
+                            <span hidden$="[[!usageReport.comparative_load.mean]]">[[abs(usageReport.comparative_load.mean)]] </span> [[diffText(usageReport.comparative_load.mean)]]
+                        </span>
+                        previous [[timeParams.window]]
+                    </div>
+                </div>
+            </div>
+        </paper-material>
+
         <paper-material id="graphRow">
             <div class="loading-data" hidden="{{!loadingDataCost}}">
                 <paper-spinner active="{{loadingDataCost}}"></paper-spinner>
             </div>
             <div>
-                <h2>Cost overview</h2>
+                <div class="head">
+                    <h2 class="title">Cost Overview</h2>
+                </div>
+
                 <div class="comparative">Current cost: $[[_formatMoney(costReport.cost)]] ([[costReport.comparative_cost]]% from previous [[timeParams.window]]) | Cost per month: max: $[[_formatMoney(costReport.cost_per_month.max)]], avg: $[[_formatMoney(costReport.cost_per_month.mean)]], min: $[[_formatMoney(costReport.cost_per_month.min)]]</div>
                 <div class="layout horizontal wrap">
                 <div class="flex-1">
@@ -305,7 +390,9 @@
                 <paper-spinner active="{{loadingDataUsage}}"></paper-spinner>
             </div>
             <div>
-                <h2>Utilisation Overview</h2>
+                <div class="head">
+                    <h2 class="title">Utilisation Overview</h2>
+                </div>
                 <div class="comparative">
                     [[usageReport.load.max]] MAX Load
                     ([[usageReport.comparative_load.max]]% from previous [[timeParams.window]]) |
@@ -414,7 +501,9 @@
                 <paper-spinner active="{{loadingDataCost}}"></paper-spinner>
             </div>
             <div>
-                <h2>Machines Overview</h2>
+                <div class="head">
+                    <h2 class="title">Machines Overview</h2>
+                </div>
                 <div class="comparative">
                     [[costReport.machine_count.unique]] UNIQUE machines ([[costReport.comparative_machine_count.unique]]% from previous [[timeParams.window]]) | MAX [[costReport.machine_count.max]] machines ([[costReport.comparative_machine_count.max]]% from previous [[timeParams.window]]) 
                     <br/>
@@ -861,6 +950,22 @@
             this.drillcostgraph = echarts.init(this.$.drillcostgraph);
             this.updateChartWidth();
             console.log('initialized charts');
+        },
+
+        isNotNull: function(value) {
+            return value != null;
+        },
+
+        abs: function(perc) {
+            return Math.abs(perc)
+        },
+        diffText: function(perc) {
+            if (perc == null)
+                return ''
+            else if (perc == 0)
+                return 'equal to'
+            else
+                return perc > 0 ? 'above' : 'below'
         },
 
         updateCostData: function (history) {
