@@ -15,7 +15,18 @@
 <script src="../moment/moment.js"></script>
 <!--
 `mist-insights`
+usage example:
+    <mist-insights  period="month"
+                    stack-term="deployment"
+                    cloud="cloud_id"
+                    uri="http://localhost"
+                    token="f2190a29eddf4cfc46cf082230cee7b5c9d8ab1b87aa4afcf7a22b518ea7ac4c"></mist-insights>
 
+period: month, day, week, quarter
+filter: cloud="cloud_id"
+        stack="stack_id"
+        tag="tag"
+stack-term="deployment"
 
 @demo demo/index.html
 -->
@@ -223,11 +234,11 @@
                         </paper-listbox>
                     </paper-dropdown-menu>
                 </div>
-                <div class="filter flex-1">
+                <div class="filter flex-1" hidden$="[[!allowFilter]]">
                     <div class="smaller">Filter by</div>
                     <paper-dropdown-menu no-label-float>
                         <paper-listbox id="filterbyType" slot="dropdown-content" attr-for-selected="value" selected="{{filterby.type}}">
-                            <paper-item value="stack">Stack</paper-item>
+                            <paper-item value="stack">[[stackTerm]]</paper-item>
                             <paper-item value="cloud">Cloud</paper-item>
                             <paper-item value="tag">Tag</paper-item>
                         </paper-listbox>
@@ -244,7 +255,7 @@
                         </paper-listbox>
                     </paper-dropdown-menu>
                 </div>
-                <paper-button class="inline baseline smaller" on-tap="clearFilter" disabled$="{{!filterby.id.length}}">clear</paper-button>
+                <paper-button class="inline baseline smaller" on-tap="clearFilter" disabled$="{{!filterby.id.length}}" hidden$="[[!allowFilter]]">clear</paper-button>
             </div>
         </paper-material>
 
@@ -330,7 +341,7 @@
                     </div>
                     <div>
                         <div id="costListByStack" class="flex" hidden$="{{!costListByStack}}">
-                            <div class="smaller">Cost by Stack</div>
+                            <div class="smaller">Cost by [[stackTerm]]</div>
                             <div class="list">
                                 <template is="dom-repeat" items="{{costListByStack}}">
                                     <div class="layout horizontal">
@@ -338,7 +349,7 @@
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
                                             <span hidden$="[[item.name.length]]">
-                                                not in a stack
+                                                not in a [[stackTerm]]
                                             </span>
                                         </span>
                                         <div class="machines-column flex-1" title="machines">
@@ -439,7 +450,7 @@
                         </div>
 
                         <div id="usageListByStack" class="flex" hidden$="{{!usageListByStack}}">
-                            <div class="smaller">Load by Stack</div>
+                            <div class="smaller">Load by [[stackTerm]]</div>
                             <div class="list">
                                 <template is="dom-repeat" items="{{usageListByStack}}">
                                     <div class="layout horizontal">
@@ -447,7 +458,7 @@
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
                                             <span hidden$="[[item.name.length]]">
-                                                not in a stack
+                                                not in a [[stackTerm]]
                                             </span>
                                         </span>
                                         <div class="machines-column">
@@ -537,7 +548,7 @@
                         </div>
 
                         <div id="machinesListByStack" class="flex" hidden$="{{!machinesListByStack}}">
-                            <div class="smaller">Machines by Stack</div>
+                            <div class="smaller">Machines by [[stackTerm]]</div>
                             <div class="list">
                                 <template is="dom-repeat" items="{{machinesListByStack}}">
                                     <div class="layout horizontal">
@@ -545,7 +556,7 @@
                                         <span class="flexchild name-col flex-2">
                                             [[item.name]]
                                             <span hidden$="[[item.name.length]]">
-                                                not in a stack
+                                                not in a [[stackTerm]]
                                             </span>
                                         </span>
                                         <div class="machines-column flex-1" title="machines">
@@ -894,7 +905,19 @@
             costWidth: Number,
             drillCostWidth: Number,
             usageWidth: Number,
-            machinesWidth: Number
+            machinesWidth: Number,
+            cloud: String,
+            stack: String,
+            tag: String,
+            allowFilter: {
+                type: Boolean,
+                computed: '_computeAllowFilter(cloud, stack, tag)',
+                value: true
+            },
+            stackTerm: {
+                type: String,
+                value: 'stack'
+            }
         },
 
         listeners: {
@@ -931,8 +954,27 @@
                 this.set('timeParams.window', this.period);
             }
 
+            if (this.cloud || this.stack || this.tag) {
+                if (this.cloud){
+                    this.set('filterby.type', 'cloud');
+                    this.set('filterby.id', this.cloud);
+                }
+                else if (this.stack){
+                    this.set('filterby.type', 'stack');
+                    this.set('filterby.id', this.stack);
+                }
+                else if (this.tag){
+                    this.set('filterby.type', 'tag');
+                    this.set('filterby.id', this.tag);
+                }
+            }
+
             // this.$.costReportAjax.generateRequest();
             // this.$.usageReportAjax.generateRequest();
+        },
+
+        _computeAllowFilter: function(cloud, stack, tag){
+            this.set('allowFilter', cloud || stack || tag ? true : false);
         },
 
         initCharts: function () {
@@ -1237,7 +1279,7 @@
                 else
                     items = [];
 
-                if (!items.length){
+                if (!items || !items.length){
                     this.set('filterbyDisable', true);
                 }
                 else {
@@ -1248,6 +1290,7 @@
             }
 
             // if filterby changed reset selected item
+            // console.log(filterby.path);
             if (filterby.path == 'filterby.type'){
                 this.set('filterby.name', '');
                 this.async(function(){
@@ -1262,14 +1305,15 @@
         },
 
         combineParams: function(time, filter) {
-            // console.log('p send ', filter);
+            // console.log('filter path', filter.path, this.allowFilter);
 
             // dont update params so dont request, if user changes window, type, name or has not specified filter by id
             // also dont request for past = -1
+
             if (filter.path == 'filterby.type' || filter.path == 'filterby.name' || time.path == 'timeParams.window' || (filter.path == 'filterby.id' && filter.value == "") || time.value == "-1") {
                 // console.log('dont send ', this.params);
             }
-            else {
+            else if (filter.path == 'filterby.id' || (filter.path == 'filterby' && this.allowFilter)){
                 var p = {
                     window: this.timeParams.window,
                     past: this.timeParams.past
@@ -1279,10 +1323,9 @@
                     p[this.filterby.type] = this.filterby.id;
                 }
                 
-                // console.log('p send ', p, this.params);
                 this.set('params', p);
                 this.$.costReportAjax.generateRequest();
-                this.$.usageReportAjax.generateRequest();
+                // console.log('p send ', p, this.params);
             }
         },
 
@@ -1364,21 +1407,21 @@
         },
 
         handleResponse: function (e) {
-            console.log('handleResponse', e);
+            console.log('handleResponse');
         },
 
         handleResponseClouds: function (e) {
-            console.log('handleResponseClouds', e);
+            console.log('handleResponseClouds');
             this.set('clouds', e.detail.xhr.response);
         },
 
         handleResponseStacks: function (e) {
-            console.log('handleResponseStacks', e);
+            console.log('handleResponseStacks');
             this.set('stacks', e.detail.xhr.response);
         },
 
         handleResponseCostReport: function (e) {
-            console.log('handleResponseCostReport', e);
+            console.log('handleResponseCostReport');
             this.set('costReport', e.detail.xhr.response);
             
             if (this.filterby.type == '')
@@ -1388,12 +1431,12 @@
         },
 
         handleResponseUsageReport: function (e) {
-            console.log('handleResponseUsageReport', e);
+            console.log('handleResponseUsageReport');
             this.set('usageReport', e.detail.xhr.response);
         },
 
         handleError: function (e) {
-            console.log('handleError', e);
+            console.log('handleError');
         }
     });
 
