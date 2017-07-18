@@ -33,26 +33,67 @@ stack-term="deployment"
 
 <dom-module id="mist-insights">
     <template>
-        <style include="default-theme iron-flex iron-flex-alignment iron-flex-factors">
+        <style include="iron-flex iron-flex-alignment iron-flex-factors">
             :host {
                 display: block;
-                font-family: 'Roboto', 'Noto', sans-serif;
-                font-size: 16px;
-                line-height: 1.8em;
-                color: rgba(0,0,0,0.87);
+                /*--insights-general-font: {
+                    font-family: 'Roboto', 'Noto', sans-serif;
+                    font-size: 16px;
+                    line-height: 1.8em;
+                    color: rgba(0,0,0,0.87);
+                };
+
+                --insights-h2: {
+                    font-size: 2.4em;
+                    margin: 0 !important;
+                    font-weight: 400;
+                    letter-spacing: 0;
+                    line-height: 48px;
+                };
+
+                --insights-h2-title: {
+                    font-size: 1.6em;
+                    margin: 0 !important;
+                };
+
+                --insights-legents: {
+                    text-transform: uppercase;
+                    font-size: 0.9em;
+                    color: rgba(0,0,0,0.54);
+                }
+
+                --material-css: {
+                    padding: 24px;
+                    margin-bottom: 16px;
+                }*/
+                
+                /*@apply --insights-general-font;*/
+
+                font-family: var(--insights-general-font-font-family);
+                font-size: var(--insights-general-font-font-size);
+                line-height: var(--insights-general-font-line-height);
+                color: var(--insights-general-font-color);
+            }
+
+            :host[noshadow] {
+                --material-shadow: {
+                    @apply --shadow-none;
+                }
             }
 
             h2 {
-                font-size: 2.4em;
-                margin: 0 !important;
-                font-weight: 400;
-                letter-spacing: 0;
-                line-height: 48px;
+                /*@apply --insights-h2;*/
+                font-size: var(--insights-h2-font-size);
+                margin: var(--insights-h2-margin);
+                font-weight: var(--insights-h2-font-weight);
+                letter-spacing: var(--insights-h2-letter-spacing);
+                line-height: var(--insights-h2-line-height);
             }
 
             h2.title {
-                font-size: 1.6em;
-                margin: 0 !important;
+                /*@apply --insights-h2-title;*/
+                font-size: var(--insights-h2-title-font-size);
+                margin: var(--insights-h2-title-margin);
             }
 
             *[hidden] {
@@ -74,9 +115,10 @@ stack-term="deployment"
             }
 
             .smaller {
-                text-transform: uppercase;
-                font-size: 0.9em;
-                color: rgba(0,0,0,0.54)
+                /*@apply --insights-legents;*/
+                text-transform: var(--insights-legents-text-transform);
+                font-size: var(--insights-legents-font-size);
+                color: var(--insights-legents-color);
             }
 
             .uppercase,
@@ -92,8 +134,10 @@ stack-term="deployment"
             paper-material {
                 position: relative;
                 display: block;
-                padding: 24px;
-                margin-bottom: 16px;
+                /*@apply --material-css;*/
+                @apply --material-shadow;
+                padding: var(--material-css-padding);
+                margin-bottom: var(--material-css-margin-bottom);
             }
 
             paper-spinner {
@@ -629,6 +673,11 @@ stack-term="deployment"
                 value: function () {
                     return {};
                 }
+            },
+            noshadow: {
+                type: Boolean,
+                value: false,
+                reflectToAttribute: true
             },
             token: {
                 type: String,
