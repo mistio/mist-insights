@@ -388,7 +388,7 @@ mist-insights {
                     <h2 class="title">Cost Overview</h2>
                 </div>
 
-                <div class="comparative">Current cost: $[[_formatMoney(costReport.cost)]] ([[costReport.comparative_cost]]% from previous [[timeParams.window]]) | Cost per month: max: $[[_formatMoney(costReport.cost_per_month.max)]], avg: $[[_formatMoney(costReport.cost_per_month.mean)]], min: $[[_formatMoney(costReport.cost_per_month.min)]]</div>
+                <div class="comparative">Current cost: $[[_formatMoney(costReport.cost)]] ([[_formatMoney(costReport.comparative_cost)]]% from previous [[timeParams.window]]) | Cost per month: max: $[[_formatMoney(costReport.cost_per_month.max)]], avg: $[[_formatMoney(costReport.cost_per_month.mean)]], min: $[[_formatMoney(costReport.cost_per_month.min)]]</div>
                 <div class="layout horizontal wrap">
                 <div class="flex-1">
                     <div id="costGraph" class="graph" style$="width: [[costWidth]]px;"></div>
@@ -488,18 +488,18 @@ mist-insights {
                 </div>
                 <div class="comparative">
                     [[usageReport.load.max]] MAX Load
-                    ([[usageReport.comparative_load.max]]% from previous [[timeParams.window]]) |
-                    [[usageReport.load.max]] MIN Load
-                    ([[usageReport.comparative_load.min]]% from previous [[timeParams.window]]) |
-                    [[usageReport.load.max]] AVG Load
-                    ([[usageReport.comparative_load.mean]]% from previous [[timeParams.window]]) 
+                    ([[_formatMoney(usageReport.comparative_load.max)]]% from previous [[timeParams.window]]) |
+                    [[_formatMoney(usageReport.load.max)]] MIN Load
+                    ([[_formatMoney(usageReport.comparative_load.min)]]% from previous [[timeParams.window]]) |
+                    [[_formatMoney(usageReport.load.max)]] AVG Load
+                    ([[_formatMoney(usageReport.comparative_load.mean)]]% from previous [[timeParams.window]]) 
                     <br/>
-                    [[usageReport.load.max]] MAX cores
-                    ([[usageReport.comparative_cores.max]]% from previous [[timeParams.window]]) |
-                    [[usageReport.load.max]] MIN cores
-                    ([[usageReport.comparative_cores.min]]% from previous [[timeParams.window]]) |
-                    [[usageReport.load.max]] AVG Load
-                    ([[usageReport.comparative_cores.mean]]% from previous [[timeParams.window]])
+                    [[_formatMoney(usageReport.load.max)]] MAX cores
+                    ([[_formatMoney(usageReport.comparative_cores.max)]]% from previous [[timeParams.window]]) |
+                    [[_formatMoney(usageReport.load.max)]] MIN cores
+                    ([[_formatMoney(usageReport.comparative_cores.min)]]% from previous [[timeParams.window]]) |
+                    [[_formatMoney(usageReport.load.max)]] AVG Load
+                    ([[_formatMoney(usageReport.comparative_cores.mean)]]% from previous [[timeParams.window]])
                 </div>
                 
                 <div class="layout horizontal wrap">
@@ -598,9 +598,9 @@ mist-insights {
                     <h2 class="title">Machines Overview</h2>
                 </div>
                 <div class="comparative">
-                    [[costReport.machine_count.unique]] UNIQUE machines ([[costReport.comparative_machine_count.unique]]% from previous [[timeParams.window]]) | MAX [[costReport.machine_count.max]] machines ([[costReport.comparative_machine_count.max]]% from previous [[timeParams.window]]) 
+                    [[_formatMoney(costReport.machine_count.unique)]] UNIQUE machines ([[_formatMoney(costReport.comparative_machine_count.unique)]]% from previous [[timeParams.window]]) | MAX [[_formatMoney(costReport.machine_count.max)]] machines ([[_formatMoney(costReport.comparative_machine_count.max)]]% from previous [[timeParams.window]]) 
                     <br/>
-                    MIN [[costReport.machine_count.min]] machines ([[costReport.comparative_machine_count.min]]% from previous [[timeParams.window]]) | AVG [[costReport.machine_count.mean]] machines ([[costReport.comparative_machine_count.mean]]% from previous [[timeParams.window]])
+                    MIN [[_formatMoney(costReport.machine_count.min)]] machines ([[_formatMoney(costReport.comparative_machine_count.min)]]% from previous [[timeParams.window]]) | AVG [[_formatMoney(costReport.machine_count.mean)]] machines ([[_formatMoney(costReport.comparative_machine_count.mean)]]% from previous [[timeParams.window]])
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
@@ -1086,7 +1086,8 @@ mist-insights {
         },
 
         abs: function(perc) {
-            return Math.abs(perc)
+            var inp = Math.abs(perc);
+            return this._formatMoney(inp);
         },
         diffText: function(perc) {
             if (perc == null)
