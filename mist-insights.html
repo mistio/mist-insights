@@ -1039,12 +1039,6 @@ mist-insights {
             if (!this.token)
                 this.uri = '';
 
-            if (this.token) {
-                // this.$.cloudsAjax.generateRequest();
-                // this.$.stacksAjax.generateRequest();
-                // this.$.tagsAjax.generateRequest();
-            }
-
             if (this.period) {
                 this.set('timeParams.window', this.period);
             }
@@ -1063,9 +1057,6 @@ mist-insights {
                     this.set('filterby.id', this.tag);
                 }
             }
-
-            // this.$.costReportAjax.generateRequest();
-            // this.$.usageReportAjax.generateRequest();
         },
 
         _computeAllowFilter: function(cloud, stack, tag){
@@ -1428,8 +1419,7 @@ mist-insights {
                 }
                 
                 this.set('params', p);
-                this.$.costReportAjax.generateRequest();
-                // console.log('p send ', p, this.params);
+                this.debounce('costReportRequeset', function() { this.$.costReportAjax.generateRequest() }, 100);
             }
         },
 
@@ -1545,7 +1535,7 @@ mist-insights {
         },
 
         _updateTenant: function(tenant) {
-            if (tenant.length) {
+            if (tenant.length && !this.uri.length) {
                 this.$.costReportAjax.headers.tenant = tenant;
                 this.$.usageReportAjax.headers.tenant = tenant;
             }
