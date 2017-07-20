@@ -683,16 +683,16 @@ mist-insights {
         </paper-material>
 
 
-        <iron-ajax id="cloudsAjax" method="GET" url$="[[uri]]/api/v1/clouds" headers$='{"Authorization": "[[token]]"}' handle-as="json"
+        <iron-ajax id="cloudsAjax" method="GET" url$="[[uri]]/api/v1/clouds" headers$='{"[[authHeader]]": "[[token]]"}' handle-as="json"
             loading={{loading}} on-response="handleResponseClouds" on-error="handleError"></iron-ajax>
 
-        <iron-ajax id="stacksAjax" method="GET" url$="[[uri]]/api/v1/stacks" headers$='{"Authorization": "[[token]]"}' handle-as="json"
+        <iron-ajax id="stacksAjax" method="GET" url$="[[uri]]/api/v1/stacks" headers$='{"[[authHeader]]": "[[token]]"}' handle-as="json"
             loading={{loading}} on-response="handleResponseStacks" on-error="handleError"></iron-ajax>
 
-        <iron-ajax id="costReportAjax" method="GET" url$="[[uri]]/api/v1/report" headers$='{"Authorization": "[[token]]"}' handle-as="json"
+        <iron-ajax id="costReportAjax" method="GET" url$="[[uri]]/api/v1/report" headers$='{"[[authHeader]]": "[[token]]"}' handle-as="json"
             loading="{{loadingDataCost}}" on-response="handleResponseCostReport" on-error="handleError" params=[[params]]></iron-ajax>
 
-        <iron-ajax id="usageReportAjax" method="GET" url="[[uri]]/api/v1/report?type=load" headers$='{"Authorization": "[[token]]"}'
+        <iron-ajax id="usageReportAjax" method="GET" url="[[uri]]/api/v1/report?type=load" headers$='{"[[authHeader]]": "[[token]]"}'
             handle-as="json" loading="{{loadingDataUsage}}" on-response="handleResponseUsageReport" on-error="handleError" params=[[params]]></iron-ajax>
 
     </template>
@@ -712,6 +712,10 @@ mist-insights {
                 type: Boolean,
                 value: false,
                 reflectToAttribute: true
+            },
+            authHeader: {
+                type: String,
+                value: 'Authorization'
             },
             token: {
                 type: String,
