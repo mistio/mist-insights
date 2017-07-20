@@ -1098,7 +1098,7 @@ mist-insights {
             if (type == 'cloud' || type == 'tag') 
                 return type;
             else 
-                return stackTerm || stack;
+                return this.stackTerm || stack;
         },
 
         diffText: function(perc) {
