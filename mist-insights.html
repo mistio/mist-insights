@@ -717,6 +717,9 @@ mist-insights {
                 type: String,
                 value: 'Authorization'
             },
+            tenant: {
+                type: String
+            },
             token: {
                 type: String,
                 value: '',
@@ -1022,6 +1025,7 @@ mist-insights {
             'computeFilterbyItems(filterby.*)',
             'combineParams(timeParams.*, filterby.*)',
             'updateCostDrillData(costReport.group_by, filterby.id)',
+            '_updateTenant(tenant)'
         ],
 
         attached: function () {
@@ -1538,6 +1542,13 @@ mist-insights {
 
         handleError: function (e) {
             console.log('handleError');
+        },
+
+        _updateTenant: function(tenant) {
+            if (tenant.length) {
+                this.$.costReportAjax.headers.tenant = tenant;
+                this.$.usageReportAjax.headers.tenant = tenant;
+            }
         }
     });
 
