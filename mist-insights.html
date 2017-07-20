@@ -331,7 +331,7 @@ mist-insights {
                                 <paper-item value="[[item.id]]" data-name$="[[item.name]][[item.title]]">[[item.name]][[item.title]]</paper-item>
                             </template>
                             <paper-item disabled hidden$="{{!filterbyDisable}}">
-                                <span hidden$="{{!filterby.type}}">no {{filterby.type}}s</span>
+                                <span hidden$="{{!filterby.type}}">no [[_display(filterby.type)]]s</span>
                                 <span hidden$="{{filterby.type.length}}">Select type</span>
                             </paper-item>
                         </paper-listbox>
@@ -1093,6 +1093,14 @@ mist-insights {
             var inp = Math.abs(perc);
             return this._formatMoney(inp);
         },
+
+        _display: function(type){
+            if (type == 'cloud' || type == 'tag') 
+                return type;
+            else 
+                return stackTerm || stack;
+        },
+
         diffText: function(perc) {
             if (perc == null)
                 return ''
@@ -1495,7 +1503,8 @@ mist-insights {
         },
 
         _formatMoney: function(inp){
-            return inp.formatMoney(2);
+            if (inp)
+                return inp.formatMoney(2);
         },
 
         handleResponse: function (e) {
