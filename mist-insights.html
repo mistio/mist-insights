@@ -109,15 +109,8 @@ mist-insights {
                 color: var(--insights-general-font-color);
             }
 
-            :host[noshadow] {
-                --material-shadow: {
-                    @apply --shadow-none;
-                }
-            }
-
             :host(.cloudify) {
                 /*--insights-general-font*/
-                --insights-general-font-font-family: 'Roboto', 'Noto', sans-serif;
                 --insights-general-font-font-size: 16px;
                 --insights-general-font-line-height: 1.8em;
                 --insights-general-font-color: rgba(0,0,0,0.87);
@@ -144,6 +137,10 @@ mist-insights {
 
                 --red-color: #e82438;
                 --green-color: #38b549;
+
+                --material-shadow: {
+                    @apply --shadow-none;
+                }
             }
 
             h2 {
