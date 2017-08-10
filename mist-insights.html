@@ -138,9 +138,20 @@ mist-insights {
                 --red-color: #e82438;
                 --green-color: #38b549;
 
+                --paper-input-container: {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                    border-radius: 3px;
+                }
                 --material-shadow: {
                     @apply --shadow-none;
                 }
+                --paper-listbox: {
+                    width: 210px;
+                }
+                --paper-input-container-color: transparent;
+                --paper-input-container-focus-color: transparent;
+                --paper-input-container-invalid-color: transparent;
             }
 
             h2 {
@@ -1221,10 +1232,10 @@ mist-insights {
                 costListByTag;
 
             if (this.costReport && this.costReport.group_by) {
-                costRingData = this.costReport.group_by['cloud'].map(function(point){
+                costRingData = this.costReport.group_by['cloud'] && this.costReport.group_by['cloud'].map(function(point){
                     return {value: point.cost, name: point.name};
                 }, this);
-                costRingLabels = this.costReport.group_by['cloud'].map(function(point){
+                costRingLabels = this.costReport.group_by['cloud'] && this.costReport.group_by['cloud'].map(function(point){
                     return point.name;
                 }, this);
 
@@ -1597,7 +1608,8 @@ mist-insights {
 
 // handle event
 window.addEventListener("optimizedResize", function() {
-    document.querySelector('mist-insights').fire('resize-insights-graphs')
+    if (document.querySelector('mist-insights'))
+        document.querySelector('mist-insights').fire('resize-insights-graphs')
 });
 
 Number.prototype.formatMoney = function(c, d, t){
