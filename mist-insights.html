@@ -398,7 +398,7 @@ mist-insights {
                         </paper-listbox>
                     </paper-dropdown-menu>
                 </div>
-                <paper-button class="inline baseline smaller" on-tap="clearFilter" disabled$="{{!filterby.id.length}}" hidden$="[[!allowFilter]]" noink>clear</paper-button>
+                <paper-button class="inline baseline smaller" on-tap="clearFilter" disabled$="{{!filterby.id.length}}" hidden$="[[!showClear]]" noink>clear</paper-button>
             </div>
         </paper-material>
 
@@ -1069,6 +1069,11 @@ mist-insights {
                 computed: '_computeAllowFilter(cloud, stack, tag)',
                 value: true
             },
+            showClear:  {
+                type: Boolean,
+                computed: '_computeShowClear(allowFilter, filterby.id.length)',
+                value: true
+            },
             stackTerm: {
                 type: String,
                 value: 'stack'
@@ -1122,6 +1127,10 @@ mist-insights {
 
         _computeAllowFilter: function(cloud, stack, tag){
             this.set('allowFilter', cloud || stack || tag ? true : false);
+        },
+
+        _computeShowClear: function(allowFilter, idlength){
+            return allowFilter && idlength;
         },
 
         initCharts: function () {
