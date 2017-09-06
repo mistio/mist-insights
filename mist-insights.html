@@ -111,7 +111,7 @@ mist-insights {
 
             :host(.cloudify) {
                 /*--insights-general-font*/
-                --insights-general-font-font-size: 16px;
+                --insights-general-font-font-size: 14px;
                 --insights-general-font-line-height: 1.8em;
                 --insights-general-font-color: rgba(0,0,0,0.87);
 
@@ -123,7 +123,7 @@ mist-insights {
                 --insights-h2-line-height: 48px;
 
                 /*--insights-h2-title*/
-                --insights-h2-title-font-size: 1.6em;
+                --insights-h2-title-font-size: 1em;
                 --insights-h2-title-margin: 0 !important;
 
                 /*--insights-legents*/
@@ -131,8 +131,12 @@ mist-insights {
                 --insights-legents-font-size: 0.9em;
                 --insights-legents-color: rgba(0,0,0,0.54);
 
+                /* dropdown */
+                --paper-font-subhead_-_font-size: 14px;
+                --paper-item-min-height: 37px;                
+
                 /*--material-css*/
-                --material-css-padding: 24px;
+                --material-css-padding: 8px 0;
                 --material-css-margin-bottom: 16px;
 
                 --red-color: #e82438;
@@ -140,8 +144,11 @@ mist-insights {
 
                 --paper-input-container: {
                     border: 1px solid #ddd;
-                    padding: 8px;
+                    padding: 0 8px;
                     border-radius: 3px;
+                }
+                paper-item: {
+                    padding: 11px 14px;
                 }
                 --material-shadow: {
                     @apply --shadow-none;
@@ -157,7 +164,41 @@ mist-insights {
                 --paper-input-container-color: transparent;
                 --paper-input-container-focus-color: transparent;
                 --paper-input-container-invalid-color: transparent;
+                --paper-listbox_-_width: 186px;
+                --insights-legents-text-transform: none;
             }
+            :host(.cloudify) paper-input-container:hover {
+                border-color: rgba(34,36,38,.35);
+            }
+
+            :host(.cloudify) .smaller {
+                text-transform: none;
+                font-size: 14px;
+                color: black;
+                font-weight: 700;
+            }
+
+            :host(.cloudify) h2 {
+                font-weight: bold;
+                text-transform: none;
+            }
+
+            :host(.cloudify) paper-material+paper-material {
+                border-top: 1px solid #ddd;
+            }
+
+            :host(.cloudify) paper-button.clear {
+                color: rgba(0,0,0,.6);
+                box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
+                border-radius: 3px;
+                padding: 3px 12px;
+                display: inline-block;
+                vertical-align: bottom;
+            }
+
+            :host(.cloudify) paper-button.clear iron-icon {
+                width: 16px;
+                margin-right: 8px;}
 
             h2 {
                 /*@apply --insights-h2;*/
@@ -349,7 +390,7 @@ mist-insights {
             <div class="container layout horizontal start">
                 <div class="filter flex-1 self-start">
                     <div class="smaller">Time</div>
-                    <paper-dropdown-menu no-label-float>
+                    <paper-dropdown-menu no-label-float noink>
                         <paper-listbox id="window" slot="dropdown-content" attr-for-selected="value" selected="{{timeParams.window}}">
                             <paper-item value="hour">hourly</paper-item>
                             <paper-item value="day">daily</paper-item>
@@ -358,7 +399,7 @@ mist-insights {
                             <paper-item value="quarter">quarterly</paper-item>
                         </paper-listbox>
                     </paper-dropdown-menu>
-                    <paper-dropdown-menu no-label-float>
+                    <paper-dropdown-menu no-label-float noink>
                         <paper-listbox id="past" slot="dropdown-content" attr-for-selected="value" selected="{{timeParams.past}}">
                             <template is="dom-repeat" items="{{pastItems}}" as="past">
                                 <paper-item value="[[past.value]]">[[past.text]]</paper-item>
@@ -368,14 +409,14 @@ mist-insights {
                 </div>
                 <div class="filter flex-1" hidden$="[[!allowFilter]]">
                     <div class="smaller">Filter by</div>
-                    <paper-dropdown-menu no-label-float>
+                    <paper-dropdown-menu no-label-float noink>
                         <paper-listbox id="filterbyType" slot="dropdown-content" attr-for-selected="value" selected="{{filterby.type}}">
                             <paper-item value="stack">[[stackTerm]]</paper-item>
                             <paper-item value="cloud">Cloud</paper-item>
                             <paper-item value="tag">Tag</paper-item>
                         </paper-listbox>
                     </paper-dropdown-menu>
-                    <paper-dropdown-menu id="filterbyNameDd" no-label-float>
+                    <paper-dropdown-menu id="filterbyNameDd" no-label-float noink>
                         <paper-listbox id="filterbyName" slot="dropdown-content" attr-for-selected="value" selected="{{filterby.id}}">
                             <template is="dom-repeat" items="{{filterbyItems}}">
                                 <paper-item value="[[item.id]]" data-name$="[[item.name]][[item.title]]">[[item.name]][[item.title]]</paper-item>
@@ -386,8 +427,8 @@ mist-insights {
                             </paper-item>
                         </paper-listbox>
                     </paper-dropdown-menu>
+                    <paper-button class="inline baseline smaller clear" on-tap="clearFilter" disabled$="{{!filterby.id.length}}" hidden$="[[!showClear]]" noink><iron-icon icon="clear"></iron-icon>Clear</paper-button>
                 </div>
-                <paper-button class="inline baseline smaller" on-tap="clearFilter" disabled$="{{!filterby.id.length}}" hidden$="[[!allowFilter]]">clear</paper-button>
             </div>
         </paper-material>
 
@@ -1058,6 +1099,11 @@ mist-insights {
                 computed: '_computeAllowFilter(cloud, stack, tag)',
                 value: true
             },
+            showClear:  {
+                type: Boolean,
+                computed: '_computeShowClear(allowFilter, filterby.id.length)',
+                value: true
+            },
             stackTerm: {
                 type: String,
                 value: 'stack'
@@ -1111,6 +1157,10 @@ mist-insights {
 
         _computeAllowFilter: function(cloud, stack, tag){
             this.set('allowFilter', cloud || stack || tag ? true : false);
+        },
+
+        _computeShowClear: function(allowFilter, idlength){
+            return allowFilter && idlength;
         },
 
         initCharts: function () {
