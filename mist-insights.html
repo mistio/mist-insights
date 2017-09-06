@@ -123,7 +123,7 @@ mist-insights {
                 --insights-h2-line-height: 48px;
 
                 /*--insights-h2-title*/
-                --insights-h2-title-font-size: 1.6em;
+                --insights-h2-title-font-size: 1em;
                 --insights-h2-title-margin: 0 !important;
 
                 /*--insights-legents*/
@@ -147,9 +147,6 @@ mist-insights {
                     padding: 0 8px;
                     border-radius: 3px;
                 }
-                paper-input-container:hover {
-                    border-color: rgba(34,36,38,.35);
-                }
                 paper-item: {
                     padding: 11px 14px;
                 }
@@ -168,7 +165,40 @@ mist-insights {
                 --paper-input-container-focus-color: transparent;
                 --paper-input-container-invalid-color: transparent;
                 --paper-listbox_-_width: 186px;
+                --insights-legents-text-transform: none;
             }
+            :host(.cloudify) paper-input-container:hover {
+                border-color: rgba(34,36,38,.35);
+            }
+
+            :host(.cloudify) .smaller {
+                text-transform: none;
+                font-size: 14px;
+                color: black;
+                font-weight: 700;
+            }
+
+            :host(.cloudify) h2 {
+                font-weight: bold;
+                text-transform: none;
+            }
+
+            :host(.cloudify) paper-material+paper-material {
+                border-top: 1px solid #ddd;
+            }
+
+            :host(.cloudify) paper-button.clear {
+                color: rgba(0,0,0,.6);
+                box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
+                border-radius: 3px;
+                padding: 3px 12px;
+                display: inline-block;
+                vertical-align: bottom;
+            }
+
+            :host(.cloudify) paper-button.clear iron-icon {
+                width: 16px;
+                margin-right: 8px;}
 
             h2 {
                 /*@apply --insights-h2;*/
@@ -397,8 +427,8 @@ mist-insights {
                             </paper-item>
                         </paper-listbox>
                     </paper-dropdown-menu>
+                    <paper-button class="inline baseline smaller clear" on-tap="clearFilter" disabled$="{{!filterby.id.length}}" hidden$="[[!showClear]]" noink><iron-icon icon="clear"></iron-icon>Clear</paper-button>
                 </div>
-                <paper-button class="inline baseline smaller" on-tap="clearFilter" disabled$="{{!filterby.id.length}}" hidden$="[[!showClear]]" noink>clear</paper-button>
             </div>
         </paper-material>
 
