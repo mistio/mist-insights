@@ -1094,6 +1094,10 @@ mist-insights {
             cloud: String,
             stack: String,
             tag: String,
+            stackName: {
+                type: String,
+                reflectToAttribute: true
+            },
             allowFilter: {
                 type: Boolean,
                 computed: '_computeAllowFilter(cloud, stack, tag)',
@@ -1121,7 +1125,8 @@ mist-insights {
             'computeFilterbyItems(filterby.*)',
             'combineParams(timeParams.*, filterby.*)',
             'updateCostDrillData(costReport.group_by, filterby.id)',
-            '_updateTenant(tenant)'
+            '_updateTenant(tenant)',
+            '_updateFilterByStackName(stackName)'
         ],
 
         attached: function () {
@@ -1139,7 +1144,7 @@ mist-insights {
                 this.set('timeParams.window', this.period);
             }
 
-            if (this.cloud || this.stack || this.tag) {
+            if (this.cloud || this.stack || this.stackName || this.tag) {
                 if (this.cloud){
                     this.set('filterby.type', 'cloud');
                     this.set('filterby.id', this.cloud);
@@ -1147,6 +1152,9 @@ mist-insights {
                 else if (this.stack){
                     this.set('filterby.type', 'stack');
                     this.set('filterby.id', this.stack);
+                }
+                else if (this.stackName){
+                    this.$.stacksAjax.generateRequest();
                 }
                 else if (this.tag){
                     this.set('filterby.type', 'tag');
@@ -1156,7 +1164,7 @@ mist-insights {
         },
 
         _computeAllowFilter: function(cloud, stack, tag){
-            this.set('allowFilter', cloud || stack || tag ? true : false);
+            this.set('allowFilter', cloud || stack || tag ? false : true);
         },
 
         _computeShowClear: function(allowFilter, idlength){
@@ -1497,6 +1505,12 @@ mist-insights {
                 this.set('filterby.name', this.computeName(filterby.value));
             }
 
+            // if filterby set when stackname
+            if (filterby.path == 'filterby'){
+                if (this.stackName)
+                    this.set('filterbyItems', this.stacks);
+            }
+
         },
 
         combineParams: function(time, filter) {
@@ -1508,7 +1522,7 @@ mist-insights {
             if (filter.path == 'filterby.type' || filter.path == 'filterby.name' || time.path == 'timeParams.window' || (filter.path == 'filterby.id' && filter.value == "") || time.value == "-1") {
                 // console.log('dont send ', this.params);
             }
-            else if (filter.path == 'filterby.id' || (filter.path == 'filterby' && this.allowFilter)){
+            else if (filter.path == 'filterby.id' || filter.path == 'filterby'){
                 var p = {
                     window: this.timeParams.window,
                     past: this.timeParams.past
@@ -1539,7 +1553,7 @@ mist-insights {
                 else if (this.filterby.type == 'stack') {
                     if (!this.token)
                         return this.model.stacks[id].name;
-                    else
+                    else (!this.stackName)
                         return this.stacks && this.stacks.find(function(s){
                             return s.id == id;
                         }).name;
@@ -1611,7 +1625,6 @@ mist-insights {
         },
 
         handleResponseStacks: function (e) {
-            console.log('handleResponseStacks');
             this.set('stacks', e.detail.xhr.response);
         },
 
@@ -1639,6 +1652,36 @@ mist-insights {
                 this.$.costReportAjax.headers.tenant = tenant;
                 this.$.usageReportAjax.headers.tenant = tenant;
             }
+        },
+
+        _updateFilterByStackName: function(stackName){
+
+            console.log('stacks filter by name', stackName);
+
+            if (this.stacks && stackName) {
+                console.log('this.stacks && this.stackName', this.stacks && this.stackName)
+                var name = this.stackName;
+                var stack = this.stacks.find(function(s){
+                        return s.name == name;
+                    });
+                if (stack) {
+                    var fb = {
+                        type: 'stack',
+                        name: this.stackName,
+                        id: stack.id
+                    }
+                    this.set('filterby', fb);
+                }
+                else {
+                    console.log("Can't find stack. clear filter.");
+                    this.clearFilter();
+                }
+            }
+
+            if (!stackName || (stackName.path == "stackName" && !stackName.value)){
+                this.clearFilter();
+            }
+
         }
     });
 
