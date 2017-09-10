@@ -16,11 +16,13 @@
 <!--
 `mist-insights`
 usage example:
-    <mist-insights  period="month"
-                    stack-term="deployment"
-                    cloud="cloud_id"
-                    uri="http://localhost"
-                    token="token_string"></mist-insights>
+    <mist-insights
+        period="month"
+        stack-term="deployment"
+        cloud="cloud_id"
+        uri="http://localhost"
+        token="token_string">
+    </mist-insights>
 
 period: month, day, week, quarter
 filter: cloud="cloud_id"
@@ -51,10 +53,10 @@ mist-insights {
         --insights-h2-title-font-size: 1.6em;
         --insights-h2-title-margin: 0 !important;
 
-        /*--insights-legents*/
-        --insights-legents-text-transform: uppercase;
-        --insights-legents-font-size: 0.9em;
-        --insights-legents-color: rgba(0,0,0,0.54);
+        /*--insights-legends*/
+        --insights-legends-text-transform: uppercase;
+        --insights-legends-font-size: 0.9em;
+        --insights-legends-color: rgba(0,0,0,0.54);
 
         /*--material-css*/
         --material-css-padding: 24px;
@@ -68,7 +70,7 @@ mist-insights {
 <dom-module id="mist-insights">
     <template>
         <style include="iron-flex iron-flex-alignment iron-flex-factors">
-            :host {
+             :host {
                 display: block;
                 /*--insights-general-font: {
                     font-family: 'Roboto', 'Noto', sans-serif;
@@ -90,7 +92,7 @@ mist-insights {
                     margin: 0 !important;
                 };
 
-                --insights-legents: {
+                --insights-legends: {
                     text-transform: uppercase;
                     font-size: 0.9em;
                     color: rgba(0,0,0,0.54);
@@ -100,20 +102,18 @@ mist-insights {
                     padding: 24px;
                     margin-bottom: 16px;
                 }*/
-                
                 /*@apply --insights-general-font;*/
-
                 font-family: var(--insights-general-font-font-family);
                 font-size: var(--insights-general-font-font-size);
                 line-height: var(--insights-general-font-line-height);
                 color: var(--insights-general-font-color);
             }
 
-            :host(.cloudify) {
+             :host(.cloudify) {
                 /*--insights-general-font*/
                 --insights-general-font-font-size: 14px;
                 --insights-general-font-line-height: 1.8em;
-                --insights-general-font-color: rgba(0,0,0,0.87);
+                --insights-general-font-color: rgba(0, 0, 0, 0.87);
 
                 /*--insights-h2*/
                 --insights-h2-font-size: 2.4em;
@@ -126,14 +126,14 @@ mist-insights {
                 --insights-h2-title-font-size: 1em;
                 --insights-h2-title-margin: 0 !important;
 
-                /*--insights-legents*/
-                --insights-legents-text-transform: uppercase;
-                --insights-legents-font-size: 0.9em;
-                --insights-legents-color: rgba(0,0,0,0.54);
+                /*--insights-legends*/
+                --insights-legends-text-transform: uppercase;
+                --insights-legends-font-size: 0.9em;
+                --insights-legends-color: rgba(0, 0, 0, 0.54);
 
                 /* dropdown */
                 --paper-font-subhead_-_font-size: 14px;
-                --paper-item-min-height: 37px;                
+                --paper-item-min-height: 37px;
 
                 /*--material-css*/
                 --material-css-padding: 8px 0;
@@ -165,40 +165,42 @@ mist-insights {
                 --paper-input-container-focus-color: transparent;
                 --paper-input-container-invalid-color: transparent;
                 --paper-listbox_-_width: 186px;
-                --insights-legents-text-transform: none;
-            }
-            :host(.cloudify) paper-input-container:hover {
-                border-color: rgba(34,36,38,.35);
+                --insights-legends-text-transform: none;
             }
 
-            :host(.cloudify) .smaller {
+             :host(.cloudify) paper-input-container:hover {
+                border-color: rgba(34, 36, 38, .35);
+            }
+
+             :host(.cloudify) .smaller {
                 text-transform: none;
                 font-size: 14px;
                 color: black;
                 font-weight: 700;
             }
 
-            :host(.cloudify) h2 {
+             :host(.cloudify) h2 {
                 font-weight: bold;
                 text-transform: none;
             }
 
-            :host(.cloudify) paper-material+paper-material {
+             :host(.cloudify) paper-material+paper-material {
                 border-top: 1px solid #ddd;
             }
 
-            :host(.cloudify) paper-button.clear {
-                color: rgba(0,0,0,.6);
-                box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
+             :host(.cloudify) paper-button.clear {
+                color: rgba(0, 0, 0, .6);
+                box-shadow: 0 0 0 1px rgba(34, 36, 38, .15) inset;
                 border-radius: 3px;
                 padding: 3px 12px;
                 display: inline-block;
                 vertical-align: bottom;
             }
 
-            :host(.cloudify) paper-button.clear iron-icon {
+             :host(.cloudify) paper-button.clear iron-icon {
                 width: 16px;
-                margin-right: 8px;}
+                margin-right: 8px;
+            }
 
             h2 {
                 /*@apply --insights-h2;*/
@@ -234,16 +236,16 @@ mist-insights {
             }
 
             .graph {
-                width:100%;
-                min-height:300px;
+                width: 100%;
+                min-height: 300px;
                 margin-bottom: 40px;
             }
 
             .smaller {
-                /*@apply --insights-legents;*/
-                text-transform: var(--insights-legents-text-transform);
-                font-size: var(--insights-legents-font-size);
-                color: var(--insights-legents-color);
+                /*@apply --insights-legends;*/
+                text-transform: var(--insights-legends-text-transform);
+                font-size: var(--insights-legends-font-size);
+                color: var(--insights-legends-color);
             }
 
             .uppercase,
@@ -271,11 +273,13 @@ mist-insights {
                 height: 80px !important;
             }
 
-            .red, .above {
+            .red,
+            .above {
                 color: var(--red-color);
             }
 
-            .green, .below {
+            .green,
+            .below {
                 color: var(--green-color);
             }
 
@@ -300,7 +304,7 @@ mist-insights {
 
             .loading-data {
                 position: absolute;
-                background-color: rgba(255,255,255,0.9);
+                background-color: rgba(255, 255, 255, 0.9);
                 width: 100%;
                 height: 100%;
                 left: 0;
@@ -339,12 +343,7 @@ mist-insights {
                 margin-top: 16px;
                 margin-bottom: 32px;
                 min-width: 300px;
-                /*max-width: 600px;*/
             }
-
-            /*.list > .layout.horizontal:nth-of-type(2n+1) {
-                background-color: #f6f6f6;
-            }*/
 
             .tag {
                 vertical-align: middle;
@@ -381,7 +380,6 @@ mist-insights {
             .index {
                 margin-right: 4px;
             }
-
         </style>
 
         <iron-media-query query="(min-width: 1180px)" query-matches="{{largescreen}}"></iron-media-query>
@@ -421,13 +419,15 @@ mist-insights {
                             <template is="dom-repeat" items="{{filterbyItems}}">
                                 <paper-item value="[[item.id]]" data-name$="[[item.name]][[item.title]]">[[item.name]][[item.title]]</paper-item>
                             </template>
-                            <paper-item disabled hidden$="{{!filterbyDisable}}">
-                                <span hidden$="{{!filterby.type}}">no [[_display(filterby.type)]]s</span>
-                                <span hidden$="{{filterby.type.length}}">Select type</span>
+                            <paper-item disabled hidden$="[[!filterbyDisable]]">
+                                <span hidden$="[[!filterby.type]]">no [[_display(filterby.type)]]s</span>
+                                <span hidden$="[[filterby.type.length]]">Select type</span>
                             </paper-item>
                         </paper-listbox>
                     </paper-dropdown-menu>
-                    <paper-button class="inline baseline smaller clear" on-tap="clearFilter" disabled$="{{!filterby.id.length}}" hidden$="[[!showClear]]" noink><iron-icon icon="clear"></iron-icon>Clear</paper-button>
+                    <paper-button class="inline baseline smaller clear" on-tap="clearFilter" disabled$="[[!filterby.id.length]]" hidden$="[[!showClear]]"
+                        noink>
+                        <iron-icon icon="clear"></iron-icon>Clear</paper-button>
                 </div>
             </div>
         </paper-material>
@@ -441,19 +441,18 @@ mist-insights {
                     <h2 class="cost"><span class="sup">$</span>[[_formatMoney(costReport.cost)]]</h2>
                     <div class="smaller" hidden$="[[!isNotNull(costReport.comparative_cost)]]">
                         <span class$="[[diffText(costReport.comparative_cost)]]">
-                            <span hidden$="[[!costReport.comparative_cost]]">[[abs(costReport.comparative_cost)]]%</span> [[diffText(costReport.comparative_cost)]]
-                        </span> 
+                            <span hidden$="[[!costReport.comparative_cost]]">[[abs(costReport.comparative_cost)]]%</span>                        [[diffText(costReport.comparative_cost)]]
+                        </span>
                         previous [[timeParams.window]]
                     </div>
                 </div>
                 <div id="quick-overview-machine_count" class="flex-1">
                     <div class="smaller">Machine Count</div>
                     <h2 class="cost"><span class="sup"></span>[[costReport.machine_count.unique]]</h2>
-                    <!-- <div class="smaller">X more this [[timeParams.window]]</div> -->
                     <div class="smaller" hidden$="[[!isNotNull(costReport.comparative_machine_count.unique)]]">
                         <span class$="[[diffText(costReport.comparative_machine_count.unique)]]">
-                            <span hidden$="[[!costReport.comparative_machine_count.unique]]">[[abs(costReport.comparative_machine_count.unique)]]%</span> [[diffText(costReport.comparative_machine_count.unique)]]
-                        </span> 
+                            <span hidden$="[[!costReport.comparative_machine_count.unique]]">[[abs(costReport.comparative_machine_count.unique)]]%</span>                        [[diffText(costReport.comparative_machine_count.unique)]]
+                        </span>
                         previous [[timeParams.window]]
                     </div>
                 </div>
@@ -462,7 +461,7 @@ mist-insights {
                     <h2 class="cost"><span class="sup"></span>[[usageReport.load.mean]]</h2>
                     <div class="smaller" hidden$="[[!isNotNull(usageReport.comparative_load.mean)]]">
                         <span class$="[[diffText(usageReport.comparative_load.mean)]]">
-                            <span hidden$="[[!usageReport.comparative_load.mean]]">[[abs(usageReport.comparative_load.mean)]] </span> [[diffText(usageReport.comparative_load.mean)]]
+                            <span hidden$="[[!usageReport.comparative_load.mean]]">[[abs(usageReport.comparative_load.mean)]] </span>                        [[diffText(usageReport.comparative_load.mean)]]
                         </span>
                         previous [[timeParams.window]]
                     </div>
@@ -479,91 +478,90 @@ mist-insights {
                     <h2 class="title">Cost Overview</h2>
                 </div>
 
-                <div class="comparative">Current cost: $[[_formatMoney(costReport.cost)]] ([[_formatMoney(costReport.comparative_cost)]]% from previous [[timeParams.window]]) | Cost per month: max: $[[_formatMoney(costReport.cost_per_month.max)]], avg: $[[_formatMoney(costReport.cost_per_month.mean)]], min: $[[_formatMoney(costReport.cost_per_month.min)]]</div>
+                <div class="comparative">Current cost: $[[_formatMoney(costReport.cost)]] ([[_formatMoney(costReport.comparative_cost)]]% from previous
+                    [[timeParams.window]]) | Cost per month: max: $[[_formatMoney(costReport.cost_per_month.max)]], avg:
+                    $[[_formatMoney(costReport.cost_per_month.mean)]], min: $[[_formatMoney(costReport.cost_per_month.min)]]</div>
                 <div class="layout horizontal wrap">
-                <div class="flex-1">
-                    <div id="costGraph" class="graph" style$="width: [[costWidth]]px;"></div>
-                </div>
-                <div class="flex-1 layout vertical">
-                    <div class="horizontal layout wrap">
-                        <div class="flex-1">
-                            <div class="smaller">Cost by Cloud</div>
-                            <div id="drillcostgraph" class="graph" style$="width: [[drillCostWidth]]px;"></div>
-                        </div>
-                        <div class="flex-1">
-                            <div id="costListByCloud" class="flex" hidden$="{{!costListByCloud}}">
-                                <div class="list">
-                                    <template is="dom-repeat" items="{{costListByCloud}}">
-                                        <div class="layout horizontal">
-                                            <span class="index">[[_index(index)]]. </span>
-                                            <span class="flexchild name-col flex-2">
+                    <div class="flex-1">
+                        <div id="costGraph" class="graph" style$="width: [[costWidth]]px;"></div>
+                    </div>
+                    <div class="flex-1 layout vertical">
+                        <div class="horizontal layout wrap">
+                            <div class="flex-1">
+                                <div class="smaller">Cost by Cloud</div>
+                                <div id="drillcostgraph" class="graph" style$="width: [[drillCostWidth]]px;"></div>
+                            </div>
+                            <div class="flex-1">
+                                <div id="costListByCloud" class="flex" hidden$="{{!costListByCloud}}">
+                                    <div class="list">
+                                        <template is="dom-repeat" items="{{costListByCloud}}">
+                                            <div class="layout horizontal">
+                                                <span class="index">[[_index(index)]]. </span>
+                                                <span class="flexchild name-col flex-2">
                                                 [[item.name]]
                                             </span>
-                                            <div class="machines-column flex-1" title="machines">
-                                                [[item.machine_count.unique]]
-                                                machines
-                                            </div>
-                                            <span class="cost-column">
+                                                <div class="machines-column flex-1" title="machines">
+                                                    [[item.machine_count.unique]] machines
+                                                </div>
+                                                <span class="cost-column">
                                                 $[[_formatMoney(item.cost)]]
                                             </span>
-                                        </div>
-                                    </template>
+                                            </div>
+                                        </template>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <div id="costListByStack" class="flex" hidden$="{{!costListByStack}}">
-                            <div class="smaller">Cost by [[stackTerm]]</div>
-                            <div class="list">
-                                <template is="dom-repeat" items="{{costListByStack}}">
-                                    <div class="layout horizontal">
-                                        <span class="index">[[_index(index)]]. </span>
-                                        <span class="flexchild name-col flex-2">
+                        <div>
+                            <div id="costListByStack" class="flex" hidden$="{{!costListByStack}}">
+                                <div class="smaller">Cost by [[stackTerm]]</div>
+                                <div class="list">
+                                    <template is="dom-repeat" items="{{costListByStack}}">
+                                        <div class="layout horizontal">
+                                            <span class="index">[[_index(index)]]. </span>
+                                            <span class="flexchild name-col flex-2">
                                             [[item.name]]
                                             <span hidden$="[[item.name.length]]">
                                                 not in a [[stackTerm]]
                                             </span>
-                                        </span>
-                                        <div class="machines-column flex-1" title="machines">
-                                            [[item.machine_count.unique]] 
-                                            machines
-                                        </div>
-                                        <span class="cost-column">
+                                            </span>
+                                            <div class="machines-column flex-1" title="machines">
+                                                [[item.machine_count.unique]] machines
+                                            </div>
+                                            <span class="cost-column">
                                             $[[_formatMoney(item.cost)]]
                                         </span>
-                                    </div>
-                                </template>
+                                        </div>
+                                    </template>
+                                </div>
                             </div>
-                        </div>
 
-                        <div id="costListByTag" class="flex" hidden$="{{!costListByTag}}">
-                            <div class="smaller">Cost by Tag</div>
-                            <div class="list">
-                                <template is="dom-repeat" items="{{costListByTag}}">
-                                    <div class="layout horizontal">
-                                        <span class="index">[[_index(index)]]. </span>
-                                        <span class="flexchild name-col flex-2">
+                            <div id="costListByTag" class="flex" hidden$="{{!costListByTag}}">
+                                <div class="smaller">Cost by Tag</div>
+                                <div class="list">
+                                    <template is="dom-repeat" items="{{costListByTag}}">
+                                        <div class="layout horizontal">
+                                            <span class="index">[[_index(index)]]. </span>
+                                            <span class="flexchild name-col flex-2">
                                             <span hidden$="[[!item.name.length]]" class$="tag hidden-[[!item.name.length]]">[[item.name]]</span>
                                             <span hidden$="[[item.name.length]]">
                                                 untagged
                                             </span>
-                                        </span>
-                                        <div class="machines-column flex-1" title="machines">
-                                            [[item.machine_count.unique]] 
-                                            machines
-                                        </div>
-                                        <span class="cost-column">
+                                            </span>
+                                            <div class="machines-column flex-1" title="machines">
+                                                [[item.machine_count.unique]] machines
+                                            </div>
+                                            <span class="cost-column">
                                             $[[_formatMoney(item.cost)]]
                                         </span>
-                                    </div>
-                                </template>
+                                        </div>
+                                    </template>
+                                </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
 
 
             </div>
@@ -578,21 +576,16 @@ mist-insights {
                     <h2 class="title">Utilisation Overview</h2>
                 </div>
                 <div class="comparative">
-                    [[usageReport.load.max]] MAX Load
-                    ([[_formatMoney(usageReport.comparative_load.max)]]% from previous [[timeParams.window]]) |
-                    [[_formatMoney(usageReport.load.max)]] MIN Load
-                    ([[_formatMoney(usageReport.comparative_load.min)]]% from previous [[timeParams.window]]) |
-                    [[_formatMoney(usageReport.load.max)]] AVG Load
-                    ([[_formatMoney(usageReport.comparative_load.mean)]]% from previous [[timeParams.window]]) 
-                    <br/>
-                    [[_formatMoney(usageReport.load.max)]] MAX cores
-                    ([[_formatMoney(usageReport.comparative_cores.max)]]% from previous [[timeParams.window]]) |
-                    [[_formatMoney(usageReport.load.max)]] MIN cores
-                    ([[_formatMoney(usageReport.comparative_cores.min)]]% from previous [[timeParams.window]]) |
-                    [[_formatMoney(usageReport.load.max)]] AVG Load
-                    ([[_formatMoney(usageReport.comparative_cores.mean)]]% from previous [[timeParams.window]])
+                    [[usageReport.load.max]] MAX Load ([[_formatMoney(usageReport.comparative_load.max)]]% from previous [[timeParams.window]])
+                    | [[_formatMoney(usageReport.load.max)]] MIN Load ([[_formatMoney(usageReport.comparative_load.min)]]%
+                    from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] AVG Load ([[_formatMoney(usageReport.comparative_load.mean)]]%
+                    from previous [[timeParams.window]])
+                    <br/> [[_formatMoney(usageReport.load.max)]] MAX cores ([[_formatMoney(usageReport.comparative_cores.max)]]%
+                    from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] MIN cores ([[_formatMoney(usageReport.comparative_cores.min)]]%
+                    from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] AVG Load ([[_formatMoney(usageReport.comparative_cores.mean)]]%
+                    from previous [[timeParams.window]])
                 </div>
-                
+
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
                         <div id="usageGraph" class="graph" style$="width: [[usageWidth]]px;"></div>
@@ -656,7 +649,7 @@ mist-insights {
                                         <span class="index">[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2 tags">
                                             <span hidden$="[[!item.name.length]]" class$="tag hidden-[[!item.name.length]]">[[item.name]]</span>
-                                            <span hidden$="[[item.name.length]]">
+                                        <span hidden$="[[item.name.length]]">
                                                 untagged
                                             </span>
                                         </span>
@@ -689,9 +682,12 @@ mist-insights {
                     <h2 class="title">Machines Overview</h2>
                 </div>
                 <div class="comparative">
-                    [[_formatMoney(costReport.machine_count.unique)]] UNIQUE machines ([[_formatMoney(costReport.comparative_machine_count.unique)]]% from previous [[timeParams.window]]) | MAX [[_formatMoney(costReport.machine_count.max)]] machines ([[_formatMoney(costReport.comparative_machine_count.max)]]% from previous [[timeParams.window]]) 
-                    <br/>
-                    MIN [[_formatMoney(costReport.machine_count.min)]] machines ([[_formatMoney(costReport.comparative_machine_count.min)]]% from previous [[timeParams.window]]) | AVG [[_formatMoney(costReport.machine_count.mean)]] machines ([[_formatMoney(costReport.comparative_machine_count.mean)]]% from previous [[timeParams.window]])
+                    [[_formatMoney(costReport.machine_count.unique)]] UNIQUE machines ([[_formatMoney(costReport.comparative_machine_count.unique)]]%
+                    from previous [[timeParams.window]]) | MAX [[_formatMoney(costReport.machine_count.max)]] machines ([[_formatMoney(costReport.comparative_machine_count.max)]]%
+                    from previous [[timeParams.window]])
+                    <br/> MIN [[_formatMoney(costReport.machine_count.min)]] machines ([[_formatMoney(costReport.comparative_machine_count.min)]]%
+                    from previous [[timeParams.window]]) | AVG [[_formatMoney(costReport.machine_count.mean)]] machines ([[_formatMoney(costReport.comparative_machine_count.mean)]]%
+                    from previous [[timeParams.window]])
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
@@ -709,8 +705,7 @@ mist-insights {
                                             [[item.name]]
                                         </span>
                                         <div class="machines-column flex-1" title="machines">
-                                            [[item.machine_count.unique]] 
-                                            machines
+                                            [[item.machine_count.unique]] machines
                                         </div>
                                         <span class="cost-column">
                                             $[[_formatMoney(item.cost)]]
@@ -733,8 +728,7 @@ mist-insights {
                                             </span>
                                         </span>
                                         <div class="machines-column flex-1" title="machines">
-                                            [[item.machine_count.unique]] 
-                                            machines
+                                            [[item.machine_count.unique]] machines
                                         </div>
                                         <span class="cost-column">
                                             $[[_formatMoney(item.cost)]]
@@ -752,13 +746,12 @@ mist-insights {
                                         <span class="index">[[_index(index)]]. </span>
                                         <span class="flexchild name-col flex-2">
                                             <span hidden$="[[!item.name.length]]" class$="tag hidden-[[!item.name.length]]">[[item.name]]</span>
-                                            <span hidden$="[[item.name.length]]">
+                                        <span hidden$="[[item.name.length]]">
                                                 untagged
                                             </span>
                                         </span>
                                         <div class="machines-column flex-1" title="machines">
-                                            [[item.machine_count.unique]] 
-                                            machines
+                                            [[item.machine_count.unique]] machines
                                         </div>
                                         <span class="cost-column">
                                             $[[_formatMoney(item.cost)]]
@@ -917,36 +910,34 @@ mist-insights {
                     legend: {
                         orient: 'vertical',
                         x: 'left',
-                        data:[1,2,3]
+                        data: [1, 2, 3]
                     },
-                    series: [
-                        {
-                            name:'cost',
-                            type:'pie',
-                            center: ['65%', '40%'],
-                            radius: ['50%', '70%'],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
-                                }
+                    series: [{
+                        name: 'cost',
+                        type: 'pie',
+                        center: ['65%', '40%'],
+                        radius: ['50%', '70%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'center'
                             },
-                            labelLine: {
-                                normal: {
-                                    show: false
+                            emphasis: {
+                                show: true,
+                                textStyle: {
+                                    fontSize: '30',
+                                    fontWeight: 'bold'
                                 }
-                            },
-                            data:[1,2,3]
-                        }
-                    ]
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data: [1, 2, 3]
+                    }]
                 }
             },
             costListByCloud: Array,
@@ -1099,7 +1090,7 @@ mist-insights {
                 computed: '_computeAllowFilter(cloud, stack, tag)',
                 value: true
             },
-            showClear:  {
+            showClear: {
                 type: Boolean,
                 computed: '_computeShowClear(allowFilter, filterby.id.length)',
                 value: true
@@ -1111,7 +1102,7 @@ mist-insights {
         },
 
         listeners: {
-            'resize-insights-graphs' : 'updateChartWidth'
+            'resize-insights-graphs': 'updateChartWidth'
         },
 
         observers: [
@@ -1140,27 +1131,25 @@ mist-insights {
             }
 
             if (this.cloud || this.stack || this.tag) {
-                if (this.cloud){
+                if (this.cloud) {
                     this.set('filterby.type', 'cloud');
                     this.set('filterby.id', this.cloud);
-                }
-                else if (this.stack){
+                } else if (this.stack) {
                     this.set('filterby.type', 'stack');
                     this.set('filterby.id', this.stack);
-                }
-                else if (this.tag){
+                } else if (this.tag) {
                     this.set('filterby.type', 'tag');
                     this.set('filterby.id', this.tag);
                 }
             }
         },
 
-        _computeAllowFilter: function(cloud, stack, tag){
+        _computeAllowFilter: function (cloud, stack, tag) {
             this.set('allowFilter', cloud || stack || tag ? true : false);
         },
 
-        _computeShowClear: function(allowFilter, idlength){
-            return allowFilter && idlength;
+        _computeShowClear: function (allowFilter, idLength) {
+            return allowFilter && idLength;
         },
 
         initCharts: function () {
@@ -1180,23 +1169,23 @@ mist-insights {
             console.log('initialized charts');
         },
 
-        isNotNull: function(value) {
+        isNotNull: function (value) {
             return value != null;
         },
 
-        abs: function(perc) {
+        abs: function (perc) {
             var inp = Math.abs(perc);
             return this._formatMoney(inp);
         },
 
-        _display: function(type){
-            if (type == 'cloud' || type == 'tag') 
+        _display: function (type) {
+            if (type == 'cloud' || type == 'tag')
                 return type;
-            else 
+            else
                 return this.stackTerm || stack;
         },
 
-        diffText: function(perc) {
+        diffText: function (perc) {
             if (perc == null)
                 return ''
             else if (perc == 0)
@@ -1265,11 +1254,17 @@ mist-insights {
                 this.usageGraph.setOption(this.usageGraphOptions);
 
             if (this.usageReport.group_by['stack'])
-                usageListByCloud = this.usageReport.group_by['cloud'].sort(function(a,b){ return a.load.mean < b.load.mean});
+                usageListByCloud = this.usageReport.group_by['cloud'].sort(function (a, b) {
+                    return a.load.mean < b.load.mean
+                });
             if (this.usageReport.group_by['stack'])
-                usageListByStack = this.usageReport.group_by['stack'].sort(function(a,b){ return a.load.mean < b.load.mean});
+                usageListByStack = this.usageReport.group_by['stack'].sort(function (a, b) {
+                    return a.load.mean < b.load.mean
+                });
             if (this.usageReport.group_by['tag'])
-                usageListByTag = this.usageReport.group_by['tag'].sort(function(a,b){ return a.load.mean < b.load.mean});
+                usageListByTag = this.usageReport.group_by['tag'].sort(function (a, b) {
+                    return a.load.mean < b.load.mean
+                });
 
             // fill in cost lists
             this.set('usageListByCloud', usageListByCloud || false);
@@ -1279,7 +1274,7 @@ mist-insights {
             console.log('updated usage data');
         },
 
-        updateCostDrillData: function(groupby, filterbyname) {            
+        updateCostDrillData: function (groupby, filterbyname) {
             var costRingData = [],
                 costRingLabels = [],
                 costListByCloud,
@@ -1287,20 +1282,23 @@ mist-insights {
                 costListByTag;
 
             if (this.costReport && this.costReport.group_by) {
-                costRingData = this.costReport.group_by['cloud'] && this.costReport.group_by['cloud'].map(function(point){
-                    return {value: point.cost, name: point.name};
+                costRingData = this.costReport.group_by['cloud'] && this.costReport.group_by['cloud'].map(function (point) {
+                    return {
+                        value: point.cost,
+                        name: point.name
+                    };
                 }, this);
-                costRingLabels = this.costReport.group_by['cloud'] && this.costReport.group_by['cloud'].map(function(point){
+                costRingLabels = this.costReport.group_by['cloud'] && this.costReport.group_by['cloud'].map(function (point) {
                     return point.name;
                 }, this);
 
-                if (this.costReport.group_by['cloud']){
+                if (this.costReport.group_by['cloud']) {
                     costListByCloud = this.sortByCost(this.costReport.group_by['cloud']);
                 }
-                if (this.costReport.group_by['stack']){
+                if (this.costReport.group_by['stack']) {
                     costListByStack = this.sortByCost(this.costReport.group_by['stack']);
                 }
-                if (this.costReport.group_by['tag']){
+                if (this.costReport.group_by['tag']) {
                     costListByTag = this.sortByCost(this.costReport.group_by['tag']);
                 }
             }
@@ -1318,18 +1316,22 @@ mist-insights {
 
         },
 
-        sortByMachines: function(array){
+        sortByMachines: function (array) {
             if (array) {
                 var ret = array.slice(0);
-                return ret.sort(function(a,b){ return a.machine_count.unique < b.machine_count.unique})
+                return ret.sort(function (a, b) {
+                    return a.machine_count.unique < b.machine_count.unique
+                })
             }
             return false;
         },
 
-        sortByCost: function(array){
+        sortByCost: function (array) {
             if (array) {
-                var ret = array.slice(0);                
-                return ret.sort(function(a,b){ return a.cost < b.cost})
+                var ret = array.slice(0);
+                return ret.sort(function (a, b) {
+                    return a.cost < b.cost
+                })
             }
             return false;
         },
@@ -1423,48 +1425,53 @@ mist-insights {
                 }, 100, this)
             }
         },
-        updateFilterItems: function(group_by) {
-            var items = [], 
-                clouds = [], stacks = [], tags = [];
-            if (this.token){
+        updateFilterItems: function (group_by) {
+            var items = [],
+                clouds = [],
+                stacks = [],
+                tags = [];
+            if (this.token) {
                 clouds = this.costReport.group_by.cloud || [];
                 stacks = this.costReport.group_by.stack || [];
                 tags = this.costReport.group_by.tag || [];
-            }
-            else if (this.model) {
+            } else if (this.model) {
                 clouds = this.model.cloudsArray;
                 stacks = this.model.stacksArray;
-                tags = this.model.machinesArray.filter(function(m){
-                        return m.tags.length > 0
-                    }).map(function(m){
-                        for (var i=0; i < m.tags.length; i++){
-                            var postfix = '';
-                            if (m.tags[i].value != ''){
-                                postfix = '='+m.tags[i].value;
-                            }
-                            return {
-                                'name': m.tags[i].key+postfix,
-                                'id': m.tags[i].key+postfix,
-                                'val': m.tags[i].val
-                            };
+                tags = this.model.machinesArray.filter(function (m) {
+                    return m.tags.length > 0
+                }).map(function (m) {
+                    for (var i = 0; i < m.tags.length; i++) {
+                        var postfix = '';
+                        if (m.tags[i].value != '') {
+                            postfix = '=' + m.tags[i].value;
                         }
-                    });
-                var names = tags.map(function(t){
+                        return {
+                            'name': m.tags[i].key + postfix,
+                            'id': m.tags[i].key + postfix,
+                            'val': m.tags[i].val
+                        };
+                    }
+                });
+                var names = tags.map(function (t) {
                     return t.name;
                 });
-                tags = tags.filter(function(t, ind){
+                tags = tags.filter(function (t, ind) {
                     return names.indexOf(t.name) == ind;
                 });
             }
 
             this.set('clouds', clouds);
-            this.set('stacks', stacks.filter(function(c){return c.name != ""}));
-            this.set('tags', tags.filter(function(c){return c.name != ""}));
+            this.set('stacks', stacks.filter(function (c) {
+                return c.name != ""
+            }));
+            this.set('tags', tags.filter(function (c) {
+                return c.name != ""
+            }));
 
         },
         computeFilterbyItems: function (filterby) {
             var items = [];
-            if (filterby.path == 'filterby.type'){
+            if (filterby.path == 'filterby.type') {
                 if (this.filterby.type == 'stack')
                     items = this.stacks;
                 else if (this.filterby.type == 'cloud')
@@ -1474,32 +1481,31 @@ mist-insights {
                 else
                     items = [];
 
-                if (!items || !items.length){
+                if (!items || !items.length) {
                     this.set('filterbyDisable', true);
-                }
-                else {
+                } else {
                     this.set('filterbyDisable', false);
                 }
 
-                this.set('filterbyItems',items);
+                this.set('filterbyItems', items);
             }
 
             // if filterby changed reset selected item
             // console.log(filterby.path);
-            if (filterby.path == 'filterby.type'){
+            if (filterby.path == 'filterby.type') {
                 this.set('filterby.name', '');
-                this.async(function(){
+                this.async(function () {
                     this.$.filterbyName.selected = '';
                 }, 100, this)
             }
             // if filterby id changed update name
-            if (filterby.path == 'filterby.id'){
+            if (filterby.path == 'filterby.id') {
                 this.set('filterby.name', this.computeName(filterby.value));
             }
 
         },
 
-        combineParams: function(time, filter) {
+        combineParams: function (time, filter) {
             // console.log('filter path', filter.path, this.allowFilter);
 
             // dont update params so dont request, if user changes window, type, name or has not specified filter by id
@@ -1507,50 +1513,48 @@ mist-insights {
 
             if (filter.path == 'filterby.type' || filter.path == 'filterby.name' || time.path == 'timeParams.window' || (filter.path == 'filterby.id' && filter.value == "") || time.value == "-1") {
                 // console.log('dont send ', this.params);
-            }
-            else if (filter.path == 'filterby.id' || (filter.path == 'filterby' && this.allowFilter)){
+            } else if (filter.path == 'filterby.id' || (filter.path == 'filterby' && this.allowFilter)) {
                 var p = {
                     window: this.timeParams.window,
                     past: this.timeParams.past
                 };
 
-                if (this.filterby.type != '' && this.filterby.id != ''){
+                if (this.filterby.type != '' && this.filterby.id != '') {
                     p[this.filterby.type] = this.filterby.id;
                 }
-                
+
                 this.set('params', p);
-                this.debounce('costReportRequeset', function() { this.$.costReportAjax.generateRequest() }, 100);
+                this.debounce('costReportRequeset', function () {
+                    this.$.costReportAjax.generateRequest()
+                }, 100);
             }
         },
 
-        computeName: function(id){
-            if (id){
+        computeName: function (id) {
+            if (id) {
                 if (this.filterby.type == 'tag') {
                     return id;
-                }
-                else if (this.filterby.type == 'cloud') {
+                } else if (this.filterby.type == 'cloud') {
                     if (!this.token)
                         return this.model.clouds[id].title;
-                    else 
-                        return this.clouds && this.clouds.find(function(c){
+                    else
+                        return this.clouds && this.clouds.find(function (c) {
                             return c.id == id;
                         }).name;
-                }
-                else if (this.filterby.type == 'stack') {
+                } else if (this.filterby.type == 'stack') {
                     if (!this.token)
                         return this.model.stacks[id].name;
                     else
-                        return this.stacks && this.stacks.find(function(s){
+                        return this.stacks && this.stacks.find(function (s) {
                             return s.id == id;
                         }).name;
                 }
-            }
-            else {
+            } else {
                 return '';
             }
         },
 
-        clearFilter: function(e){
+        clearFilter: function (e) {
             this.set('filterby', {
                 type: '',
                 name: '',
@@ -1558,29 +1562,28 @@ mist-insights {
             });
         },
 
-        updateChartWidth: function(){
+        updateChartWidth: function () {
             var parentWidth = this.$.graphRow.offsetWidth - 50;
 
-            if (parentWidth/2 > 400) {
-                this.set('costWidth',parentWidth/2);
-                this.set('usageWidth',parentWidth/2);
-                this.set('machinesWidth',parentWidth/2);
-                if (parentWidth/4 > 300)
-                    this.set('drillCostWidth',parentWidth/4);
+            if (parentWidth / 2 > 400) {
+                this.set('costWidth', parentWidth / 2);
+                this.set('usageWidth', parentWidth / 2);
+                this.set('machinesWidth', parentWidth / 2);
+                if (parentWidth / 4 > 300)
+                    this.set('drillCostWidth', parentWidth / 4);
                 else
-                    this.set('drillCostWidth',parentWidth/2);
-            }
-            else {
-                this.set('costWidth',parentWidth);
-                this.set('drillCostWidth',parentWidth);
-                this.set('usageWidth',parentWidth);
-                this.set('machinesWidth',parentWidth);
+                    this.set('drillCostWidth', parentWidth / 2);
+            } else {
+                this.set('costWidth', parentWidth);
+                this.set('drillCostWidth', parentWidth);
+                this.set('usageWidth', parentWidth);
+                this.set('machinesWidth', parentWidth);
             }
 
             this.resizeGraphs();
         },
 
-        resizeGraphs: function(){
+        resizeGraphs: function () {
             console.log('resizeGraphs');
             if (this.costGraph)
                 this.costGraph.resize();
@@ -1592,11 +1595,11 @@ mist-insights {
                 this.machinesGraph.resize();
         },
 
-        _index: function(ind) {
-            return ind+1;
+        _index: function (ind) {
+            return ind + 1;
         },
 
-        _formatMoney: function(inp){
+        _formatMoney: function (inp) {
             if (inp)
                 return inp.formatMoney(2);
         },
@@ -1618,7 +1621,7 @@ mist-insights {
         handleResponseCostReport: function (e) {
             console.log('handleResponseCostReport');
             this.set('costReport', e.detail.xhr.response);
-            
+
             if (this.filterby.type == '')
                 this.updateFilterItems(this.costReport.group_by);
 
@@ -1634,7 +1637,7 @@ mist-insights {
             console.log('handleError');
         },
 
-        _updateTenant: function(tenant) {
+        _updateTenant: function (tenant) {
             if (tenant.length && !this.uri.length) {
                 this.$.costReportAjax.headers.tenant = tenant;
                 this.$.usageReportAjax.headers.tenant = tenant;
@@ -1642,40 +1645,42 @@ mist-insights {
         }
     });
 
-(function() {
-    var throttle = function(type, name, obj) {
-        obj = obj || window;
-        var running = false;
-        var func = function() {
-            if (running) { return; }
-            running = true;
-             requestAnimationFrame(function() {
-                obj.dispatchEvent(new CustomEvent(name));
-                running = false;
-            });
+    (function () {
+        var throttle = function (type, name, obj) {
+            obj = obj || window;
+            var running = false;
+            var func = function () {
+                if (running) {
+                    return;
+                }
+                running = true;
+                requestAnimationFrame(function () {
+                    obj.dispatchEvent(new CustomEvent(name));
+                    running = false;
+                });
+            };
+            obj.addEventListener(type, func);
         };
-        obj.addEventListener(type, func);
+
+        /* init - you can init any event */
+        throttle("resize", "optimizedResize");
+    })();
+
+    // handle event
+    window.addEventListener("optimizedResize", function () {
+        if (document.querySelector('mist-insights'))
+            document.querySelector('mist-insights').fire('resize-insights-graphs')
+    });
+
+    Number.prototype.formatMoney = function (c, d, t) {
+        var n = this,
+            c = isNaN(c = Math.abs(c)) ? 2 : c,
+            d = d == undefined ? "." : d,
+            t = t == undefined ? "," : t,
+            s = n < 0 ? "-" : "",
+            i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+            j = (j = i.length) > 3 ? j % 3 : 0;
+        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
     };
-
-    /* init - you can init any event */
-    throttle("resize", "optimizedResize");
-})();
-
-// handle event
-window.addEventListener("optimizedResize", function() {
-    if (document.querySelector('mist-insights'))
-        document.querySelector('mist-insights').fire('resize-insights-graphs')
-});
-
-Number.prototype.formatMoney = function(c, d, t){
-var n = this,
-    c = isNaN(c = Math.abs(c)) ? 2 : c,
-    d = d == undefined ? "." : d,
-    t = t == undefined ? "," : t,
-    s = n < 0 ? "-" : "",
-    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
-    j = (j = i.length) > 3 ? j % 3 : 0;
-   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
- };
   </script>
 </dom-module>
