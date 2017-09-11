@@ -33,7 +33,6 @@ stack-term="deployment"
 
 @demo demo/index.html
 -->
-
 <!-- 
 css on parent: 
 mist-insights {
@@ -67,13 +66,12 @@ mist-insights {
         --green-color: #38b549;
       }
  -->
-
 <dom-module id="mist-insights">
     <template>
         <style include="iron-flex iron-flex-alignment iron-flex-factors">
-             :host {
-                display: block;
-                /*--insights-general-font: {
+         :host {
+            display: block;
+            /*--insights-general-font: {
                     font-family: 'Roboto', 'Noto', sans-serif;
                     font-size: 16px;
                     line-height: 1.8em;
@@ -103,288 +101,286 @@ mist-insights {
                     padding: 24px;
                     margin-bottom: 16px;
                 }*/
-                /*@apply --insights-general-font;*/
-                font-family: var(--insights-general-font-font-family);
-                font-size: var(--insights-general-font-font-size);
-                line-height: var(--insights-general-font-line-height);
-                color: var(--insights-general-font-color);
-            }
+            /*@apply --insights-general-font;*/
+            font-family: var(--insights-general-font-font-family);
+            font-size: var(--insights-general-font-font-size);
+            line-height: var(--insights-general-font-line-height);
+            color: var(--insights-general-font-color);
+        }
 
-             :host(.cloudify) {
-                /*--insights-general-font*/
-                --insights-general-font-font-size: 14px;
-                --insights-general-font-line-height: 1.8em;
-                --insights-general-font-color: rgba(0, 0, 0, 0.87);
+         :host(.cloudify) {
+            /*--insights-general-font*/
+            --insights-general-font-font-size: 14px;
+            --insights-general-font-line-height: 1.8em;
+            --insights-general-font-color: rgba(0, 0, 0, 0.87);
 
-                /*--insights-h2*/
-                --insights-h2-font-size: 2.4em;
-                --insights-h2-margin: 0 !important;
-                --insights-h2-font-weight: 400;
-                --insights-h2-letter-spacing: 0;
-                --insights-h2-line-height: 48px;
+            /*--insights-h2*/
+            --insights-h2-font-size: 2.4em;
+            --insights-h2-margin: 0 !important;
+            --insights-h2-font-weight: 400;
+            --insights-h2-letter-spacing: 0;
+            --insights-h2-line-height: 48px;
 
-                /*--insights-h2-title*/
-                --insights-h2-title-font-size: 1em;
-                --insights-h2-title-margin: 0 !important;
+            /*--insights-h2-title*/
+            --insights-h2-title-font-size: 1em;
+            --insights-h2-title-margin: 0 !important;
 
-                /*--insights-legends*/
-                --insights-legends-text-transform: uppercase;
-                --insights-legends-font-size: 0.9em;
-                --insights-legends-color: rgba(0, 0, 0, 0.54);
+            /*--insights-legends*/
+            --insights-legends-text-transform: uppercase;
+            --insights-legends-font-size: 0.9em;
+            --insights-legends-color: rgba(0, 0, 0, 0.54);
 
-                /* dropdown */
-                --paper-font-subhead_-_font-size: 14px;
-                --paper-item-min-height: 37px;
+            /* dropdown */
+            --paper-font-subhead_-_font-size: 14px;
+            --paper-item-min-height: 37px;
 
-                /*--material-css*/
-                --material-css-padding: 8px 0;
-                --material-css-margin-bottom: 16px;
+            /*--material-css*/
+            --material-css-padding: 8px 0;
+            --material-css-margin-bottom: 16px;
 
-                --red-color: #e82438;
-                --green-color: #38b549;
+            --red-color: #e82438;
+            --green-color: #38b549;
 
-                --paper-input-container: {
-                    border: 1px solid #ddd;
-                    padding: 0 8px;
-                    border-radius: 3px;
-                }
-                paper-item: {
-                    padding: 11px 14px;
-                }
-                --material-shadow: {
-                    @apply --shadow-none;
-                }
-                --paper-listbox: {
-                    /*@apply --shadow-none;*/
-                    width: 210px;
-                    border: 1px solid #81BCD4;
-                    margin: 0;
-                    padding: 0;
-                    border-radius: 3px;
-                }
-                --paper-input-container-color: transparent;
-                --paper-input-container-focus-color: transparent;
-                --paper-input-container-invalid-color: transparent;
-                --paper-listbox_-_width: 186px;
-                --insights-legends-text-transform: none;
-            }
-
-             :host(.cloudify) paper-input-container:hover {
-                border-color: rgba(34, 36, 38, .35);
-            }
-
-             :host(.cloudify) .smaller {
-                text-transform: none;
-                font-size: 14px;
-                color: black;
-                font-weight: 700;
-            }
-
-             :host(.cloudify) h2 {
-                font-weight: bold;
-                text-transform: none;
-            }
-
-             :host(.cloudify) paper-material+paper-material {
-                border-top: 1px solid #ddd;
-            }
-
-             :host(.cloudify) paper-button.clear {
-                color: rgba(0, 0, 0, .6);
-                box-shadow: 0 0 0 1px rgba(34, 36, 38, .15) inset;
+            --paper-input-container: {
+                border: 1px solid #ddd;
+                padding: 0 8px;
                 border-radius: 3px;
-                padding: 3px 12px;
-                display: inline-block;
-                vertical-align: bottom;
             }
-
-             :host(.cloudify) paper-button.clear iron-icon {
-                width: 16px;
-                margin-right: 8px;
+            paper-item: {
+                padding: 11px 14px;
             }
-
-            h2 {
-                /*@apply --insights-h2;*/
-                font-size: var(--insights-h2-font-size);
-                margin: var(--insights-h2-margin);
-                font-weight: var(--insights-h2-font-weight);
-                letter-spacing: var(--insights-h2-letter-spacing);
-                line-height: var(--insights-h2-line-height);
+            --material-shadow: {
+                @apply --shadow-none;
             }
-
-            h2.title {
-                /*@apply --insights-h2-title;*/
-                font-size: var(--insights-h2-title-font-size);
-                margin: var(--insights-h2-title-margin);
-                padding: var(--insights-h2-title-padding);
-                border-bottom: var(--insights-h2-border-bottom);
-            }
-
-            *[hidden] {
-                display: none;
-            }
-
-            #quick-overview {
-                margin: var(--insights-quick-overview-margin);
-            }
-
-            #graphRow[largescreen] {
-                display: flex;
-            }
-
-            #graphRow[largescreen] .block+.block {
-                padding-left: 48px;
-            }
-
-            .graph {
-                width: 100%;
-                min-height: 300px;
-                margin-bottom: 40px;
-            }
-
-            .smaller {
-                /*@apply --insights-legends;*/
-                text-transform: var(--insights-legends-text-transform);
-                font-size: var(--insights-legends-font-size);
-                color: var(--insights-legends-color);
-            }
-
-            .uppercase,
-            paper-dropdown-menu.uppercase paper-item,
-            paper-dropdown-menu.uppercase ::content #input {
-                text-transform: uppercase;
-            }
-
-            paper-listbox#filterbyType paper-item {
-                text-transform: capitalize;
-            }
-
-            paper-material {
-                position: relative;
-                display: block;
-                /*@apply --material-css;*/
-                @apply --material-shadow;
-                padding: var(--material-css-padding);
-                margin-bottom: var(--material-css-margin-bottom);
-            }
-
-            paper-spinner {
-                margin: 10% calc(50% - 40px);
-                width: 80px !important;
-                height: 80px !important;
-            }
-
-            .red,
-            .above {
-                color: var(--red-color);
-            }
-
-            .green,
-            .below {
-                color: var(--green-color);
-            }
-
-            .sup {
-                vertical-align: super;
-                font-size: 0.55em;
-                opacity: 0.34;
-            }
-
-            .opaque {
-                opacity: 0.34
-            }
-
-            .filterby {
-                display: inline-block;
-            }
-
-            .highlight {
-                background-color: #ffff8d;
-                padding: 2px;
-            }
-
-            .loading-data {
-                position: absolute;
-                background-color: rgba(255, 255, 255, 0.9);
-                width: 100%;
-                height: 100%;
-                left: 0;
-                right: 0;
-                top: 0;
-                bottom: 0;
-                z-index: 2;
-            }
-
-            .filter {
-                padding: 0 16px 0 0;
-            }
-
-            #filtering .container {
-                align-items: flex-end;
-            }
-
-            .machines-column {
-                opacity: 0.54;
-                padding-right: 16px;
-                text-align: left;
-
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-
-                text-align-last: right;
-            }
-
-            .cost-column {
-                text-align: right;
-                width: 30%;
-            }
-
-            .list {
-                margin-top: 16px;
-                margin-bottom: 32px;
-                min-width: 300px;
-            }
-
-            .tag {
-                vertical-align: middle;
-                line-height: 1.6em;
-                display: inline-block;
-                background-color: #888;
-                color: #fff;
-                font-size: 14px;
-                padding: 0 0.5em;
-                margin: 0 1px;
-                border-radius: 2px;
-                letter-spacing: .4px;
-                font-weight: 400;
-                word-break: break-all;
-                max-width: 250px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            .tag.hidden-true {
+            --paper-listbox: {
+                /*@apply --shadow-none;*/
+                width: 210px;
+                border: 1px solid #81BCD4;
+                margin: 0;
                 padding: 0;
+                border-radius: 3px;
             }
+            --paper-input-container-color: transparent;
+            --paper-input-container-focus-color: transparent;
+            --paper-input-container-invalid-color: transparent;
+            --paper-listbox_-_width: 186px;
+            --insights-legends-text-transform: none;
+        }
 
-            .comparative {
-                margin-bottom: 24px;
-            }
+         :host(.cloudify) paper-input-container:hover {
+            border-color: rgba(34, 36, 38, .35);
+        }
 
-            #test .test {
-                margin: 20px;
-                background-color: #eee;
-            }
+         :host(.cloudify) .smaller {
+            text-transform: none;
+            font-size: 14px;
+            color: black;
+            font-weight: 700;
+        }
 
-            .index {
-                margin-right: 4px;
-            }
+         :host(.cloudify) h2 {
+            font-weight: bold;
+            text-transform: none;
+        }
+
+         :host(.cloudify) paper-material+paper-material {
+            border-top: 1px solid #ddd;
+        }
+
+         :host(.cloudify) paper-button.clear {
+            color: rgba(0, 0, 0, .6);
+            box-shadow: 0 0 0 1px rgba(34, 36, 38, .15) inset;
+            border-radius: 3px;
+            padding: 3px 12px;
+            display: inline-block;
+            vertical-align: bottom;
+        }
+
+         :host(.cloudify) paper-button.clear iron-icon {
+            width: 16px;
+            margin-right: 8px;
+        }
+
+        h2 {
+            /*@apply --insights-h2;*/
+            font-size: var(--insights-h2-font-size);
+            margin: var(--insights-h2-margin);
+            font-weight: var(--insights-h2-font-weight);
+            letter-spacing: var(--insights-h2-letter-spacing);
+            line-height: var(--insights-h2-line-height);
+        }
+
+        h2.title {
+            /*@apply --insights-h2-title;*/
+            font-size: var(--insights-h2-title-font-size);
+            margin: var(--insights-h2-title-margin);
+            padding: var(--insights-h2-title-padding);
+            border-bottom: var(--insights-h2-border-bottom);
+        }
+
+        *[hidden] {
+            display: none;
+        }
+
+        #quick-overview {
+            margin: var(--insights-quick-overview-margin);
+        }
+
+        #graphRow[largescreen] {
+            display: flex;
+        }
+
+        #graphRow[largescreen] .block+.block {
+            padding-left: 48px;
+        }
+
+        .graph {
+            width: 100%;
+            min-height: 300px;
+            margin-bottom: 40px;
+        }
+
+        .smaller {
+            /*@apply --insights-legends;*/
+            text-transform: var(--insights-legends-text-transform);
+            font-size: var(--insights-legends-font-size);
+            color: var(--insights-legends-color);
+        }
+
+        .uppercase,
+        paper-dropdown-menu.uppercase paper-item,
+        paper-dropdown-menu.uppercase ::content #input {
+            text-transform: uppercase;
+        }
+
+        paper-listbox#filterbyType paper-item {
+            text-transform: capitalize;
+        }
+
+        paper-material {
+            position: relative;
+            display: block;
+            /*@apply --material-css;*/
+            @apply --material-shadow;
+            padding: var(--material-css-padding);
+            margin-bottom: var(--material-css-margin-bottom);
+        }
+
+        paper-spinner {
+            margin: 10% calc(50% - 40px);
+            width: 80px !important;
+            height: 80px !important;
+        }
+
+        .red,
+        .above {
+            color: var(--red-color);
+        }
+
+        .green,
+        .below {
+            color: var(--green-color);
+        }
+
+        .sup {
+            vertical-align: super;
+            font-size: 0.55em;
+            opacity: 0.34;
+        }
+
+        .opaque {
+            opacity: 0.34
+        }
+
+        .filterby {
+            display: inline-block;
+        }
+
+        .highlight {
+            background-color: #ffff8d;
+            padding: 2px;
+        }
+
+        .loading-data {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.9);
+            width: 100%;
+            height: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 2;
+        }
+
+        .filter {
+            padding: 0 16px 0 0;
+        }
+
+        #filtering .container {
+            align-items: flex-end;
+        }
+
+        .machines-column {
+            opacity: 0.54;
+            padding-right: 16px;
+            text-align: left;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            text-align-last: right;
+        }
+
+        .cost-column {
+            text-align: right;
+            width: 30%;
+        }
+
+        .list {
+            margin-top: 16px;
+            margin-bottom: 32px;
+            min-width: 300px;
+        }
+
+        .tag {
+            vertical-align: middle;
+            line-height: 1.6em;
+            display: inline-block;
+            background-color: #888;
+            color: #fff;
+            font-size: 14px;
+            padding: 0 0.5em;
+            margin: 0 1px;
+            border-radius: 2px;
+            letter-spacing: .4px;
+            font-weight: 400;
+            word-break: break-all;
+            max-width: 250px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tag.hidden-true {
+            padding: 0;
+        }
+
+        .comparative {
+            margin-bottom: 24px;
+        }
+
+        #test .test {
+            margin: 20px;
+            background-color: #eee;
+        }
+
+        .index {
+            margin-right: 4px;
+        }
         </style>
-
         <iron-media-query query="(min-width: 1180px)" query-matches="{{largescreen}}"></iron-media-query>
-
         <paper-material id="filtering" class="margin-botttom">
             <div class="container layout horizontal start">
                 <div class="filter flex-1 self-start">
@@ -426,13 +422,11 @@ mist-insights {
                             </paper-item>
                         </paper-listbox>
                     </paper-dropdown-menu>
-                    <paper-button class="inline baseline smaller clear" on-tap="clearFilter" disabled$="[[!filterby.id.length]]" hidden$="[[!showClear]]"
-                        noink>
+                    <paper-button class="inline baseline smaller clear" on-tap="clearFilter" disabled$="[[!filterby.id.length]]" hidden$="[[!showClear]]" noink>
                         <iron-icon icon="clear"></iron-icon>Clear</paper-button>
                 </div>
             </div>
         </paper-material>
-
         <paper-material id="quick-overview" class="margin-botttom">
             <div class="loading-data" hidden="{{!loadingDataCost}}">
             </div>
@@ -472,7 +466,6 @@ mist-insights {
                 </div>
             </div>
         </paper-material>
-
         <paper-material id="graphRow">
             <div class="loading-data" hidden="{{!loadingDataCost}}">
                 <paper-spinner active="{{loadingDataCost}}"></paper-spinner>
@@ -481,10 +474,7 @@ mist-insights {
                 <div class="head">
                     <h2 class="title">Cost Overview</h2>
                 </div>
-
-                <div class="comparative">Current cost: $[[_formatMoney(costReport.cost)]] ([[_formatMoney(costReport.comparative_cost)]]% from previous
-                    [[timeParams.window]]) | Cost per month: max: $[[_formatMoney(costReport.cost_per_month.max)]], avg:
-                    $[[_formatMoney(costReport.cost_per_month.mean)]], min: $[[_formatMoney(costReport.cost_per_month.min)]]</div>
+                <div class="comparative">Current cost: $[[_formatMoney(costReport.cost)]] ([[_formatMoney(costReport.comparative_cost)]]% from previous [[timeParams.window]]) | Cost per month: max: $[[_formatMoney(costReport.cost_per_month.max)]], avg: $[[_formatMoney(costReport.cost_per_month.mean)]], min: $[[_formatMoney(costReport.cost_per_month.min)]]</div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
                         <div id="costGraph" class="graph" style$="width: [[costWidth]]px;"></div>
@@ -539,7 +529,6 @@ mist-insights {
                                     </template>
                                 </div>
                             </div>
-
                             <div id="costListByTag" class="flex" hidden$="{{!costListByTag}}">
                                 <div class="smaller">Cost by Tag</div>
                                 <div class="list">
@@ -562,15 +551,11 @@ mist-insights {
                                     </template>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </paper-material>
-
         <paper-material>
             <div class="loading-data" hidden="{{!loadingDataUsage}}">
                 <paper-spinner active="{{loadingDataUsage}}"></paper-spinner>
@@ -580,22 +565,14 @@ mist-insights {
                     <h2 class="title">Utilisation Overview</h2>
                 </div>
                 <div class="comparative">
-                    [[usageReport.load.max]] MAX Load ([[_formatMoney(usageReport.comparative_load.max)]]% from previous [[timeParams.window]])
-                    | [[_formatMoney(usageReport.load.max)]] MIN Load ([[_formatMoney(usageReport.comparative_load.min)]]%
-                    from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] AVG Load ([[_formatMoney(usageReport.comparative_load.mean)]]%
-                    from previous [[timeParams.window]])
-                    <br/> [[_formatMoney(usageReport.load.max)]] MAX cores ([[_formatMoney(usageReport.comparative_cores.max)]]%
-                    from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] MIN cores ([[_formatMoney(usageReport.comparative_cores.min)]]%
-                    from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] AVG Load ([[_formatMoney(usageReport.comparative_cores.mean)]]%
-                    from previous [[timeParams.window]])
+                    [[usageReport.load.max]] MAX Load ([[_formatMoney(usageReport.comparative_load.max)]]% from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] MIN Load ([[_formatMoney(usageReport.comparative_load.min)]]% from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] AVG Load ([[_formatMoney(usageReport.comparative_load.mean)]]% from previous [[timeParams.window]])
+                    <br/> [[_formatMoney(usageReport.load.max)]] MAX cores ([[_formatMoney(usageReport.comparative_cores.max)]]% from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] MIN cores ([[_formatMoney(usageReport.comparative_cores.min)]]% from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] AVG Load ([[_formatMoney(usageReport.comparative_cores.mean)]]% from previous [[timeParams.window]])
                 </div>
-
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
                         <div id="usageGraph" class="graph" style$="width: [[usageWidth]]px;"></div>
                     </div>
                     <div class="flex-1">
-
                         <div id="usageListByCloud" class="flex" hidden$="{{!usageListByCloud}}">
                             <div class="smaller">Load by Cloud</div>
                             <div class="list">
@@ -618,7 +595,6 @@ mist-insights {
                                 </template>
                             </div>
                         </div>
-
                         <div id="usageListByStack" class="flex" hidden$="{{!usageListByStack}}">
                             <div class="smaller">Load by [[stackTerm]]</div>
                             <div class="list">
@@ -644,7 +620,6 @@ mist-insights {
                                 </template>
                             </div>
                         </div>
-
                         <div id="usageListByTag" class="flex" hidden$="{{!usageListByTag}}">
                             <div class="smaller">Load by Tag</div>
                             <div class="list">
@@ -670,13 +645,10 @@ mist-insights {
                                 </template>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </paper-material>
-
         <paper-material>
             <div class="loading-data" hidden="{{!loadingDataCost}}">
                 <paper-spinner active="{{loadingDataCost}}"></paper-spinner>
@@ -686,19 +658,14 @@ mist-insights {
                     <h2 class="title">Machines Overview</h2>
                 </div>
                 <div class="comparative">
-                    [[_formatMoney(costReport.machine_count.unique)]] UNIQUE machines ([[_formatMoney(costReport.comparative_machine_count.unique)]]%
-                    from previous [[timeParams.window]]) | MAX [[_formatMoney(costReport.machine_count.max)]] machines ([[_formatMoney(costReport.comparative_machine_count.max)]]%
-                    from previous [[timeParams.window]])
-                    <br/> MIN [[_formatMoney(costReport.machine_count.min)]] machines ([[_formatMoney(costReport.comparative_machine_count.min)]]%
-                    from previous [[timeParams.window]]) | AVG [[_formatMoney(costReport.machine_count.mean)]] machines ([[_formatMoney(costReport.comparative_machine_count.mean)]]%
-                    from previous [[timeParams.window]])
+                    [[_formatMoney(costReport.machine_count.unique)]] UNIQUE machines ([[_formatMoney(costReport.comparative_machine_count.unique)]]% from previous [[timeParams.window]]) | MAX [[_formatMoney(costReport.machine_count.max)]] machines ([[_formatMoney(costReport.comparative_machine_count.max)]]% from previous [[timeParams.window]])
+                    <br/> MIN [[_formatMoney(costReport.machine_count.min)]] machines ([[_formatMoney(costReport.comparative_machine_count.min)]]% from previous [[timeParams.window]]) | AVG [[_formatMoney(costReport.machine_count.mean)]] machines ([[_formatMoney(costReport.comparative_machine_count.mean)]]% from previous [[timeParams.window]])
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
                         <div id="machinesGraph" class="graph" style$="width: [[machinesWidth]]px;"></div>
                     </div>
                     <div class="flex-1">
-
                         <div id="machinesListByCloud" class="flex" hidden$="{{!machinesListByCloud}}">
                             <div class="smaller">Machines by Cloud</div>
                             <div class="list">
@@ -718,7 +685,6 @@ mist-insights {
                                 </template>
                             </div>
                         </div>
-
                         <div id="machinesListByStack" class="flex" hidden$="{{!machinesListByStack}}">
                             <div class="smaller">Machines by [[stackTerm]]</div>
                             <div class="list">
@@ -741,7 +707,6 @@ mist-insights {
                                 </template>
                             </div>
                         </div>
-
                         <div id="machinesListByTag" class="flex" hidden$="{{!machinesListByTag}}">
                             <div class="smaller">Machines by Tag</div>
                             <div class="list">
@@ -764,28 +729,212 @@ mist-insights {
                                 </template>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </paper-material>
-
-
-        <iron-ajax id="cloudsAjax" method="GET" url$="[[uri]]/api/v1/clouds" headers$='{"[[authHeader]]": "[[token]]"}' handle-as="json"
-            loading={{loading}} on-response="handleResponseClouds" on-error="handleError"></iron-ajax>
-
-        <iron-ajax id="stacksAjax" method="GET" url$="[[uri]]/api/v1/stacks" headers$='{"[[authHeader]]": "[[token]]"}' handle-as="json"
-            loading={{loading}} on-response="handleResponseStacks" on-error="handleError"></iron-ajax>
-
-        <iron-ajax id="costReportAjax" method="GET" url$="[[uri]]/api/v1/report" headers$='{"[[authHeader]]": "[[token]]"}' handle-as="json"
-            loading="{{loadingDataCost}}" on-response="handleResponseCostReport" on-error="handleError" params=[[params]]></iron-ajax>
-
-        <iron-ajax id="usageReportAjax" method="GET" url="[[uri]]/api/v1/report?type=load" headers$='{"[[authHeader]]": "[[token]]"}'
-            handle-as="json" loading="{{loadingDataUsage}}" on-response="handleResponseUsageReport" on-error="handleError" params=[[params]]></iron-ajax>
-
+        <iron-ajax id="cloudsAjax" method="GET" url$="[[uri]]/api/v1/clouds" headers$='{"[[authHeader]]": "[[token]]"}' handle-as="json" loading={{loading}} on-response="handleResponseClouds" on-error="handleError"></iron-ajax>
+        <iron-ajax id="stacksAjax" method="GET" url$="[[uri]]/api/v1/stacks" headers$='{"[[authHeader]]": "[[token]]"}' handle-as="json" loading={{loading}} on-response="handleResponseStacks" on-error="handleError"></iron-ajax>
+        <iron-ajax id="costReportAjax" method="GET" url$="[[uri]]/api/v1/report" headers$='{"[[authHeader]]": "[[token]]"}' handle-as="json" loading="{{loadingDataCost}}" on-response="handleResponseCostReport" on-error="handleError" params=[[params]]></iron-ajax>
+        <iron-ajax id="usageReportAjax" method="GET" url="[[uri]]/api/v1/report?type=load" headers$='{"[[authHeader]]": "[[token]]"}' handle-as="json" loading="{{loadingDataUsage}}" on-response="handleResponseUsageReport" on-error="handleError" params=[[params]]></iron-ajax>
     </template>
-
     <script>
+    var COST_GRAPH_OPTIONS = {
+        tooltip: {
+            trigger: 'axis',
+            formatter: "{b}: <br/>${c}",
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
+            }
+        },
+        legend: {
+            data: ['Cost per month']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [{
+            type: 'category',
+            boundaryGap: false,
+            data: []
+        }],
+        yAxis: [{
+            type: 'value'
+        }],
+        series: [{
+            name: 'Cost',
+            type: 'line',
+            stack: 'f',
+            areaStyle: {
+                normal: {
+                    color: "rgba(0,155,155,0.2)"
+                }
+            },
+            lineStyle: {
+                normal: {
+                    color: "rgba(0,155,155,1)"
+                }
+            },
+            itemStyle: {
+                normal: {
+                    borderColor: "rgba(0,155,155,1)"
+                }
+            },
+            data: []
+        }]
+    };
+    var DRILL_COST_GRAPH_OPTIONS = {
+        tooltip: {
+            trigger: 'item',
+            formatter: "{b} {a}: <br/>${c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            x: 'left',
+            data: [1, 2, 3]
+        },
+        series: [{
+            name: 'cost',
+            type: 'pie',
+            center: ['65%', '40%'],
+            radius: ['50%', '70%'],
+            avoidLabelOverlap: false,
+            label: {
+                normal: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            data: [1, 2, 3]
+        }]
+    };
+    var USAGE_GRAPH_OPTIONS = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
+            }
+        },
+        legend: {
+            data: [{
+                name: 'Load',
+                textStyle: "rgba(0,155,155,1)",
+            }, {
+                name: 'Cores',
+                textStyle: "rgba(250,128,114,1)",
+            }]
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [{
+            type: 'category',
+            boundaryGap: false,
+            data: ['1', '2', '3', '4']
+        }],
+        yAxis: [{
+            type: 'value'
+        }],
+        series: [{
+                name: 'Cores',
+                type: 'line',
+                stack: 'f',
+                areaStyle: {
+                    normal: {
+                        color: "rgba(0,155,155,0.2)"
+                    }
+                },
+                lineStyle: {
+                    normal: {
+                        color: "rgba(0,155,155,1)"
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        borderColor: "rgba(0,155,155,1)"
+                    }
+                },
+                data: [120, 132, 101, 134]
+            },
+            {
+                name: 'Load',
+                type: 'line',
+                stack: 'g',
+                areaStyle: {
+                    normal: {
+                        color: "rgba(250,128,114,0.2)"
+                    }
+                },
+                lineStyle: {
+                    normal: {
+                        color: "rgba(250,128,114,1)"
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        borderColor: "rgba(250,128,114,1)"
+                    }
+                },
+                data: [120, 132, 101, 134]
+            }
+        ]
+    };
+    var MACHINES_GRAPH_OPTIONS = {
+        color: ["rgba(0,155,155,0.2)"],
+        borderColor: ["rgba(0,155,155,1)"],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [{
+            type: 'category',
+            data: ['Mon'],
+            axisTick: {
+                alignWithLabel: true
+            }
+        }],
+        yAxis: [{
+            type: 'value'
+        }],
+        series: [{
+            name: 'machines',
+            type: 'bar',
+            barWidth: '60%',
+            data: [10]
+        }]
+    };
     Polymer({
         is: 'mist-insights',
 
@@ -795,7 +944,7 @@ mist-insights {
             ],
             model: {
                 type: Object,
-                value: function () {
+                value: function() {
                     return {};
                 }
             },
@@ -828,7 +977,7 @@ mist-insights {
             },
             timeParams: {
                 type: Object,
-                value: function () {
+                value: function() {
                     return {
                         window: "month",
                         past: "0"
@@ -837,7 +986,7 @@ mist-insights {
             },
             filterby: {
                 type: Object,
-                value: function () {
+                value: function() {
                     return {
                         type: '',
                         name: '',
@@ -853,98 +1002,15 @@ mist-insights {
             costGraph: Object,
             costGraphOptions: {
                 type: Object,
-                value: function () {
-                    return {
-                        tooltip: {
-                            trigger: 'axis',
-                            formatter: "{b}: <br/>${c}",
-                            axisPointer: {
-                                type: 'cross',
-                                label: {
-                                    backgroundColor: '#6a7985'
-                                }
-                            }
-                        },
-                        legend: {
-                            data: ['Cost per month']
-                        },
-                        grid: {
-                            left: '3%',
-                            right: '4%',
-                            bottom: '3%',
-                            containLabel: true
-                        },
-                        xAxis: [{
-                            type: 'category',
-                            boundaryGap: false,
-                            data: []
-                        }],
-                        yAxis: [{
-                            type: 'value'
-                        }],
-                        series: [{
-                            name: 'Cost',
-                            type: 'line',
-                            stack: 'f',
-                            areaStyle: {
-                                normal: {
-                                    color: "rgba(0,155,155,0.2)"
-                                }
-                            },
-                            lineStyle: {
-                                normal: {
-                                    color: "rgba(0,155,155,1)"
-                                }
-                            },
-                            itemStyle: {
-                                normal: {
-                                    borderColor: "rgba(0,155,155,1)"
-                                }
-                            },
-                            data: []
-                        }]
-                    }
+                value: function() {
+                    return COST_GRAPH_OPTIONS;
                 }
             },
             drillcostgraph: Object,
             drillcostgraphOptions: {
                 type: Object,
-                value: {
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: "{b} {a}: <br/>${c} ({d}%)"
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        x: 'left',
-                        data: [1, 2, 3]
-                    },
-                    series: [{
-                        name: 'cost',
-                        type: 'pie',
-                        center: ['65%', '40%'],
-                        radius: ['50%', '70%'],
-                        avoidLabelOverlap: false,
-                        label: {
-                            normal: {
-                                show: false,
-                                position: 'center'
-                            },
-                            emphasis: {
-                                show: true,
-                                textStyle: {
-                                    fontSize: '30',
-                                    fontWeight: 'bold'
-                                }
-                            }
-                        },
-                        labelLine: {
-                            normal: {
-                                show: false
-                            }
-                        },
-                        data: [1, 2, 3]
-                    }]
+                value: function() {
+                    return DRILL_COST_GRAPH_OPTIONS;
                 }
             },
             costListByCloud: Array,
@@ -956,84 +1022,8 @@ mist-insights {
             usageGraph: Object,
             usageGraphOptions: {
                 type: Object,
-                value: function () {
-                    return {
-                        tooltip: {
-                            trigger: 'axis',
-                            axisPointer: {
-                                type: 'cross',
-                                label: {
-                                    backgroundColor: '#6a7985'
-                                }
-                            }
-                        },
-                        legend: {
-                            data: [{
-                                name: 'Load',
-                                textStyle: "rgba(0,155,155,1)",
-                            }, {
-                                name: 'Cores',
-                                textStyle: "rgba(250,128,114,1)",
-                            }]
-                        },
-                        grid: {
-                            left: '3%',
-                            right: '4%',
-                            bottom: '3%',
-                            containLabel: true
-                        },
-                        xAxis: [{
-                            type: 'category',
-                            boundaryGap: false,
-                            data: ['1', '2', '3', '4']
-                        }],
-                        yAxis: [{
-                            type: 'value'
-                        }],
-                        series: [{
-                                name: 'Cores',
-                                type: 'line',
-                                stack: 'f',
-                                areaStyle: {
-                                    normal: {
-                                        color: "rgba(0,155,155,0.2)"
-                                    }
-                                },
-                                lineStyle: {
-                                    normal: {
-                                        color: "rgba(0,155,155,1)"
-                                    }
-                                },
-                                itemStyle: {
-                                    normal: {
-                                        borderColor: "rgba(0,155,155,1)"
-                                    }
-                                },
-                                data: [120, 132, 101, 134]
-                            },
-                            {
-                                name: 'Load',
-                                type: 'line',
-                                stack: 'g',
-                                areaStyle: {
-                                    normal: {
-                                        color: "rgba(250,128,114,0.2)"
-                                    }
-                                },
-                                lineStyle: {
-                                    normal: {
-                                        color: "rgba(250,128,114,1)"
-                                    }
-                                },
-                                itemStyle: {
-                                    normal: {
-                                        borderColor: "rgba(250,128,114,1)"
-                                    }
-                                },
-                                data: [120, 132, 101, 134]
-                            }
-                        ]
-                    }
+                value: function() {
+                    return USAGE_GRAPH_OPTIONS;
                 }
             },
             machinesListByCloud: {
@@ -1051,37 +1041,8 @@ mist-insights {
             machinesGraph: Object,
             machinesGraphOptions: {
                 type: Object,
-                value: {
-                    color: ["rgba(0,155,155,0.2)"],
-                    borderColor: ["rgba(0,155,155,1)"],
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'shadow'
-                        }
-                    },
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
-                    },
-                    xAxis: [{
-                        type: 'category',
-                        data: ['Mon'],
-                        axisTick: {
-                            alignWithLabel: true
-                        }
-                    }],
-                    yAxis: [{
-                        type: 'value'
-                    }],
-                    series: [{
-                        name: 'machines',
-                        type: 'bar',
-                        barWidth: '60%',
-                        data: [10]
-                    }]
+                value: function() {
+                    return MACHINES_GRAPH_OPTIONS;
                 }
             },
             period: String,
@@ -1127,12 +1088,13 @@ mist-insights {
             '_computeFilterbyItems(filterby.*)',
             '_updateCombinedParams(timeParams.*, filterby.*)',
             '_updateCostDrillData(costReport.group_by, filterby.id)',
-            '_updateTenant(tenant)'
+            '_updateTenant(tenant)',
+            '_updateFilterByStackName(stackName)'
         ],
 
-        attached: function () {
+        attached: function() {
             if (typeof echarts == 'undefined')
-                this.importHref(this.resolveUrl('echarts-import.html'), this.initCharts, function (e) {
+                this.importHref(this.resolveUrl('echarts-import.html'), this.initCharts, function(e) {
                     console.error('Failed to load echarts', e);
                 }, true);
             else
@@ -1165,11 +1127,11 @@ mist-insights {
             this.set('allowFilter', cloud || stack || tag ? false : true);
         },
 
-        _computeShowClear: function (allowFilter, idLength) {
+        _computeShowClear: function(allowFilter, idLength) {
             return allowFilter && idLength;
         },
 
-        initCharts: function () {
+        initCharts: function() {
             var colorPalette = ['#607D8B', '#d96557', '#3F51B5', '#009688', '#795548', '#8c76d1', '#795548', '#0277BD', '#0099cc', '#424242', '#D48900', '#43A047', '#2F2F3E'];
             echarts.registerTheme('insights', {
                 color: colorPalette,
@@ -1186,16 +1148,16 @@ mist-insights {
             console.log('initialized charts');
         },
 
-        isNotNull: function (value) {
+        isNotNull: function(value) {
             return value != null;
         },
 
-        abs: function (perc) {
+        abs: function(perc) {
             var inp = Math.abs(perc);
             return this._formatMoney(inp);
         },
 
-        _display: function (type) {
+        _display: function(type) {
             if (type == 'cloud' || type == 'tag')
                 return type;
             else
@@ -1216,16 +1178,16 @@ mist-insights {
                 machinesData = [],
                 labels = [];
             if (history) {
-                labels = history.map(function (datapoint) {
+                labels = history.map(function(datapoint) {
                     if (['day', 'hour'].indexOf(this.timeParams.window) != -1)
                         return moment(datapoint.date).format('HH:mm').toString();
                     else
                         return moment(datapoint.date).format('YYYY-MM-DD').toString();
                 }, this);
-                costData = history.map(function (datapoint) {
+                costData = history.map(function(datapoint) {
                     return datapoint.cost_per_month;
                 });
-                machinesData = history.map(function (datapoint) {
+                machinesData = history.map(function(datapoint) {
                     return datapoint.machine_count;
                 });
             }
@@ -1250,16 +1212,16 @@ mist-insights {
                 usageListByTag;
 
             if (history) {
-                labels = history.map(function (datapoint) {
+                labels = history.map(function(datapoint) {
                     if (['day', 'hour'].indexOf(this.timeParams.window) != -1)
                         return moment(datapoint.date).format('HH:mm').toString();
                     else
                         return moment(datapoint.date).format('YYYY-MM-DD').toString();
                 }, this);
-                usageData = history.map(function (datapoint) {
+                usageData = history.map(function(datapoint) {
                     return datapoint.load;
                 });
-                coresData = history.map(function (datapoint) {
+                coresData = history.map(function(datapoint) {
                     return datapoint.cores;
                 });
             }
@@ -1271,15 +1233,15 @@ mist-insights {
                 this.usageGraph.setOption(this.usageGraphOptions);
 
             if (this.usageReport.group_by['stack'])
-                usageListByCloud = this.usageReport.group_by['cloud'].sort(function (a, b) {
+                usageListByCloud = this.usageReport.group_by['cloud'].sort(function(a, b) {
                     return a.load.mean < b.load.mean
                 });
             if (this.usageReport.group_by['stack'])
-                usageListByStack = this.usageReport.group_by['stack'].sort(function (a, b) {
+                usageListByStack = this.usageReport.group_by['stack'].sort(function(a, b) {
                     return a.load.mean < b.load.mean
                 });
             if (this.usageReport.group_by['tag'])
-                usageListByTag = this.usageReport.group_by['tag'].sort(function (a, b) {
+                usageListByTag = this.usageReport.group_by['tag'].sort(function(a, b) {
                     return a.load.mean < b.load.mean
                 });
 
@@ -1299,13 +1261,13 @@ mist-insights {
                 costListByTag;
 
             if (this.costReport && this.costReport.group_by) {
-                costRingData = this.costReport.group_by['cloud'] && this.costReport.group_by['cloud'].map(function (point) {
+                costRingData = this.costReport.group_by['cloud'] && this.costReport.group_by['cloud'].map(function(point) {
                     return {
                         value: point.cost,
                         name: point.name
                     };
                 }, this);
-                costRingLabels = this.costReport.group_by['cloud'] && this.costReport.group_by['cloud'].map(function (point) {
+                costRingLabels = this.costReport.group_by['cloud'] && this.costReport.group_by['cloud'].map(function(point) {
                     return point.name;
                 }, this);
 
@@ -1336,17 +1298,17 @@ mist-insights {
         sortByMachineCount: function (array) {
             if (array) {
                 var ret = array.slice(0);
-                return ret.sort(function (a, b) {
+                return ret.sort(function(a, b) {
                     return a.machine_count.unique < b.machine_count.unique
                 })
             }
             return false;
         },
 
-        sortByCost: function (array) {
+        sortByCost: function(array) {
             if (array) {
                 var ret = array.slice(0);
-                return ret.sort(function (a, b) {
+                return ret.sort(function(a, b) {
                     return a.cost < b.cost
                 })
             }
@@ -1436,13 +1398,13 @@ mist-insights {
             // if window changed reset selected past
             if (timeParamsChangeRecord.path == 'timeParams.window') {
                 this.set('timeParams.past', '0');
-                this.async(function () {
+                this.async(function() {
                     this.$.past.selected = -1;
                     this.$.past.selected = 0;
                 }, 100, this)
             }
         },
-        updateFilterItems: function (group_by) {
+        updateFilterItems: function(group_by) {
             var items = [],
                 clouds = [],
                 stacks = [],
@@ -1454,9 +1416,9 @@ mist-insights {
             } else if (this.model) {
                 clouds = this.model.cloudsArray;
                 stacks = this.model.stacksArray;
-                tags = this.model.machinesArray.filter(function (m) {
+                tags = this.model.machinesArray.filter(function(m) {
                     return m.tags.length > 0
-                }).map(function (m) {
+                }).map(function(m) {
                     for (var i = 0; i < m.tags.length; i++) {
                         var postfix = '';
                         if (m.tags[i].value != '') {
@@ -1469,23 +1431,24 @@ mist-insights {
                         };
                     }
                 });
-                var names = tags.map(function (t) {
+                var names = tags.map(function(t) {
                     return t.name;
                 });
-                tags = tags.filter(function (t, ind) {
+                tags = tags.filter(function(t, ind) {
                     return names.indexOf(t.name) == ind;
                 });
             }
 
             this.set('clouds', clouds);
-            this.set('stacks', stacks.filter(function (c) {
+            this.set('stacks', stacks.filter(function(c) {
                 return c.name != ""
             }));
-            this.set('tags', tags.filter(function (c) {
+            this.set('tags', tags.filter(function(c) {
                 return c.name != ""
             }));
 
         },
+
         _computeFilterbyItems: function (filterby) {
             var items = [];
             if (filterby.path == 'filterby.type') {
@@ -1511,7 +1474,7 @@ mist-insights {
             // console.log(filterby.path);
             if (filterby.path == 'filterby.type') {
                 this.set('filterby.name', '');
-                this.async(function () {
+                this.async(function() {
                     this.$.filterbyName.selected = '';
                 }, 100, this)
             }
@@ -1548,13 +1511,13 @@ mist-insights {
                 }
 
                 this.set('params', p);
-                this.debounce('costReportRequeset', function () {
+                this.debounce('costReportRequeset', function() {
                     this.$.costReportAjax.generateRequest()
                 }, 100);
             }
         },
 
-        computeName: function (id) {
+        computeName: function(id) {
             if (id) {
                 if (this.filterby.type == 'tag') {
                     return id;
@@ -1562,7 +1525,7 @@ mist-insights {
                     if (!this.token)
                         return this.model.clouds[id].title;
                     else
-                        return this.clouds && this.clouds.find(function (c) {
+                        return this.clouds && this.clouds.find(function(c) {
                             return c.id == id;
                         }).name;
                 } else if (this.filterby.type == 'stack') {
@@ -1578,7 +1541,7 @@ mist-insights {
             }
         },
 
-        clearFilter: function (e) {
+        clearFilter: function(e) {
             this.set('filterby', {
                 type: '',
                 name: '',
@@ -1586,7 +1549,7 @@ mist-insights {
             });
         },
 
-        updateChartWidth: function () {
+        updateChartWidth: function() {
             var parentWidth = this.$.graphRow.offsetWidth - 50;
 
             if (parentWidth / 2 > 400) {
@@ -1607,7 +1570,7 @@ mist-insights {
             this.resizeGraphs();
         },
 
-        resizeGraphs: function () {
+        resizeGraphs: function() {
             console.log('resizeGraphs');
             if (this.costGraph)
                 this.costGraph.resize();
@@ -1619,29 +1582,30 @@ mist-insights {
                 this.machinesGraph.resize();
         },
 
-        _index: function (ind) {
+        _index: function(ind) {
             return ind + 1;
         },
 
-        _formatMoney: function (inp) {
+        _formatMoney: function(inp) {
             if (inp)
                 return inp.formatMoney(2);
         },
 
-        handleResponse: function (e) {
+        handleResponse: function(e) {
             console.log('handleResponse');
         },
 
-        handleResponseClouds: function (e) {
+        handleResponseClouds: function(e) {
             console.log('handleResponseClouds');
             this.set('clouds', e.detail.xhr.response);
         },
 
-        handleResponseStacks: function (e) {
+        handleResponseStacks: function(e) {
+            console.log('handleResponseStacks');
             this.set('stacks', e.detail.xhr.response);
         },
 
-        handleResponseCostReport: function (e) {
+        handleResponseCostReport: function(e) {
             console.log('handleResponseCostReport');
             if (typeof echarts == 'undefined' && this.retryCount < 20) {
                 this.async(function(){
@@ -1658,16 +1622,16 @@ mist-insights {
             this.$.usageReportAjax.generateRequest();
         },
 
-        handleResponseUsageReport: function (e) {
+        handleResponseUsageReport: function(e) {
             console.log('handleResponseUsageReport');
             this.set('usageReport', e.detail.xhr.response);
         },
 
-        handleError: function (e) {
+        handleError: function(e) {
             console.log('handleError');
         },
 
-        _updateTenant: function (tenant) {
+        _updateTenant: function(tenant) {
             if (tenant.length && !this.uri.length) {
                 this.$.costReportAjax.headers.tenant = tenant;
                 this.$.usageReportAjax.headers.tenant = tenant;
@@ -1675,9 +1639,6 @@ mist-insights {
         },
 
         _updateFilterByStackName: function(stackName){
-
-            console.log('stacks filter by name', stackName);
-
             if (this.stacks && stackName) {
                 console.log('this.stacks && this.stackName', this.stacks && this.stackName)
                 var name = this.stackName;
@@ -1701,11 +1662,10 @@ mist-insights {
             if (!stackName || (stackName.path == "stackName" && !stackName.value)){
                 this.clearFilter();
             }
-
         }
     });
 
-    Number.prototype.formatMoney = function (c, d, t) {
+    Number.prototype.formatMoney = function(c, d, t) {
         var n = this,
             c = isNaN(c = Math.abs(c)) ? 2 : c,
             d = d == undefined ? "." : d,
@@ -1715,5 +1675,5 @@ mist-insights {
             j = (j = i.length) > 3 ? j % 3 : 0;
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
     };
-  </script>
+    </script>
 </dom-module>
