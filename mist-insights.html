@@ -440,8 +440,9 @@ mist-insights {
                     <div class="smaller">Cost</div>
                     <h2 class="cost"><span class="sup">$</span>[[_formatMoney(costReport.cost)]]</h2>
                     <div class="smaller" hidden$="[[!isNotNull(costReport.comparative_cost)]]">
-                        <span class$="[[diffText(costReport.comparative_cost)]]">
-                            <span hidden$="[[!costReport.comparative_cost]]">[[abs(costReport.comparative_cost)]]%</span>                        [[diffText(costReport.comparative_cost)]]
+                        <span class$="[[percentageSignToText(costReport.comparative_cost)]]">
+                            <span hidden$="[[!costReport.comparative_cost]]">[[abs(costReport.comparative_cost)]]%</span>
+                            [[percentageSignToText(costReport.comparative_cost)]]
                         </span>
                         previous [[timeParams.window]]
                     </div>
@@ -450,8 +451,9 @@ mist-insights {
                     <div class="smaller">Machine Count</div>
                     <h2 class="cost"><span class="sup"></span>[[costReport.machine_count.unique]]</h2>
                     <div class="smaller" hidden$="[[!isNotNull(costReport.comparative_machine_count.unique)]]">
-                        <span class$="[[diffText(costReport.comparative_machine_count.unique)]]">
-                            <span hidden$="[[!costReport.comparative_machine_count.unique]]">[[abs(costReport.comparative_machine_count.unique)]]%</span>                        [[diffText(costReport.comparative_machine_count.unique)]]
+                        <span class$="[[percentageSignToText(costReport.comparative_machine_count.unique)]]">
+                            <span hidden$="[[!costReport.comparative_machine_count.unique]]">[[abs(costReport.comparative_machine_count.unique)]]%</span>
+                            [[percentageSignToText(costReport.comparative_machine_count.unique)]]
                         </span>
                         previous [[timeParams.window]]
                     </div>
@@ -460,8 +462,9 @@ mist-insights {
                     <div class="smaller">Average load</div>
                     <h2 class="cost"><span class="sup"></span>[[usageReport.load.mean]]</h2>
                     <div class="smaller" hidden$="[[!isNotNull(usageReport.comparative_load.mean)]]">
-                        <span class$="[[diffText(usageReport.comparative_load.mean)]]">
-                            <span hidden$="[[!usageReport.comparative_load.mean]]">[[abs(usageReport.comparative_load.mean)]] </span>                        [[diffText(usageReport.comparative_load.mean)]]
+                        <span class$="[[percentageSignToText(usageReport.comparative_load.mean)]]">
+                            <span hidden$="[[!usageReport.comparative_load.mean]]">[[abs(usageReport.comparative_load.mean)]] </span>
+                            [[percentageSignToText(usageReport.comparative_load.mean)]]
                         </span>
                         previous [[timeParams.window]]
                     </div>
@@ -552,8 +555,8 @@ mist-insights {
                                                 [[item.machine_count.unique]] machines
                                             </div>
                                             <span class="cost-column">
-                                            $[[_formatMoney(item.cost)]]
-                                        </span>
+                                                $[[_formatMoney(item.cost)]]
+                                            </span>
                                         </div>
                                     </template>
                                 </div>
@@ -1031,15 +1034,15 @@ mist-insights {
             },
             machinesListByCloud: {
                 type: Array,
-                computed: 'sortByMachines(costListByCloud)'
+                computed: 'sortByMachineCount(costListByCloud)'
             },
             machinesListByStack: {
                 type: Array,
-                computed: 'sortByMachines(costListByStack)'
+                computed: 'sortByMachineCount(costListByStack)'
             },
             machinesListByTag: {
                 type: Array,
-                computed: 'sortByMachines(costListByTag)'
+                computed: 'sortByMachineCount(costListByTag)'
             },
             machinesGraph: Object,
             machinesGraphOptions: {
@@ -1106,12 +1109,12 @@ mist-insights {
         },
 
         observers: [
-            'computePastItems(timeParams.*)',
-            'updateCostData(costReport.history)',
-            'updateUsageData(usageReport.history)',
-            'computeFilterbyItems(filterby.*)',
-            'combineParams(timeParams.*, filterby.*)',
-            'updateCostDrillData(costReport.group_by, filterby.id)',
+            '_computePastItems(timeParams.*)',
+            '_updateCostData(costReport.history)',
+            '_updateUsageData(usageReport.history)',
+            '_computeFilterbyItems(filterby.*)',
+            '_updateCombinedParams(timeParams.*, filterby.*)',
+            '_updateCostDrillData(costReport.group_by, filterby.id)',
             '_updateTenant(tenant)'
         ],
 
@@ -1185,7 +1188,7 @@ mist-insights {
                 return this.stackTerm || stack;
         },
 
-        diffText: function (perc) {
+        percentageSignToText: function (perc) {
             if (perc == null)
                 return ''
             else if (perc == 0)
@@ -1194,7 +1197,7 @@ mist-insights {
                 return perc > 0 ? 'above' : 'below'
         },
 
-        updateCostData: function (history) {
+        _updateCostData: function (history) {
             var costData = [],
                 machinesData = [],
                 labels = [];
@@ -1224,7 +1227,7 @@ mist-insights {
                 this.machinesGraph.setOption(this.machinesGraphOptions);
         },
 
-        updateUsageData: function (history) {
+        _updateUsageData: function (history) {
             var usageData = [],
                 coresData = [],
                 labels = [],
@@ -1274,7 +1277,7 @@ mist-insights {
             console.log('updated usage data');
         },
 
-        updateCostDrillData: function (groupby, filterbyname) {
+        _updateCostDrillData: function (groupby, filterbyname) {
             var costRingData = [],
                 costRingLabels = [],
                 costListByCloud,
@@ -1316,7 +1319,7 @@ mist-insights {
 
         },
 
-        sortByMachines: function (array) {
+        sortByMachineCount: function (array) {
             if (array) {
                 var ret = array.slice(0);
                 return ret.sort(function (a, b) {
@@ -1336,7 +1339,7 @@ mist-insights {
             return false;
         },
 
-        computePastItems: function (timeParamsChangeRecord) {
+        _computePastItems: function (timeParamsChangeRecord) {
             // console.log("loadingData", this.loadingData);
             var items = [];
             if (this.timeParams.window == "hour") {
@@ -1469,7 +1472,7 @@ mist-insights {
             }));
 
         },
-        computeFilterbyItems: function (filterby) {
+        _computeFilterbyItems: function (filterby) {
             var items = [];
             if (filterby.path == 'filterby.type') {
                 if (this.filterby.type == 'stack')
@@ -1505,7 +1508,7 @@ mist-insights {
 
         },
 
-        combineParams: function (time, filter) {
+        _updateCombinedParams: function (time, filter) {
             // console.log('filter path', filter.path, this.allowFilter);
 
             // dont update params so dont request, if user changes window, type, name or has not specified filter by id
