@@ -18,11 +18,30 @@
   <body>
     <div class="vertical-section-container centered">
       <h3>Basic mist-insights demo</h3>
+      <button onclick="xrisstackforinsights()">add stack xrisstackforinsights</button>
+      <button onclick="xriststestinsights()">add stack xriststestinsights</button>
+      <button onclick="nonexisting()">add nonexisting stack</button>
+      <button onclick="none()">clear</button>
       <demo-snippet>
         <template>
-          <mist-insights></mist-insights>
+          <mist-insights id="mistinsights" uri="http://localhost" class="cloudify" token="a336564a7c7439ac86de79a35dde9525d50d3a02436f3d43594deeab95d1b2c5"></mist-insights>
         </template>
       </demo-snippet>
     </div>
+    <script>
+      function xrisstackforinsights(){
+        console.log('xrisstackforinsights', document.getElementById("mistinsights"));
+        document.getElementById("mistinsights").setAttribute('stack-name', 'xrisstackforinsights');
+      }
+      function xriststestinsights(){
+        document.getElementById("mistinsights").setAttribute('stack-name', 'xriststestinsights');
+      }
+      function nonexisting(){
+        document.getElementById("mistinsights").setAttribute('stack-name', 'nonexisting');
+      }
+      function none(){
+        document.getElementById("mistinsights").removeAttribute('stack-name');
+      }
+    </script>
   </body>
 </html>

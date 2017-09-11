@@ -1102,6 +1102,10 @@ mist-insights {
             stackTerm: {
                 type: String,
                 value: 'stack'
+            },
+            retryCount: {
+                type: Number,
+                value: 0
             }
         },
 
@@ -1633,6 +1637,13 @@ mist-insights {
 
         handleResponseCostReport: function (e) {
             console.log('handleResponseCostReport');
+            if (typeof echarts == 'undefined' && this.retryCount < 20) {
+                this.async(function(){
+                    this.handleResponseCostReport(e);
+                    this.retryCount += 1
+                }, 100);
+                return;
+            }
             this.set('costReport', e.detail.xhr.response);
 
             if (this.filterby.type == '')
@@ -1686,33 +1697,6 @@ mist-insights {
             }
 
         }
-    });
-
-    (function () {
-        var throttle = function (type, name, obj) {
-            obj = obj || window;
-            var running = false;
-            var func = function () {
-                if (running) {
-                    return;
-                }
-                running = true;
-                requestAnimationFrame(function () {
-                    obj.dispatchEvent(new CustomEvent(name));
-                    running = false;
-                });
-            };
-            obj.addEventListener(type, func);
-        };
-
-        /* init - you can init any event */
-        throttle("resize", "optimizedResize");
-    })();
-
-    // handle event
-    window.addEventListener("optimizedResize", function () {
-        if (document.querySelector('mist-insights'))
-            document.querySelector('mist-insights').fire('resize-insights-graphs')
     });
 
     Number.prototype.formatMoney = function (c, d, t) {
