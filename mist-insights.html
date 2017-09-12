@@ -433,7 +433,7 @@ mist-insights {
             <div id="quick-overview-data" class="quick-overview container layout horizontal">
                 <div id="quick-overview-cost" class="flex-1">
                     <div class="smaller">Cost</div>
-                    <h2 class="cost"><span class="sup">$</span>[[_formatMoney(costReport.cost)]]</h2>
+                    <h2 class="cost"><span class="sup">$</span>[[_formatLargeNumber(costReport.cost)]]</h2>
                     <div class="smaller" hidden$="[[!isNotNull(costReport.comparative_cost)]]">
                         <span class$="[[percentageSignToText(costReport.comparative_cost)]]">
                             <span hidden$="[[!costReport.comparative_cost]]">[[abs(costReport.comparative_cost)]]%</span>
@@ -474,7 +474,8 @@ mist-insights {
                 <div class="head">
                     <h2 class="title">Cost Overview</h2>
                 </div>
-                <div class="comparative">Current cost: $[[_formatMoney(costReport.cost)]] ([[_formatMoney(costReport.comparative_cost)]]% from previous [[timeParams.window]]) | Cost per month: max: $[[_formatMoney(costReport.cost_per_month.max)]], avg: $[[_formatMoney(costReport.cost_per_month.mean)]], min: $[[_formatMoney(costReport.cost_per_month.min)]]</div>
+                <div class="comparative">
+                Current cost: $[[_formatLargeNumber(costReport.cost)]] ([[_formatLargeNumber(costReport.comparative_cost)]]% from previous [[timeParams.window]]) | Cost per month: max: $[[_formatLargeNumber(costReport.cost_per_month.max)]], avg: $[[_formatLargeNumber(costReport.cost_per_month.mean)]], min: $[[_formatLargeNumber(costReport.cost_per_month.min)]]</div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
                         <div id="costGraph" class="graph" style$="width: [[costWidth]]px;"></div>
@@ -498,7 +499,7 @@ mist-insights {
                                                     [[item.machine_count.unique]] machines
                                                 </div>
                                                 <span class="cost-column">
-                                                $[[_formatMoney(item.cost)]]
+                                                $[[_formatLargeNumber(item.cost)]]
                                             </span>
                                             </div>
                                         </template>
@@ -523,7 +524,7 @@ mist-insights {
                                                 [[item.machine_count.unique]] machines
                                             </div>
                                             <span class="cost-column">
-                                            $[[_formatMoney(item.cost)]]
+                                            $[[_formatLargeNumber(item.cost)]]
                                         </span>
                                         </div>
                                     </template>
@@ -545,7 +546,7 @@ mist-insights {
                                                 [[item.machine_count.unique]] machines
                                             </div>
                                             <span class="cost-column">
-                                                $[[_formatMoney(item.cost)]]
+                                                $[[_formatLargeNumber(item.cost)]]
                                             </span>
                                         </div>
                                     </template>
@@ -565,8 +566,8 @@ mist-insights {
                     <h2 class="title">Utilisation Overview</h2>
                 </div>
                 <div class="comparative">
-                    [[usageReport.load.max]] MAX Load ([[_formatMoney(usageReport.comparative_load.max)]]% from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] MIN Load ([[_formatMoney(usageReport.comparative_load.min)]]% from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] AVG Load ([[_formatMoney(usageReport.comparative_load.mean)]]% from previous [[timeParams.window]])
-                    <br/> [[_formatMoney(usageReport.load.max)]] MAX cores ([[_formatMoney(usageReport.comparative_cores.max)]]% from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] MIN cores ([[_formatMoney(usageReport.comparative_cores.min)]]% from previous [[timeParams.window]]) | [[_formatMoney(usageReport.load.max)]] AVG Load ([[_formatMoney(usageReport.comparative_cores.mean)]]% from previous [[timeParams.window]])
+                    [[usageReport.load.max]] MAX Load ([[_formatLargeNumber(usageReport.comparative_load.max)]]% from previous [[timeParams.window]]) | [[_formatLargeNumber(usageReport.load.max)]] MIN Load ([[_formatLargeNumber(usageReport.comparative_load.min)]]% from previous [[timeParams.window]]) | [[_formatLargeNumber(usageReport.load.max)]] AVG Load ([[_formatLargeNumber(usageReport.comparative_load.mean)]]% from previous [[timeParams.window]])
+                    <br/> [[_formatLargeNumber(usageReport.load.max)]] MAX cores ([[_formatLargeNumber(usageReport.comparative_cores.max)]]% from previous [[timeParams.window]]) | [[_formatLargeNumber(usageReport.load.max)]] MIN cores ([[_formatLargeNumber(usageReport.comparative_cores.min)]]% from previous [[timeParams.window]]) | [[_formatLargeNumber(usageReport.load.max)]] AVG Load ([[_formatLargeNumber(usageReport.comparative_cores.mean)]]% from previous [[timeParams.window]])
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
@@ -658,8 +659,8 @@ mist-insights {
                     <h2 class="title">Machines Overview</h2>
                 </div>
                 <div class="comparative">
-                    [[_formatMoney(costReport.machine_count.unique)]] UNIQUE machines ([[_formatMoney(costReport.comparative_machine_count.unique)]]% from previous [[timeParams.window]]) | MAX [[_formatMoney(costReport.machine_count.max)]] machines ([[_formatMoney(costReport.comparative_machine_count.max)]]% from previous [[timeParams.window]])
-                    <br/> MIN [[_formatMoney(costReport.machine_count.min)]] machines ([[_formatMoney(costReport.comparative_machine_count.min)]]% from previous [[timeParams.window]]) | AVG [[_formatMoney(costReport.machine_count.mean)]] machines ([[_formatMoney(costReport.comparative_machine_count.mean)]]% from previous [[timeParams.window]])
+                    [[_formatLargeNumber(costReport.machine_count.unique)]] UNIQUE machines ([[_formatLargeNumber(costReport.comparative_machine_count.unique)]]% from previous [[timeParams.window]]) | MAX [[_formatLargeNumber(costReport.machine_count.max)]] machines ([[_formatLargeNumber(costReport.comparative_machine_count.max)]]% from previous [[timeParams.window]])
+                    <br/> MIN [[_formatLargeNumber(costReport.machine_count.min)]] machines ([[_formatLargeNumber(costReport.comparative_machine_count.min)]]% from previous [[timeParams.window]]) | AVG [[_formatLargeNumber(costReport.machine_count.mean)]] machines ([[_formatLargeNumber(costReport.comparative_machine_count.mean)]]% from previous [[timeParams.window]])
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
@@ -679,7 +680,7 @@ mist-insights {
                                             [[item.machine_count.unique]] machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[_formatMoney(item.cost)]]
+                                            $[[_formatLargeNumber(item.cost)]]
                                         </span>
                                     </div>
                                 </template>
@@ -701,7 +702,7 @@ mist-insights {
                                             [[item.machine_count.unique]] machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[_formatMoney(item.cost)]]
+                                            $[[_formatLargeNumber(item.cost)]]
                                         </span>
                                     </div>
                                 </template>
@@ -723,7 +724,7 @@ mist-insights {
                                             [[item.machine_count.unique]] machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[_formatMoney(item.cost)]]
+                                            $[[_formatLargeNumber(item.cost)]]
                                         </span>
                                     </div>
                                 </template>
@@ -1154,14 +1155,14 @@ mist-insights {
 
         abs: function(perc) {
             var inp = Math.abs(perc);
-            return this._formatMoney(inp);
+            return this._formatLargeNumber(inp);
         },
 
         _display: function(type) {
             if (type == 'cloud' || type == 'tag')
                 return type;
             else
-                return this.stackTerm || stack;
+                return this.stackTerm || 'stack';
         },
 
         percentageSignToText: function (perc) {
@@ -1511,7 +1512,7 @@ mist-insights {
                 }
 
                 this.set('params', p);
-                this.debounce('costReportRequeset', function() {
+                this.debounce('costReportRequest', function() {
                     this.$.costReportAjax.generateRequest()
                 }, 100);
             }
@@ -1586,9 +1587,9 @@ mist-insights {
             return ind + 1;
         },
 
-        _formatMoney: function(inp) {
+        _formatLargeNumber: function(inp) {
             if (inp)
-                return inp.formatMoney(2);
+                return inp.formatLargeNumber(2);
         },
 
         handleResponse: function(e) {
@@ -1631,6 +1632,10 @@ mist-insights {
             console.log('handleError');
         },
 
+        lastValue: function(history, val){
+            return history.length > 1 ? this._formatLargeNumber(history[history.length-1][val]) : '';
+        },
+
         _updateTenant: function(tenant) {
             if (tenant.length && !this.uri.length) {
                 this.$.costReportAjax.headers.tenant = tenant;
@@ -1665,7 +1670,7 @@ mist-insights {
         }
     });
 
-    Number.prototype.formatMoney = function(c, d, t) {
+    Number.prototype.formatLargeNumber = function(c, d, t) {
         var n = this,
             c = isNaN(c = Math.abs(c)) ? 2 : c,
             d = d == undefined ? "." : d,
