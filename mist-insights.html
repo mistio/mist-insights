@@ -210,6 +210,14 @@ mist-insights {
             line-height: var(--insights-h2-line-height);
         }
 
+        .head {
+            display: flex;
+        }
+        .head > h2.title {
+            display: flex;
+            flex: 1;
+        }
+
         h2.title {
             /*@apply --insights-h2-title;*/
             font-size: var(--insights-h2-title-font-size);
@@ -379,6 +387,18 @@ mist-insights {
         .index {
             margin-right: 4px;
         }
+
+        .flexchild {
+            @apply(--layout-flex);
+        }
+        .inline {
+            display: inline;
+            padding-right: 8px;
+        }
+        .smaller.inline + .smaller.inline {
+            border-left: 1px solid #ddd; 
+            padding-left: 16px;
+        }
         </style>
         <iron-media-query query="(min-width: 1180px)" query-matches="{{largescreen}}"></iron-media-query>
         <paper-material id="filtering" class="margin-botttom">
@@ -473,9 +493,24 @@ mist-insights {
             <div>
                 <div class="head">
                     <h2 class="title">Cost Overview</h2>
+                    <div class="currentValue">
+                        <div class="smaller">Cost</div>
+                        <h2 class="cost"><span class="sup">$</span>[[_formatLargeNumber(costReport.cost)]]</h2>
+                    </div>
                 </div>
-                <div class="comparative">
-                Current cost: $[[_formatLargeNumber(costReport.cost)]] ([[_formatLargeNumber(costReport.comparative_cost)]]% from previous [[timeParams.window]]) | Cost per month: max: $[[_formatLargeNumber(costReport.cost_per_month.max)]], avg: $[[_formatLargeNumber(costReport.cost_per_month.mean)]], min: $[[_formatLargeNumber(costReport.cost_per_month.min)]]</div>
+                <div class="comparative flexchild">
+                    <div class="smaller inline">$[[lastValue(costReport.history,'cost')]] current run rate</div>
+                    <div class="smaller inline" hidden$="[[!isNotNull(report.comparative_cost)]]">
+                        <span class$="[[percentageSignToText(costReport.comparative_cost)]]">
+                            <span hidden$="[[!costReport.comparative_cost]]">[[abs(costReport.comparative_cost)]]%</span>
+                            [[percentageSignToText(costReport.comparative_cost)]]
+                        </span>
+                        previous [[timeParams.window]]
+                    </div>
+                    <div class="smaller inline" hidden$="[[!isNotNull(costReport.cost_per_month.max)]]"> max: $[[_formatLargeNumber(costReport.cost_per_month.max)]] </div>
+                    <div class="smaller inline" hidden$="[[!isNotNull(costReport.cost_per_month.avg)]]"> avg: $[[_formatLargeNumber(costReport.cost_per_month.mean)]] </div>
+                    <div class="smaller inline" hidden$="[[!isNotNull(costReport.cost_per_month.min)]]"> min: $[[_formatLargeNumber(costReport.cost_per_month.min)]]</div>
+                </div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
                         <div id="costGraph" class="graph" style$="width: [[costWidth]]px;"></div>
