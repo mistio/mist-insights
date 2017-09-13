@@ -260,6 +260,13 @@ mist-insights {
         .subtitle {
         }
 
+        .secondary {
+            opacity: 0.54;
+            font-size: 0.9rem;
+            display: inline-block;
+            font-weight: 300;
+        }
+
         .uppercase,
         paper-dropdown-menu.uppercase paper-item,
         paper-dropdown-menu.uppercase ::content #input {
@@ -305,6 +312,12 @@ mist-insights {
         .green,
         .below {
             color: var(--green-color);
+        }
+
+        .infotext .arrow > iron-icon {
+            width: 16px;
+            height: 16px;
+            vertical-align: text-top;
         }
 
         .sup {
@@ -625,7 +638,7 @@ mist-insights {
             <div class="loading-data" hidden="{{!loadingDataCost}}"></div>
             <div class="head">
                 <div class="flexchild">
-                    <h2 class="title">Utilisation Overview</h2>
+                    <h2 class="title">Utilisation Overview <span class="secondary">* for monitored machines only</span></h2>
                     <div class="filterby highlight" hidden$="[[!filterby.type.length]]">
                         <span class="uppercase">for [[filterby.type]]:</span><span class="uppercase [[filterby.type]]"> [[filterby.name]] <span hidden$="[[filterby.id.length]]">select [[filterby.type]]</span>
                     </div>
@@ -650,9 +663,39 @@ mist-insights {
                 <paper-spinner active="{{loadingDataUsage}}"></paper-spinner>
             </div>
             <div>
-                <div class="comparative">
-                    [[usageReport.load.max]] MAX Load ([[_formatLargeNumber(usageReport.comparative_load.max)]]% from previous [[timeParams.window]]) | [[_formatLargeNumber(usageReport.load.max)]] MIN Load ([[_formatLargeNumber(usageReport.comparative_load.min)]]% from previous [[timeParams.window]]) | [[_formatLargeNumber(usageReport.load.max)]] AVG Load ([[_formatLargeNumber(usageReport.comparative_load.mean)]]% from previous [[timeParams.window]])
-                    <br/> [[_formatLargeNumber(usageReport.load.max)]] MAX cores ([[_formatLargeNumber(usageReport.comparative_cores.max)]]% from previous [[timeParams.window]]) | [[_formatLargeNumber(usageReport.load.max)]] MIN cores ([[_formatLargeNumber(usageReport.comparative_cores.min)]]% from previous [[timeParams.window]]) | [[_formatLargeNumber(usageReport.load.max)]] AVG Load ([[_formatLargeNumber(usageReport.comparative_cores.mean)]]% from previous [[timeParams.window]])
+                <div class="comparative flexchild">
+                    <div class="infotext inline" hidden$="[[!isNotNull(usageReport.load.mean)]]"><strong>[[_formatLargeNumber(usageReport.load.mean)]]</strong> average load on <strong>[[_formatLargeInteger(usageReport.cores.mean)]]</strong> cores</div>
+
+                    <div class="infotext inline" hidden$="[[!isNotNull(usageReport.comparative_load.mean)]]">
+                        <span class$="[[percentageSignToText(usageReport.comparative_load.mean)]]">
+                            <span hidden$="[[!usageReport.comparative_load.mean]]">[[abs(usageReport.comparative_load.mean)]]%</span>
+                            [[percentageSignToText(usageReport.comparative_load.mean)]]
+                        </span>
+                        previous [[timeParams.window]]
+                    </div>
+
+                    <div class="infotext inline">
+                        Load max: [[_formatLargeNumber(usageReport.load.max)]]
+                        <span class$="[[percentageSignToText(usageReport.comparative_load.max)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.max)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.max)]]%"></iron-icon></span>,
+
+                        min: [[_formatLargeNumber(usageReport.load.min)]]
+                        <span class$="[[percentageSignToText(usageReport.comparative_load.min)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.min)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.min)]]%"></iron-icon></span>,
+
+                        avg: [[_formatLargeNumber(usageReport.load.mean)]]
+                        <span class$="[[percentageSignToText(usageReport.comparative_load.mean)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.mean)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.mean)]]%"></iron-icon></span>
+                    </div>
+
+                    <div class="infotext inline">
+                        Cores max:  [[_formatLargeNumber(usageReport.cores.max)]]
+                        <span class$="[[percentageSignToText(usageReport.comparative_cores.max)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.max)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.max)]]%"></iron-icon></span>,
+
+                        min: [[_formatLargeNumber(usageReport.cores.min)]]
+                        <span class$="[[percentageSignToText(usageReport.comparative_cores.min)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.min)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.min)]]%"></iron-icon></span>,
+
+                        avg: [[_formatLargeNumber(usageReport.cores.mean)]]
+                        <span class$="[[percentageSignToText(usageReport.comparative_cores.mean)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.mean)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.mean)]]%"></iron-icon></span>
+                    </div>
+
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
@@ -1259,6 +1302,15 @@ mist-insights {
                 return perc > 0 ? 'above' : 'below'
         },
 
+        percentageSignToArrow: function (perc) {
+            if (perc == null)
+                return ''
+            else if (perc == 0)
+                return 'icons:remove'
+            else
+                return perc > 0 ? 'icons:arrow-upward' : 'icons:arrow-downward'
+        },
+
         _updateCostData: function (history) {
             var costData = [],
                 machinesData = [],
@@ -1674,6 +1726,10 @@ mist-insights {
 
         _formatLargeNumber: function(inp) {
             return inp.formatLargeNumber(2);
+        },
+
+        _formatLargeInteger: function(inp) {
+            return inp.formatLargeNumber(0);
         },
 
         handleResponse: function(e) {
