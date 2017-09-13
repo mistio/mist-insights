@@ -178,12 +178,18 @@ mist-insights {
             font-weight: 700;
         }
 
+         :host(.cloudify) .infotext {
+            text-transform: none;
+            font-size: 14px;
+            color: black;
+        }
+
          :host(.cloudify) h2 {
             font-weight: bold;
             text-transform: none;
         }
 
-         :host(.cloudify) paper-material+paper-material {
+         :host(.cloudify) paper-material.section+paper-material {
             border-top: 1px solid #ddd;
         }
 
@@ -212,10 +218,6 @@ mist-insights {
 
         .head {
             display: flex;
-        }
-        .head > h2.title {
-            display: flex;
-            flex: 1;
         }
 
         h2.title {
@@ -248,17 +250,29 @@ mist-insights {
             margin-bottom: 40px;
         }
 
-        .smaller {
+        .smaller, .infotext, .subtitle {
             /*@apply --insights-legends;*/
             text-transform: var(--insights-legends-text-transform);
             font-size: var(--insights-legends-font-size);
             color: var(--insights-legends-color);
         }
 
+        .subtitle {
+        }
+
         .uppercase,
         paper-dropdown-menu.uppercase paper-item,
         paper-dropdown-menu.uppercase ::content #input {
             text-transform: uppercase;
+        }
+
+        .lowercase {
+            text-transform: lowercase;
+        }
+
+        .current-value {
+            text-align: right;
+            padding-left: 36px;
         }
 
         paper-listbox#filterbyType paper-item {
@@ -271,6 +285,9 @@ mist-insights {
             /*@apply --material-css;*/
             @apply --material-shadow;
             padding: var(--material-css-padding);
+        }
+
+        paper-material.margin-bottom {
             margin-bottom: var(--material-css-margin-bottom);
         }
 
@@ -395,13 +412,16 @@ mist-insights {
             display: inline;
             padding-right: 8px;
         }
-        .smaller.inline + .smaller.inline {
+        .infotext.inline + .infotext.inline {
             border-left: 1px solid #ddd; 
             padding-left: 16px;
         }
+        [hidden] {
+            display: none;
+        }
         </style>
         <iron-media-query query="(min-width: 1180px)" query-matches="{{largescreen}}"></iron-media-query>
-        <paper-material id="filtering" class="margin-botttom">
+        <paper-material id="filtering" class="margin-bottom section">
             <div class="container layout horizontal start">
                 <div class="filter flex-1 self-start">
                     <div class="smaller">Time</div>
@@ -447,7 +467,7 @@ mist-insights {
                 </div>
             </div>
         </paper-material>
-        <paper-material id="quick-overview" class="margin-botttom">
+        <paper-material id="quick-overview" class="margin-bottom section">
             <div class="loading-data" hidden="{{!loadingDataCost}}">
             </div>
             <div id="quick-overview-data" class="quick-overview container layout horizontal">
@@ -486,30 +506,39 @@ mist-insights {
                 </div>
             </div>
         </paper-material>
-        <paper-material id="graphRow">
+        <paper-material>
+            <div class="loading-data" hidden="{{!loadingDataCost}}"></div>
+            <div class="head">
+                <div class="flexchild">
+                    <h2 class="title">Cost Overview</h2>
+                    <div class="filterby highlight" hidden$="[[!filterby.type.length]]">
+                        <span class="uppercase">for [[filterby.type]]:</span><span class="uppercase [[filterby.type]]"> [[filterby.name]] <span hidden$="[[filterby.id.length]]">select [[filterby.type]]</span>
+                    </div>
+                    <div class="filterby highlight" hidden$="[[filterby.type.length]]">All infrastructure</div>
+                </div>
+                <div class="current-value">
+                    <div class="subtitle smaller">Cost</div>
+                    <h2 class="cost"><span class="sup">$</span>[[_formatLargeNumber(costReport.cost)]]</h2>
+                </div>
+            </div>
+        </paper-material>
+        <paper-material id="graphRow" class="margin-bottom section">
             <div class="loading-data" hidden="{{!loadingDataCost}}">
                 <paper-spinner active="{{loadingDataCost}}"></paper-spinner>
             </div>
             <div>
-                <div class="head">
-                    <h2 class="title">Cost Overview</h2>
-                    <div class="currentValue">
-                        <div class="smaller">Cost</div>
-                        <h2 class="cost"><span class="sup">$</span>[[_formatLargeNumber(costReport.cost)]]</h2>
-                    </div>
-                </div>
                 <div class="comparative flexchild">
-                    <div class="smaller inline">$[[lastValue(costReport.history,'cost')]] current run rate</div>
-                    <div class="smaller inline" hidden$="[[!isNotNull(report.comparative_cost)]]">
+                    <div class="infotext inline"><strong>$[[lastValue(costReport.history,'cost')]]</strong><span class="lowercase">/month</span> current run rate</div>
+                    <div class="infotext inline" hidden$="[[!isNotNull(report.comparative_cost)]]">
                         <span class$="[[percentageSignToText(costReport.comparative_cost)]]">
                             <span hidden$="[[!costReport.comparative_cost]]">[[abs(costReport.comparative_cost)]]%</span>
                             [[percentageSignToText(costReport.comparative_cost)]]
                         </span>
                         previous [[timeParams.window]]
                     </div>
-                    <div class="smaller inline" hidden$="[[!isNotNull(costReport.cost_per_month.max)]]"> max: $[[_formatLargeNumber(costReport.cost_per_month.max)]] </div>
-                    <div class="smaller inline" hidden$="[[!isNotNull(costReport.cost_per_month.avg)]]"> avg: $[[_formatLargeNumber(costReport.cost_per_month.mean)]] </div>
-                    <div class="smaller inline" hidden$="[[!isNotNull(costReport.cost_per_month.min)]]"> min: $[[_formatLargeNumber(costReport.cost_per_month.min)]]</div>
+                    <div class="infotext inline" hidden$="[[!isNotNull(costReport.cost_per_month.max)]]"> max: $[[_formatLargeNumber(costReport.cost_per_month.max)]] </div>
+                    <div class="infotext inline" hidden$="[[!isNotNull(costReport.cost_per_month.mean)]]"> avg: $[[_formatLargeNumber(costReport.cost_per_month.mean)]] </div>
+                    <div class="infotext inline" hidden$="[[!isNotNull(costReport.cost_per_month.min)]]"> min: $[[_formatLargeNumber(costReport.cost_per_month.min)]]</div>
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
@@ -593,13 +622,34 @@ mist-insights {
             </div>
         </paper-material>
         <paper-material>
+            <div class="loading-data" hidden="{{!loadingDataCost}}"></div>
+            <div class="head">
+                <div class="flexchild">
+                    <h2 class="title">Utilisation Overview</h2>
+                    <div class="filterby highlight" hidden$="[[!filterby.type.length]]">
+                        <span class="uppercase">for [[filterby.type]]:</span><span class="uppercase [[filterby.type]]"> [[filterby.name]] <span hidden$="[[filterby.id.length]]">select [[filterby.type]]</span>
+                    </div>
+                    <div class="filterby highlight" hidden$="[[filterby.type.length]]">All infrastructure</div>
+                </div>
+                <div class="current-value">
+                    <div class="subtitle smaller">Maximum</div>
+                    <h2 class="cost">[[usageReport.load.max]]</h2>
+                </div>
+                <div class="current-value">
+                    <div class="subtitle smaller">Minimum</div>
+                    <h2 class="cost">[[usageReport.load.min]]</h2>
+                </div>
+                <div class="current-value">
+                    <div class="subtitle smaller">Average Load</div>
+                    <h2 class="cost">[[usageReport.load.mean]]</h2>
+                </div>
+            </div>
+        </paper-material>
+        <paper-material class="margin-bottom section">
             <div class="loading-data" hidden="{{!loadingDataUsage}}">
                 <paper-spinner active="{{loadingDataUsage}}"></paper-spinner>
             </div>
             <div>
-                <div class="head">
-                    <h2 class="title">Utilisation Overview</h2>
-                </div>
                 <div class="comparative">
                     [[usageReport.load.max]] MAX Load ([[_formatLargeNumber(usageReport.comparative_load.max)]]% from previous [[timeParams.window]]) | [[_formatLargeNumber(usageReport.load.max)]] MIN Load ([[_formatLargeNumber(usageReport.comparative_load.min)]]% from previous [[timeParams.window]]) | [[_formatLargeNumber(usageReport.load.max)]] AVG Load ([[_formatLargeNumber(usageReport.comparative_load.mean)]]% from previous [[timeParams.window]])
                     <br/> [[_formatLargeNumber(usageReport.load.max)]] MAX cores ([[_formatLargeNumber(usageReport.comparative_cores.max)]]% from previous [[timeParams.window]]) | [[_formatLargeNumber(usageReport.load.max)]] MIN cores ([[_formatLargeNumber(usageReport.comparative_cores.min)]]% from previous [[timeParams.window]]) | [[_formatLargeNumber(usageReport.load.max)]] AVG Load ([[_formatLargeNumber(usageReport.comparative_cores.mean)]]% from previous [[timeParams.window]])
@@ -685,7 +735,7 @@ mist-insights {
                 </div>
             </div>
         </paper-material>
-        <paper-material>
+        <paper-material class="margin-bottom section">
             <div class="loading-data" hidden="{{!loadingDataCost}}">
                 <paper-spinner active="{{loadingDataCost}}"></paper-spinner>
             </div>
@@ -1623,8 +1673,7 @@ mist-insights {
         },
 
         _formatLargeNumber: function(inp) {
-            if (inp)
-                return inp.formatLargeNumber(2);
+            return inp.formatLargeNumber(2);
         },
 
         handleResponse: function(e) {
