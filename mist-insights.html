@@ -438,6 +438,8 @@ mist-insights {
         }
         .inline {
             display: inline;
+        }
+        .infotext.inline {
             padding-right: 8px;
         }
         .infotext.inline + .infotext.inline {
@@ -513,8 +515,8 @@ mist-insights {
                 </div>
                 <div id="quick-overview-machine_count" class="flex-1">
                     <div class="smaller">Machine Count</div>
-                    <div class="no-data" hidden$="[[!isNull(costReport.machine_count.unique)]]">No data</div>
                     <h2 class="cost" hidden$="[[isNull(costReport.machine_count.unique)]]"><span class="sup"></span>[[costReport.machine_count.unique]]</h2>
+                    <div class="no-data" hidden$="[[!isNull(costReport.machine_count.unique)]]">No data</div>
                     <div class="smaller" hidden$="[[isNull(costReport.comparative_machine_count.unique)]]">
                         <span class$="[[percentageSignToText(costReport.comparative_machine_count.unique)]]">
                             <span hidden$="[[!costReport.comparative_machine_count.unique]]">[[abs(costReport.comparative_machine_count.unique)]]%</span>
