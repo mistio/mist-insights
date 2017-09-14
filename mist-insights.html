@@ -513,8 +513,8 @@ mist-insights {
                 </div>
                 <div id="quick-overview-machine_count" class="flex-1">
                     <div class="smaller">Machine Count</div>
-                    <h2 class="cost" hidden$="[[isNull(costReport.machine_count.unique)]]"><span class="sup"></span>[[costReport.machine_count.unique]]</h2>
                     <div class="no-data" hidden$="[[!isNull(costReport.machine_count.unique)]]">No data</div>
+                    <h2 class="cost" hidden$="[[isNull(costReport.machine_count.unique)]]"><span class="sup"></span>[[costReport.machine_count.unique]]</h2>
                     <div class="smaller" hidden$="[[isNull(costReport.comparative_machine_count.unique)]]">
                         <span class$="[[percentageSignToText(costReport.comparative_machine_count.unique)]]">
                             <span hidden$="[[!costReport.comparative_machine_count.unique]]">[[abs(costReport.comparative_machine_count.unique)]]%</span>
@@ -548,7 +548,7 @@ mist-insights {
                     <div class="filterby highlight" hidden$="[[filterby.type.length]]">All infrastructure</div>
                 </div>
                 <div class="current-value">
-                    <div class="subtitle smaller">Current Cost <span hidden$="[[!timeParams.window]]">this [[timeParams.window]]</span></div>
+                    <div class="subtitle smaller"><span hidden$="[[!timeParams.past]]">Current</span> Cost [[timeToText(pastItems,timeParams.past)]]</div>
                     <h2 class="cost"><span class="sup">$</span>[[_formatLargeNumber(costReport.cost)]]</h2>
                 </div>
             </div>
@@ -705,7 +705,7 @@ mist-insights {
                             <span class$="[[percentageSignToText(usageReport.comparative_load.max)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.max)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.max)]]% change"></iron-icon></span>
                         </span>,
 
-                        <span hidden$="[[isNull(usageReport.oad.min)]]">
+                        <span hidden$="[[isNull(usageReport.load.min)]]">
                             min: [[_formatLargeNumber(usageReport.load.min)]]
                             <span class$="[[percentageSignToText(usageReport.comparative_load.min)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.min)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.min)]]% change"></iron-icon></span>
                         </span>,
@@ -847,7 +847,7 @@ mist-insights {
             <div>
                 <div class="comparative flexchild" hidden$="[[isEmpty(costReport.history)]]">
                     <div class="infotext inline">
-                        <strong>[[_formatLargeInteger(costReport.machine_count.unique)]]</strong> unique machines this [[timeParams.window]]
+                        <strong>[[_formatLargeInteger(costReport.machine_count.unique)]]</strong> unique machines [[timeToText(pastItems,timeParams.past)]]
                     </div>
                     <div class="infotext inline" hidden$="[[!costReport.comparative_machine_count.unique]]">
                         <span class$="[[percentageSignToText(costReport.comparative_machine_count.unique)]]">
@@ -1263,6 +1263,7 @@ mist-insights {
                     return MACHINES_GRAPH_OPTIONS;
                 }
             },
+            pastItems: Array,
             period: String,
             costWidth: Number,
             drillCostWidth: Number,
@@ -1635,6 +1636,16 @@ mist-insights {
                 }, 100, this)
             }
         },
+
+        timeToText: function(items, past){
+            var ps = items || [];
+            var timePeriod = ps.find(function(i){
+                return i.value == past;
+            });
+            if (timePeriod)
+                return timePeriod.text;
+        },
+
         updateFilterItems: function(group_by) {
             var items = [],
                 clouds = [],
