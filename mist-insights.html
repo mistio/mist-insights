@@ -635,7 +635,7 @@ mist-insights {
             </div>
         </paper-material>
         <paper-material>
-            <div class="loading-data" hidden="{{!loadingDataCost}}"></div>
+            <div class="loading-data" hidden="{{!loadingDataUsage}}"></div>
             <div class="head">
                 <div class="flexchild">
                     <h2 class="title">Utilisation Overview <span class="secondary">* for monitored machines only</span></h2>
@@ -676,24 +676,24 @@ mist-insights {
 
                     <div class="infotext inline">
                         Load max: [[_formatLargeNumber(usageReport.load.max)]]
-                        <span class$="[[percentageSignToText(usageReport.comparative_load.max)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.max)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.max)]]%"></iron-icon></span>,
+                        <span class$="[[percentageSignToText(usageReport.comparative_load.max)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.max)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.max)]]% change"></iron-icon></span>,
 
                         min: [[_formatLargeNumber(usageReport.load.min)]]
-                        <span class$="[[percentageSignToText(usageReport.comparative_load.min)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.min)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.min)]]%"></iron-icon></span>,
+                        <span class$="[[percentageSignToText(usageReport.comparative_load.min)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.min)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.min)]]% change"></iron-icon></span>,
 
                         avg: [[_formatLargeNumber(usageReport.load.mean)]]
-                        <span class$="[[percentageSignToText(usageReport.comparative_load.mean)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.mean)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.mean)]]%"></iron-icon></span>
+                        <span class$="[[percentageSignToText(usageReport.comparative_load.mean)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.mean)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.mean)]]% change"></iron-icon></span>
                     </div>
 
                     <div class="infotext inline">
                         Cores max:  [[_formatLargeNumber(usageReport.cores.max)]]
-                        <span class$="[[percentageSignToText(usageReport.comparative_cores.max)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.max)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.max)]]%"></iron-icon></span>,
+                        <span class$="[[percentageSignToText(usageReport.comparative_cores.max)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.max)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.max)]]% change"></iron-icon></span>,
 
                         min: [[_formatLargeNumber(usageReport.cores.min)]]
-                        <span class$="[[percentageSignToText(usageReport.comparative_cores.min)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.min)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.min)]]%"></iron-icon></span>,
+                        <span class$="[[percentageSignToText(usageReport.comparative_cores.min)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.min)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.min)]]% change"></iron-icon></span>,
 
                         avg: [[_formatLargeNumber(usageReport.cores.mean)]]
-                        <span class$="[[percentageSignToText(usageReport.comparative_cores.mean)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.mean)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.mean)]]%"></iron-icon></span>
+                        <span class$="[[percentageSignToText(usageReport.comparative_cores.mean)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.mean)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.mean)]]% change"></iron-icon></span>
                     </div>
 
                 </div>
@@ -778,17 +778,59 @@ mist-insights {
                 </div>
             </div>
         </paper-material>
+        <paper-material>
+            <div class="loading-data" hidden="{{!loadingDataCost}}"></div>
+            <div class="head">
+                <div class="flexchild">
+                    <h2 class="title">Machines Overview</h2>
+                    <div class="filterby highlight" hidden$="[[!filterby.type.length]]">
+                        <span class="uppercase">for [[filterby.type]]:</span><span class="uppercase [[filterby.type]]"> [[filterby.name]] <span hidden$="[[filterby.id.length]]">select [[filterby.type]]</span>
+                    </div>
+                    <div class="filterby highlight" hidden$="[[filterby.type.length]]">All infrastructure</div>
+                </div>
+                <div class="current-value">
+                    <div class="subtitle smaller">Maximum</div>
+                    <h2 class="cost">[[costReport.machine_count.max]]</h2>
+                </div>
+                <div class="current-value">
+                    <div class="subtitle smaller">Average</div>
+                    <h2 class="cost">[[costReport.machine_count.mean]]</h2>
+                </div>
+                <div class="current-value">
+                    <div class="subtitle smaller">Unique</div>
+                    <h2 class="cost">[[costReport.machine_count.unique]]</h2>
+                </div>
+            </div>
+        </paper-material>
         <paper-material class="margin-bottom section">
             <div class="loading-data" hidden="{{!loadingDataCost}}">
                 <paper-spinner active="{{loadingDataCost}}"></paper-spinner>
             </div>
             <div>
-                <div class="head">
-                    <h2 class="title">Machines Overview</h2>
-                </div>
-                <div class="comparative">
-                    [[_formatLargeNumber(costReport.machine_count.unique)]] UNIQUE machines ([[_formatLargeNumber(costReport.comparative_machine_count.unique)]]% from previous [[timeParams.window]]) | MAX [[_formatLargeNumber(costReport.machine_count.max)]] machines ([[_formatLargeNumber(costReport.comparative_machine_count.max)]]% from previous [[timeParams.window]])
-                    <br/> MIN [[_formatLargeNumber(costReport.machine_count.min)]] machines ([[_formatLargeNumber(costReport.comparative_machine_count.min)]]% from previous [[timeParams.window]]) | AVG [[_formatLargeNumber(costReport.machine_count.mean)]] machines ([[_formatLargeNumber(costReport.comparative_machine_count.mean)]]% from previous [[timeParams.window]])
+                <div class="comparative flexchild">
+                    <div class="infotext inline">
+                        <strong>[[_formatLargeInteger(costReport.machine_count.unique)]]</strong> unique machines this [[timeParams.window]]
+                    </div>
+                    <div class="infotext inline">
+                        <span class$="[[percentageSignToText(costReport.comparative_machine_count.unique)]]">
+                            <span hidden$="[[!costReport.comparative_machine_count.unique]]">[[abs(costReport.comparative_machine_count.unique)]]%</span>
+                            [[percentageSignToText(costReport.comparative_machine_count.unique)]]
+                        </span>
+                        previous [[timeParams.window]]
+                    </div>
+                    <div class="infotext inline">
+                        Machines max: [[_formatLargeInteger(costReport.machine_count.max)]]
+                        <span class$="[[percentageSignToText(costReport.comparative_machine_count.max)]] arrow"><iron-icon icon$="[[percentageSignToArrow(costReport.comparative_machine_count.max)]]" title$="[[_formatLargeNumber(costReport.comparative_machine_count.max)]]% change"></iron-icon></span>,
+
+                        min: [[_formatLargeInteger(costReport.machine_count.min)]]
+                        <span class$="[[percentageSignToText(costReport.comparative_machine_count.min)]] arrow"><iron-icon icon$="[[percentageSignToArrow(costReport.comparative_machine_count.min)]]" title$="[[_formatLargeNumber(costReport.comparative_machine_count.min)]]% change"></iron-icon></span>,
+
+                        avg: [[_formatLargeNumber(costReport.machine_count.mean)]]
+                        <span class$="[[percentageSignToText(costReport.comparative_machine_count.mean)]] arrow"><iron-icon icon$="[[percentageSignToArrow(costReport.comparative_machine_count.mean)]]" title$="[[_formatLargeNumber(costReport.comparative_machine_count.mean)]]% change"></iron-icon></span>,
+
+                        unique: [[_formatLargeInteger(costReport.machine_count.unique)]]
+                        <span class$="[[percentageSignToText(costReport.comparative_machine_count.mean)]] arrow"><iron-icon icon$="[[percentageSignToArrow(costReport.comparative_machine_count.mean)]]" title$="[[_formatLargeNumber(costReport.comparative_machine_count.mean)]]% change"></iron-icon></span>
+                    </div>
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
@@ -1725,11 +1767,13 @@ mist-insights {
         },
 
         _formatLargeNumber: function(inp) {
-            return inp.formatLargeNumber(2);
+            if (inp != undefined)
+                return inp.formatLargeNumber(2);
         },
 
         _formatLargeInteger: function(inp) {
-            return inp.formatLargeNumber(0);
+            if (inp != undefined)
+                return inp.formatLargeNumber(0);
         },
 
         handleResponse: function(e) {
