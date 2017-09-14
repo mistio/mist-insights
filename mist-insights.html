@@ -330,6 +330,18 @@ mist-insights {
             opacity: 0.34
         }
 
+        .graphArea {
+            position: relative;
+        }
+
+        .no-data {
+            text-align: center;
+            position: absolute;
+            top: 40%;
+            width: 100%;
+            font-style: italic;
+        }
+
         .filterby {
             display: inline-block;
         }
@@ -555,7 +567,8 @@ mist-insights {
                     </div>
                 </div>
                 <div class="layout horizontal wrap">
-                    <div class="flex-1">
+                    <div class="graphArea flex-1">
+                        <div class="no-data" hidden$="[[!isEmpty(costReport.history)]]">No available cost data</div>
                         <div id="costGraph" class="graph" style$="width: [[costWidth]]px;"></div>
                     </div>
                     <div class="flex-1 layout vertical">
@@ -666,7 +679,7 @@ mist-insights {
                 <paper-spinner active="{{loadingDataUsage}}"></paper-spinner>
             </div>
             <div>
-                <div class="comparative flexchild">
+                <div class="comparative flexchild" hidden$="[[!usageReport.history.length]]">
                     <div class="infotext inline" hidden$="[[!isNotNull(usageReport.load.mean)]]"><strong>[[_formatLargeNumber(usageReport.load.mean)]]</strong> average load on <strong>[[_formatLargeInteger(usageReport.cores.mean)]]</strong> cores</div>
 
                     <div class="infotext inline" hidden$="[[!isNotNull(usageReport.comparative_load.mean)]]">
@@ -678,30 +691,37 @@ mist-insights {
                     </div>
 
                     <div class="infotext inline">
-                        Load max: [[_formatLargeNumber(usageReport.load.max)]]
-                        <span class$="[[percentageSignToText(usageReport.comparative_load.max)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.max)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.max)]]% change"></iron-icon></span>,
+                        <span hidden$="[[!isNotNull(usageReport.comparative_load.max)]]">
+                            Load max: [[_formatLargeNumber(usageReport.load.max)]]
+                            <span class$="[[percentageSignToText(usageReport.comparative_load.max)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.max)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.max)]]% change"></iron-icon></span>
+                        </span>,
 
-                        min: [[_formatLargeNumber(usageReport.load.min)]]
-                        <span class$="[[percentageSignToText(usageReport.comparative_load.min)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.min)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.min)]]% change"></iron-icon></span>,
+                        <span hidden$="[[!isNotNull(usageReport.comparative_load.min)]]">
+                            min: [[_formatLargeNumber(usageReport.load.min)]]
+                            <span class$="[[percentageSignToText(usageReport.comparative_load.min)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.min)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.min)]]% change"></iron-icon></span>
+                        </span>,
 
-                        avg: [[_formatLargeNumber(usageReport.load.mean)]]
-                        <span class$="[[percentageSignToText(usageReport.comparative_load.mean)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.mean)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.mean)]]% change"></iron-icon></span>
+                        <span hidden$="[[!isNotNull(usageReport.comparative_load.mean)]]">
+                            avg: [[_formatLargeNumber(usageReport.load.mean)]]
+                            <span class$="[[percentageSignToText(usageReport.comparative_load.mean)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_load.mean)]]" title$="[[_formatLargeNumber(usageReport.comparative_load.mean)]]% change"></iron-icon></span>
+                        </span>
                     </div>
 
                     <div class="infotext inline">
                         Cores max:  [[_formatLargeNumber(usageReport.cores.max)]]
-                        <span class$="[[percentageSignToText(usageReport.comparative_cores.max)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.max)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.max)]]% change"></iron-icon></span>,
+                        <span class$="[[percentageSignToText(usageReport.comparative_cores.max)]] arrow" hidden$="[[!isNotNull(usageReport.comparative_cores.max)]]"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.max)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.max)]]% change"></iron-icon></span>,
 
                         min: [[_formatLargeNumber(usageReport.cores.min)]]
-                        <span class$="[[percentageSignToText(usageReport.comparative_cores.min)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.min)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.min)]]% change"></iron-icon></span>,
+                        <span class$="[[percentageSignToText(usageReport.comparative_cores.min)]] arrow" hidden$="[[!isNotNull(usageReport.comparative_cores.min)]]"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.min)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.min)]]% change"></iron-icon></span>,
 
                         avg: [[_formatLargeNumber(usageReport.cores.mean)]]
-                        <span class$="[[percentageSignToText(usageReport.comparative_cores.mean)]] arrow"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.mean)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.mean)]]% change"></iron-icon></span>
+                        <span class$="[[percentageSignToText(usageReport.comparative_cores.mean)]] arrow" hidden$="[[!isNotNull(usageReport.comparative_cores.mean)]]"><iron-icon icon$="[[percentageSignToArrow(usageReport.comparative_cores.mean)]]" title$="[[_formatLargeNumber(usageReport.comparative_cores.mean)]]% change"></iron-icon></span>
                     </div>
 
                 </div>
                 <div class="layout horizontal wrap">
-                    <div class="flex-1">
+                    <div class="graphArea flex-1">
+                        <div class="no-data" hidden$="[[!isEmpty(usageReport.history)]]">No available usage data</div>
                         <div id="usageGraph" class="graph" style$="width: [[usageWidth]]px;"></div>
                     </div>
                     <div class="flex-1">
@@ -836,7 +856,8 @@ mist-insights {
                     </div>
                 </div>
                 <div class="layout horizontal wrap">
-                    <div class="flex-1">
+                    <div class="graphArea flex-1">
+                        <div class="no-data" hidden$="[[!isEmpty(costReport.history)]]">No available cost data</div>
                         <div id="machinesGraph" class="graph" style$="width: [[machinesWidth]]px;"></div>
                     </div>
                     <div class="flex-1">
@@ -1324,6 +1345,10 @@ mist-insights {
 
         isNotNull: function(value) {
             return value != null;
+        },
+
+        isEmpty: function(array) {
+            return array.length == 0 ? true : false;
         },
 
         abs: function(perc) {
