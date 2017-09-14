@@ -530,7 +530,7 @@ mist-insights {
                     <div class="filterby highlight" hidden$="[[filterby.type.length]]">All infrastructure</div>
                 </div>
                 <div class="current-value">
-                    <div class="subtitle smaller">Cost</div>
+                    <div class="subtitle smaller">Current Cost <span hidden$="[[!timeParams.window]]">this [[timeParams.window]]</span></div>
                     <h2 class="cost"><span class="sup">$</span>[[_formatLargeNumber(costReport.cost)]]</h2>
                 </div>
             </div>
@@ -541,7 +541,7 @@ mist-insights {
             </div>
             <div>
                 <div class="comparative flexchild">
-                    <div class="infotext inline"><strong>$[[lastValue(costReport.history,'cost')]]</strong><span class="lowercase">/month</span> current run rate</div>
+                    <div class="infotext inline"><strong>$[[lastValue(costReport.history,'cost_per_month')]]</strong><span class="lowercase">/month</span> current run rate</div>
                     <div class="infotext inline" hidden$="[[!isNotNull(report.comparative_cost)]]">
                         <span class$="[[percentageSignToText(costReport.comparative_cost)]]">
                             <span hidden$="[[!costReport.comparative_cost]]">[[abs(costReport.comparative_cost)]]%</span>
@@ -549,9 +549,10 @@ mist-insights {
                         </span>
                         previous [[timeParams.window]]
                     </div>
-                    <div class="infotext inline" hidden$="[[!isNotNull(costReport.cost_per_month.max)]]"> max: $[[_formatLargeNumber(costReport.cost_per_month.max)]] </div>
-                    <div class="infotext inline" hidden$="[[!isNotNull(costReport.cost_per_month.mean)]]"> avg: $[[_formatLargeNumber(costReport.cost_per_month.mean)]] </div>
-                    <div class="infotext inline" hidden$="[[!isNotNull(costReport.cost_per_month.min)]]"> min: $[[_formatLargeNumber(costReport.cost_per_month.min)]]</div>
+                    <div class="infotext inline"> Cost max: $[[_formatLargeNumber(costReport.cost_per_month.max)]]/<span class="lowercase">month</span>,
+                        avg: $[[_formatLargeNumber(costReport.cost_per_month.mean)]]/<span class="lowercase">month</span>,
+                        min: $[[_formatLargeNumber(costReport.cost_per_month.min)]]/<span class="lowercase">month</span>
+                    </div>
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="flex-1">
@@ -636,6 +637,7 @@ mist-insights {
         </paper-material>
         <paper-material>
             <div class="loading-data" hidden="{{!loadingDataUsage}}"></div>
+            <div class="loading-data" hidden="{{!loadingDataCost}}"></div>
             <div class="head">
                 <div class="flexchild">
                     <h2 class="title">Utilisation Overview <span class="secondary">* for monitored machines only</span></h2>
@@ -659,6 +661,7 @@ mist-insights {
             </div>
         </paper-material>
         <paper-material class="margin-bottom section">
+            <div class="loading-data" hidden="{{!loadingDataCost}}"></div>
             <div class="loading-data" hidden="{{!loadingDataUsage}}">
                 <paper-spinner active="{{loadingDataUsage}}"></paper-spinner>
             </div>
