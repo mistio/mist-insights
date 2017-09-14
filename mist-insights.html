@@ -439,7 +439,7 @@ mist-insights {
                 <div class="filter flex-1 self-start">
                     <div class="smaller">Time</div>
                     <paper-dropdown-menu no-label-float noink>
-                        <paper-listbox id="window" slot="dropdown-content" attr-for-selected="value" selected="{{timeParams.window}}">
+                        <paper-listbox id="window" slot="dropdown-content" class="dropdown-content" attr-for-selected="value" selected="{{timeParams.window}}">
                             <paper-item value="hour">hourly</paper-item>
                             <paper-item value="day">daily</paper-item>
                             <paper-item value="week">weekly</paper-item>
@@ -448,7 +448,7 @@ mist-insights {
                         </paper-listbox>
                     </paper-dropdown-menu>
                     <paper-dropdown-menu no-label-float noink>
-                        <paper-listbox id="past" slot="dropdown-content" attr-for-selected="value" selected="{{timeParams.past}}">
+                        <paper-listbox id="past" slot="dropdown-content" class="dropdown-content" attr-for-selected="value" selected="{{timeParams.past}}">
                             <template is="dom-repeat" items="{{pastItems}}" as="past">
                                 <paper-item value="[[past.value]]">[[past.text]]</paper-item>
                             </template>
@@ -458,14 +458,14 @@ mist-insights {
                 <div class="filter flex-1" hidden$="[[!allowFilter]]">
                     <div class="smaller">Filter by</div>
                     <paper-dropdown-menu no-label-float noink>
-                        <paper-listbox id="filterbyType" slot="dropdown-content" attr-for-selected="value" selected="{{filterby.type}}">
+                        <paper-listbox id="filterbyType" slot="dropdown-content" class="dropdown-content" attr-for-selected="value" selected="{{filterby.type}}">
                             <paper-item value="stack">[[stackTerm]]</paper-item>
                             <paper-item value="cloud">Cloud</paper-item>
                             <paper-item value="tag">Tag</paper-item>
                         </paper-listbox>
                     </paper-dropdown-menu>
                     <paper-dropdown-menu id="filterbyNameDd" no-label-float noink>
-                        <paper-listbox id="filterbyName" slot="dropdown-content" attr-for-selected="value" selected="{{filterby.id}}">
+                        <paper-listbox id="filterbyName" slot="dropdown-content" class="dropdown-content" attr-for-selected="value" selected="{{filterby.id}}">
                             <template is="dom-repeat" items="{{filterbyItems}}">
                                 <paper-item value="[[item.id]]" data-name$="[[item.name]][[item.title]]">[[item.name]][[item.title]]</paper-item>
                             </template>
@@ -1412,7 +1412,7 @@ mist-insights {
             if (this.usageGraph)
                 this.usageGraph.setOption(this.usageGraphOptions);
 
-            if (this.usageReport.group_by['stack'])
+            if (this.usageReport.group_by['cloud'])
                 usageListByCloud = this.usageReport.group_by['cloud'].sort(function(a, b) {
                     return a.load.mean < b.load.mean
                 });
