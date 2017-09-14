@@ -689,7 +689,7 @@ mist-insights {
             </div>
             <div>
                 <div class="comparative flexchild" hidden$="[[!usageReport.history.length]]">
-                    <div class="infotext inline" hidden$="[[isNull(usageReport.load.mean)]]"><strong>[[_formatLargeNumber(usageReport.load.mean)]]</strong> average load on <strong>[[_formatLargeInteger(usageReport.cores.mean)]]</strong> cores</div>
+                    <div class="infotext inline" hidden$="[[isNull(usageReport.load.mean)]]"><strong>[[_formatLargeNumber(usageReport.load.mean)]]</strong> average load on <strong>[[_formatLargeInteger(usageReport.cores.mean)]]</strong> cores [[timeToText(pastItems,timeParams.past)]]</div>
 
                     <div class="infotext inline" hidden$="[[isNull(usageReport.comparative_load.mean)]]">
                         <span class$="[[percentageSignToText(usageReport.comparative_load.mean)]]">
