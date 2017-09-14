@@ -335,11 +335,14 @@ mist-insights {
         }
 
         .no-data {
-            text-align: center;
             position: absolute;
             top: 40%;
             width: 100%;
             font-style: italic;
+        }
+
+        .graphArea .no-data {
+            text-align: center;
         }
 
         .filterby {
@@ -498,7 +501,8 @@ mist-insights {
             <div id="quick-overview-data" class="quick-overview container layout horizontal">
                 <div id="quick-overview-cost" class="flex-1">
                     <div class="smaller">Cost</div>
-                    <h2 class="cost"><span class="sup">$</span>[[_formatLargeNumber(costReport.cost)]]</h2>
+                    <h2 class="cost" hidden$="[[isNull(costReport.cost)]]"><span class="sup">$</span>[[_formatLargeNumber(costReport.cost)]]</h2>
+                    <div class="no-data" hidden$="[[!isNull(costReport.cost)]]">No data</div>
                     <div class="smaller" hidden$="[[isNull(costReport.comparative_cost)]]">
                         <span class$="[[percentageSignToText(costReport.comparative_cost)]]">
                             <span hidden$="[[!costReport.comparative_cost]]">[[abs(costReport.comparative_cost)]]%</span>
@@ -509,7 +513,8 @@ mist-insights {
                 </div>
                 <div id="quick-overview-machine_count" class="flex-1">
                     <div class="smaller">Machine Count</div>
-                    <h2 class="cost"><span class="sup"></span>[[costReport.machine_count.unique]]</h2>
+                    <h2 class="cost" hidden$="[[isNull(costReport.machine_count.unique)]]"><span class="sup"></span>[[costReport.machine_count.unique]]</h2>
+                    <div class="no-data" hidden$="[[!isNull(costReport.machine_count.unique)]]">No data</div>
                     <div class="smaller" hidden$="[[isNull(costReport.comparative_machine_count.unique)]]">
                         <span class$="[[percentageSignToText(costReport.comparative_machine_count.unique)]]">
                             <span hidden$="[[!costReport.comparative_machine_count.unique]]">[[abs(costReport.comparative_machine_count.unique)]]%</span>
@@ -520,7 +525,8 @@ mist-insights {
                 </div>
                 <div id="quick-overview-average_load" class="flex-1">
                     <div class="smaller">Average load</div>
-                    <h2 class="cost"><span class="sup"></span>[[usageReport.load.mean]]</h2>
+                    <h2 class="cost" hidden$="[[isNull(usageReport.load.mean)]]"><span class="sup"></span>[[usageReport.load.mean]]</h2>
+                    <div class="no-data" hidden$="[[!isNull(usageReport.load.mean)]]">No data</div>
                     <div class="smaller" hidden$="[[isNull(usageReport.comparative_load.mean)]]">
                         <span class$="[[percentageSignToText(usageReport.comparative_load.mean)]]">
                             <span hidden$="[[!usageReport.comparative_load.mean]]">[[abs(usageReport.comparative_load.mean)]] </span>
@@ -556,7 +562,7 @@ mist-insights {
                     <div class="infotext inline">
                         <strong>$[[lastValue(costReport.history,'cost_per_month')]]</strong><span class="lowercase">/month</span> run rate
                     </div>
-                    <div class="infotext inline" hidden$="[[isNull(report.comparative_cost)]]">
+                    <div class="infotext inline" hidden$="[[isNull(costReport.comparative_cost)]]">
                         <span class$="[[percentageSignToText(costReport.comparative_cost)]]">
                             <span hidden$="[[!costReport.comparative_cost]]">[[abs(costReport.comparative_cost)]]%</span>
                             [[percentageSignToText(costReport.comparative_cost)]]
@@ -571,7 +577,7 @@ mist-insights {
                 <div class="layout horizontal wrap">
                     <div class="graphArea flex-1">
                         <div class="smaller">Run Rate ($/<span class="lowercase">month</span>)</div>
-                        <div class="no-data" hidden$="[[!isEmpty(costReport.history)]]">No available cost data</div>
+                        <div class="no-data" hidden$="[[!isEmpty(costReport.history)]]">No cost data available</div>
                         <div id="costGraph" class="graph" style$="width: [[costWidth]]px;"></div>
                     </div>
                     <div class="flex-1 layout vertical">
@@ -730,7 +736,7 @@ mist-insights {
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="graphArea flex-1">
-                        <div class="no-data" hidden$="[[!isEmpty(usageReport.history)]]">No available usage data</div>
+                        <div class="no-data" hidden$="[[!isEmpty(usageReport.history)]]">No usage data available</div>
                         <div id="usageGraph" class="graph" style$="width: [[usageWidth]]px;"></div>
                     </div>
                     <div class="flex-1">
@@ -874,7 +880,7 @@ mist-insights {
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="graphArea flex-1">
-                        <div class="no-data" hidden$="[[!isEmpty(costReport.history)]]">No available cost data</div>
+                        <div class="no-data" hidden$="[[!isEmpty(costReport.history)]]">No machines data available</div>
                         <div id="machinesGraph" class="graph" style$="width: [[machinesWidth]]px;"></div>
                     </div>
                     <div class="flex-1">
