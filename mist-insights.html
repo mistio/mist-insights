@@ -568,6 +568,7 @@ mist-insights {
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="graphArea flex-1">
+                        <div class="smaller">Run Rate ($/<span class="lowercase">month</span>)</div>
                         <div class="no-data" hidden$="[[!isEmpty(costReport.history)]]">No available cost data</div>
                         <div id="costGraph" class="graph" style$="width: [[costWidth]]px;"></div>
                     </div>
@@ -659,15 +660,15 @@ mist-insights {
                     </div>
                     <div class="filterby highlight" hidden$="[[filterby.type.length]]">All infrastructure</div>
                 </div>
-                <div class="current-value">
+                <div class="current-value" hidden$="[[isEmpty(usageReport.history)]]">
                     <div class="subtitle smaller">Maximum</div>
                     <h2 class="cost">[[usageReport.load.max]]</h2>
                 </div>
-                <div class="current-value">
+                <div class="current-value" hidden$="[[isEmpty(usageReport.history)]]">
                     <div class="subtitle smaller">Minimum</div>
                     <h2 class="cost">[[usageReport.load.min]]</h2>
                 </div>
-                <div class="current-value">
+                <div class="current-value" hidden$="[[isEmpty(usageReport.history)]]">
                     <div class="subtitle smaller">Average Load</div>
                     <h2 class="cost">[[usageReport.load.mean]]</h2>
                 </div>
