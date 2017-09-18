@@ -539,7 +539,7 @@ mist-insights {
                 </div>
             </div>
         </paper-material>
-        <paper-material>
+        <paper-material id="cost_overview">
             <div class="loading-data" hidden$="{{!loadingDataCost}}"></div>
             <div class="head">
                 <div class="flexchild">
@@ -659,7 +659,7 @@ mist-insights {
                 </div>
             </div>
         </paper-material>
-        <paper-material>
+        <paper-material id="utilization_overview">
             <div class="loading-data" hidden$="{{!loadingDataUsage}}"></div>
             <div class="loading-data" hidden$="{{!loadingDataCost}}"></div>
             <div class="head">
@@ -684,7 +684,7 @@ mist-insights {
                 </div>
             </div>
         </paper-material>
-        <paper-material class="margin-bottom section">
+        <paper-material id="average_load" class="margin-bottom section">
             <div class="loading-data" hidden$="{{!loadingDataCost}}"></div>
             <div class="loading-data" hidden$="{{!loadingDataUsage}}">
                 <paper-spinner active="{{loadingDataUsage}}"></paper-spinner>
@@ -818,7 +818,7 @@ mist-insights {
                 </div>
             </div>
         </paper-material>
-        <paper-material>
+        <paper-material id="machines_overview">
             <div class="loading-data" hidden$="{{!loadingDataCost}}"></div>
             <div class="head">
                 <div class="flexchild">
@@ -842,7 +842,7 @@ mist-insights {
                 </div>
             </div>
         </paper-material>
-        <paper-material class="margin-bottom section">
+        <paper-material id="machinesCount" class="margin-bottom section">
             <div class="loading-data" hidden$="{{!loadingDataCost}}">
                 <paper-spinner active="{{loadingDataCost}}"></paper-spinner>
             </div>
