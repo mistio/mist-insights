@@ -515,7 +515,7 @@ mist-insights {
                 </div>
                 <div id="quick-overview-machine_count" class="flex-1">
                     <div class="smaller">Machine Count</div>
-                    <h2 class="cost" hidden$="[[isNull(costReport.machine_count.unique)]]"><span class="sup"></span>[[costReport.machine_count.unique]]</h2>
+                    <h2 class="cost" hidden$="[[isNull(costReport.machine_count.unique)]]"><span class="sup">&nbsp;</span>[[costReport.machine_count.unique]]</h2>
                     <div class="no-data" hidden$="[[!isNull(costReport.machine_count.unique)]]">No data</div>
                     <div class="smaller" hidden$="[[isNull(costReport.comparative_machine_count.unique)]]">
                         <span class$="[[percentageSignToText(costReport.comparative_machine_count.unique)]]">
@@ -527,7 +527,7 @@ mist-insights {
                 </div>
                 <div id="quick-overview-average_load" class="flex-1">
                     <div class="smaller">Average load</div>
-                    <h2 class="cost" hidden$="[[isNull(usageReport.load.mean)]]"><span class="sup"></span>[[usageReport.load.mean]]</h2>
+                    <h2 class="cost" hidden$="[[isNull(usageReport.load.mean)]]"><span class="sup">&nbsp;</span>[[usageReport.load.mean]]</h2>
                     <div class="no-data" hidden$="[[!isNull(usageReport.load.mean)]]">No data</div>
                     <div class="smaller" hidden$="[[isNull(usageReport.comparative_load.mean)]]">
                         <span class$="[[percentageSignToText(usageReport.comparative_load.mean)]]">
