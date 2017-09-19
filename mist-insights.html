@@ -335,14 +335,14 @@ mist-insights {
         }
 
         .no-data {
-            position: absolute;
-            top: 40%;
-            width: 100%;
             font-style: italic;
         }
 
         .graphArea .no-data {
             text-align: center;
+            position: absolute;
+            top: 40%;
+            width: 100%;
         }
 
         .filterby {
@@ -1520,7 +1520,8 @@ mist-insights {
             // fill in ring
             this.set('drillcostgraphOptions.series.0.data', costRingData);
             this.set('drillcostgraphOptions.legend.data', costRingLabels);
-            if (this.drillcostgraph)
+            console.log('this.drillcostgraphOptions', this.drillcostgraphOptions);
+            if (this.drillcostgraph && this.drillcostgraphOptions)
                 this.drillcostgraph.setOption(this.drillcostgraphOptions);
 
             // fill in cost lists
@@ -1756,9 +1757,10 @@ mist-insights {
                 }
 
                 this.set('params', p);
-                this.debounce('costReportRequest', function() {
-                    this.$.costReportAjax.generateRequest()
-                }, 100);
+                if (this.$.costReportAjax)
+                    this.debounce('costReportRequest', function() {
+                        this.$.costReportAjax.generateRequest()
+                    }, 100);
             }
         },
 
@@ -1832,13 +1834,19 @@ mist-insights {
         },
 
         _formatLargeNumber: function(inp) {
-            if (inp != undefined)
+            console.log('inp', typeof(inp), inp);
+            if (inp != undefined && inp != NaN)
                 return inp.formatLargeNumber(2);
+            else
+                return '';
         },
 
         _formatLargeInteger: function(inp) {
-            if (inp != undefined)
+            console.log('inp', typeof(inp), inp);
+            if (inp != undefined && inp != NaN)
                 return inp.formatLargeNumber(0);
+            else
+                return '';
         },
 
         handleResponseClouds: function(e) {
@@ -1860,7 +1868,8 @@ mist-insights {
                 }, 100);
                 return;
             }
-            this.set('costReport', e.detail.xhr.response);
+            if (e.detail.xhr.response)
+                this.set('costReport', e.detail.xhr.response);
 
             if (this.filterby.type == '')
                 this.updateFilterItems(this.costReport.group_by);
@@ -1875,6 +1884,31 @@ mist-insights {
 
         handleError: function(e) {
             console.log('handleError');
+            this.clearData();
+        },
+
+        clearData: function(){
+            var emptyCost = {
+                cost: undefined,
+                history: [],
+                group_by: {stack: [], cloud: [], tag: []},
+                comparative_cost: {max: undefined, unique: undefined, min: undefined, mean: undefined},
+                machine_count: {min: undefined, max: undefined, unique: undefined, miin: undefined},
+                comparative_machine_count: {max: undefined, mean: undefined, min: undefined, unique: undefined},
+                cost_per_month: {max: undefined, mean: undefined, min: undefined}
+            }
+            var emptyUsage = {
+                load: {max: undefined, mean: undefined, min: undefined},
+                comparative_load: {max: undefined, mean: undefined, min: undefined},
+                history: [],
+                group_by: {stack: [], cloud: [], tag: []},
+                cores: {max: undefined, mean: undefined, min: undefined},
+                comparative_cores: {max: undefined, mean: undefined, min: undefined},
+                machine_count: {min: undefined, max: undefined, unique: undefined, miin: undefined}
+            }
+
+            this.set('costReport', emptyCost);
+            this.set('usageReport', emptyUsage);
         },
 
         lastValue: function(history, val){
