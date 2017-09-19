@@ -1197,10 +1197,10 @@ mist-insights {
             },
             timeParams: {
                 type: Object,
-                value: function() {
+                value: function(){
                     return {
-                        window: "month",
-                        past: "0"
+                        window: null,
+                        past: '0'
                     }
                 }
             },
@@ -1324,9 +1324,10 @@ mist-insights {
             if (!this.token)
                 this.uri = '';
 
-            if (this.period) {
+            if (this.period)
                 this.set('timeParams.window', this.period);
-            }
+            else
+                this.set('timeParams.window', 'month');
 
             if (this.cloud || this.stack || this.stackName || this.tag) {
                 if (this.cloud){
@@ -1736,7 +1737,7 @@ mist-insights {
         },
 
         _updateCombinedParams: function (time, filter) {
-            // console.log('filter path', filter.path, this.allowFilter);
+            // console.log('filter path', filter.path, this.timeParams.past);
 
             // dont update params so dont request, if user changes window, type, name or has not specified filter by id
             // also dont request for past = -1
@@ -1744,7 +1745,7 @@ mist-insights {
             if (filter.path == 'filterby.type' || filter.path == 'filterby.name' || time.path == 'timeParams.window' || (filter.path == 'filterby.id' && filter.value == "") || time.value == "-1") {
                 // console.log('dont send ', this.params);
             }
-            else if (filter.path == 'filterby.id' || filter.path == 'filterby'){
+            else if ((filter.path == 'filterby.id' || filter.path == 'filterby') && this.timeParams.window){
                 var p = {
                     window: this.timeParams.window,
                     past: this.timeParams.past
@@ -1838,10 +1839,6 @@ mist-insights {
         _formatLargeInteger: function(inp) {
             if (inp != undefined)
                 return inp.formatLargeNumber(0);
-        },
-
-        handleResponse: function(e) {
-            console.log('handleResponse');
         },
 
         handleResponseClouds: function(e) {
