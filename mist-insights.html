@@ -980,9 +980,16 @@ mist-insights {
             containLabel: true
         },
         xAxis: [{
-            type: 'category',
-            boundaryGap: false,
-            data: []
+            type: 'time',
+            // boundaryGap: false,
+            // data: [],
+            // axisLabel: {
+            //     formatter: function (value, index) {
+            //         if (index == 0)
+            //             return echarts.format.formatTime('yyyy-MM-dd hh:mm:ss', value)
+            //         return echarts.format.formatTime('hh:mm:ss', value)
+            //     }
+            // }
         }],
         yAxis: [{
             type: 'value'
@@ -1072,9 +1079,11 @@ mist-insights {
             containLabel: true
         },
         xAxis: [{
-            type: 'category',
-            boundaryGap: false,
-            data: ['1', '2', '3', '4']
+            type: 'time',
+            // boundaryGap: false,
+            // data: ['1', '2', '3', '4'],
+            // min: 0,
+            // max: 6
         }],
         yAxis: [{
             type: 'value'
@@ -1139,11 +1148,11 @@ mist-insights {
             containLabel: true
         },
         xAxis: [{
-            type: 'category',
-            data: ['Mon'],
-            axisTick: {
-                alignWithLabel: true
-            }
+            type: 'time',
+            // data: ['Mon'],
+            // axisTick: {
+            //     alignWithLabel: true
+            // },
         }],
         yAxis: [{
             type: 'value'
@@ -1410,29 +1419,22 @@ mist-insights {
 
         _updateCostData: function (history) {
             var costData = [],
-                machinesData = [],
-                labels = [];
+                machinesData = [];
+
             if (history) {
-                labels = history.map(function(datapoint) {
-                    if (['day', 'hour'].indexOf(this.timeParams.window) != -1)
-                        return moment(datapoint.date).format('HH:mm').toString();
-                    else
-                        return moment(datapoint.date).format('YYYY-MM-DD').toString();
-                }, this);
+                this.setXAxisMinMax();
                 costData = history.map(function(datapoint) {
-                    return datapoint.cost;
+                    return [moment(datapoint.date)._d, datapoint.cost];
                 });
                 machinesData = history.map(function(datapoint) {
-                    return datapoint.machine_count;
+                    return [moment(datapoint.date)._d, datapoint.machine_count];
                 });
             }
-
-            this.set('costGraphOptions.xAxis.0.data', labels);
+            
             this.set('costGraphOptions.series.0.data', costData);
             if (this.costGraph)
                 this.costGraph.setOption(this.costGraphOptions);
 
-            this.set('machinesGraphOptions.xAxis.0.data', labels);
             this.set('machinesGraphOptions.series.0.data', machinesData);
             if (this.machinesGraph)
                 this.machinesGraph.setOption(this.machinesGraphOptions);
@@ -1441,27 +1443,20 @@ mist-insights {
         _updateUsageData: function (history) {
             var usageData = [],
                 coresData = [],
-                labels = [],
                 usageListByCloud,
                 usageListByStack,
                 usageListByTag;
 
             if (history) {
-                labels = history.map(function(datapoint) {
-                    if (['day', 'hour'].indexOf(this.timeParams.window) != -1)
-                        return moment(datapoint.date).format('HH:mm').toString();
-                    else
-                        return moment(datapoint.date).format('YYYY-MM-DD').toString();
-                }, this);
+                this.setXAxisMinMax();
                 usageData = history.map(function(datapoint) {
-                    return datapoint.load;
+                    return [moment(datapoint.date)._d, datapoint.load];
                 });
                 coresData = history.map(function(datapoint) {
-                    return datapoint.cores;
+                    return [moment(datapoint.date)._d, datapoint.cores];
                 });
             }
 
-            this.set('usageGraphOptions.xAxis.0.data', labels);
             this.set('usageGraphOptions.series.0.data', coresData);
             this.set('usageGraphOptions.series.1.data', usageData);
             if (this.usageGraph)
@@ -1757,11 +1752,59 @@ mist-insights {
                 }
 
                 this.set('params', p);
-                if (this.$.costReportAjax)
+
+                if (this.$.costReportAjax){
                     this.debounce('costReportRequest', function() {
                         this.$.costReportAjax.generateRequest()
                     }, 100);
+                }
             }
+        },
+
+        setXAxisMinMax: function(){
+            var timewindow = this.timeParams.window,
+                timepast = this.timeParams.past;
+            var min, max, reference = moment().utc();
+
+            if (timewindow == 'hour'){
+                if (timepast)
+                    reference.subtract(timepast, 'H')
+            } else if (timewindow == 'day'){
+                if (timepast)
+                    reference.subtract(timepast, 'd')
+            } else if (timewindow == 'week'){
+                if (timepast)
+                    reference.subtract(timepast, 'w');
+            } else if (timewindow == 'month'){
+                if (timepast)
+                    reference.subtract(timepast, 'month')
+            } else if (timewindow == 'quarter'){
+                if (timepast)
+                    reference.subtract(timepast, 'quarter')
+            }
+
+            console.log('time min max ref', timewindow, reference._d, reference.endOf(timewindow), reference.startOf(timewindow));
+
+            if (timewindow == 'week'){
+                this.setXAxisMax(reference.endOf(timewindow).toDate());
+                this.setXAxisMin(reference.startOf(timewindow).add(1,'d').toDate());
+            }
+            else {
+                this.setXAxisMax(reference.endOf(timewindow).toDate());
+                this.setXAxisMin(reference.startOf(timewindow).toDate());
+            }
+        },
+
+        setXAxisMin: function(min){
+            this.set('costGraphOptions.xAxis.0.min', min);
+            this.set('usageGraphOptions.xAxis.0.min', min);
+            this.set('machinesGraphOptions.xAxis.0.min', min);
+        },
+
+        setXAxisMax: function(max){
+            this.set('costGraphOptions.xAxis.0.max', max);
+            this.set('usageGraphOptions.xAxis.0.max', max);
+            this.set('machinesGraphOptions.xAxis.0.max', max);
         },
 
         computeName: function(id) {
@@ -1834,7 +1877,7 @@ mist-insights {
         },
 
         _formatLargeNumber: function(inp) {
-            console.log('inp', typeof(inp), inp);
+            // console.log('inp', typeof(inp), inp);
             if (inp != undefined && inp != NaN)
                 return inp.formatLargeNumber(2);
             else
@@ -1842,7 +1885,7 @@ mist-insights {
         },
 
         _formatLargeInteger: function(inp) {
-            console.log('inp', typeof(inp), inp);
+            // console.log('inp', typeof(inp), inp);
             if (inp != undefined && inp != NaN)
                 return inp.formatLargeNumber(0);
             else
@@ -1868,18 +1911,24 @@ mist-insights {
                 }, 100);
                 return;
             }
-            if (e.detail.xhr.response)
+            if (e.detail.xhr.response && e.detail.xhr.response.history && e.detail.xhr.response.history.length){
                 this.set('costReport', e.detail.xhr.response);
+                this.$.usageReportAjax.generateRequest();
+            }
+            else
+                this.clearData();
 
             if (this.filterby.type == '')
                 this.updateFilterItems(this.costReport.group_by);
 
-            this.$.usageReportAjax.generateRequest();
         },
 
         handleResponseUsageReport: function(e) {
             console.log('handleResponseUsageReport');
-            this.set('usageReport', e.detail.xhr.response);
+            if (e.detail.xhr.response && e.detail.xhr.response.history && e.detail.xhr.response.history.length)
+                this.set('usageReport', e.detail.xhr.response);
+            else 
+                this.clearData('usage');
         },
 
         handleError: function(e) {
@@ -1887,7 +1936,7 @@ mist-insights {
             this.clearData();
         },
 
-        clearData: function(){
+        clearData: function(usage){
             var emptyCost = {
                 cost: undefined,
                 history: [],
@@ -1907,7 +1956,8 @@ mist-insights {
                 machine_count: {min: undefined, max: undefined, unique: undefined, miin: undefined}
             }
 
-            this.set('costReport', emptyCost);
+            if (!usage)
+                this.set('costReport', emptyCost);
             this.set('usageReport', emptyUsage);
         },
 
