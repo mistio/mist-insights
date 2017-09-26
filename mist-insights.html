@@ -13,7 +13,7 @@
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
-<script src="../moment/moment.js"></script>
+<script src="../moment/min/moment-with-locales.min.js"></script>
 <!--
 `mist-insights`
 usage example:
@@ -962,7 +962,7 @@ mist-insights {
     var COST_GRAPH_OPTIONS = {
         tooltip: {
             trigger: 'axis',
-            formatter: "{b}: <br/>${c}",
+            formatter: "{a}{b}:{c}",
             axisPointer: {
                 type: 'cross',
                 label: {
@@ -974,19 +974,21 @@ mist-insights {
             data: ['Cost per month']
         },
         grid: {
+            top: '4%',
             left: '3%',
             right: '4%',
-            bottom: '3%',
+            bottom: '5%',
             containLabel: true
         },
         xAxis: [{
             type: 'time',
-            // boundaryGap: false,
-            // data: [],
+            splitLine: {
+                show: false
+            },
             // axisLabel: {
             //     formatter: function (value, index) {
             //         if (index == 0)
-            //             return echarts.format.formatTime('yyyy-MM-dd hh:mm:ss', value)
+            //             return echarts.format.formatTime('yyyy-MM-dd hh:mm', value)
             //         return echarts.format.formatTime('hh:mm:ss', value)
             //     }
             // }
@@ -1024,7 +1026,7 @@ mist-insights {
         legend: {
             orient: 'vertical',
             x: 'left',
-            data: [1, 2, 3]
+            data: []
         },
         series: [{
             name: 'cost',
@@ -1075,15 +1077,14 @@ mist-insights {
         grid: {
             left: '3%',
             right: '4%',
-            bottom: '3%',
+            bottom: '5%',
             containLabel: true
         },
         xAxis: [{
             type: 'time',
-            // boundaryGap: false,
-            // data: ['1', '2', '3', '4'],
-            // min: 0,
-            // max: 6
+            splitLine: {
+                show: false
+            }
         }],
         yAxis: [{
             type: 'value'
@@ -1107,7 +1108,7 @@ mist-insights {
                         borderColor: "rgba(0,155,155,1)"
                     }
                 },
-                data: [120, 132, 101, 134]
+                data: []
             },
             {
                 name: 'Load',
@@ -1128,13 +1129,12 @@ mist-insights {
                         borderColor: "rgba(250,128,114,1)"
                     }
                 },
-                data: [120, 132, 101, 134]
+                data: []
             }
         ]
     };
     var MACHINES_GRAPH_OPTIONS = {
         color: ["rgba(0,155,155,0.2)"],
-        borderColor: ["rgba(0,155,155,1)"],
         tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -1142,17 +1142,20 @@ mist-insights {
             }
         },
         grid: {
+            top: '4%',
             left: '3%',
             right: '4%',
-            bottom: '3%',
+            bottom: '5%',
             containLabel: true
         },
         xAxis: [{
             type: 'time',
-            // data: ['Mon'],
-            // axisTick: {
-            //     alignWithLabel: true
-            // },
+            axisTick: {
+                alignWithLabel: true
+            },
+            splitLine: {
+                show: false
+            }
         }],
         yAxis: [{
             type: 'value'
@@ -1160,8 +1163,17 @@ mist-insights {
         series: [{
             name: 'machines',
             type: 'bar',
-            barWidth: '60%',
-            data: [10]
+            barMaxWidth: "60px",
+            barGap:'-100%',
+            data: [],
+            itemStyle: {
+                normal: {
+                    barBorderColor: ["rgba(0,155,155,1)"]
+                },
+                emphasis: {
+                    color: ["rgba(0,155,155,0.4)"]
+                }
+            }
         }]
     };
     Polymer({
@@ -1422,12 +1434,16 @@ mist-insights {
                 machinesData = [];
 
             if (history) {
-                this.setXAxisMinMax();
+                if (history[0])
+                    this.setXAxisMinMax(history[0].date,history[history.length-1].date);
+                else
+                    this.setXAxisMinMax();
+                console.log('history[0]',history[0]);
                 costData = history.map(function(datapoint) {
-                    return [moment(datapoint.date)._d, datapoint.cost];
+                    return [moment.utc(datapoint.date).toDate(), datapoint.cost];
                 });
                 machinesData = history.map(function(datapoint) {
-                    return [moment(datapoint.date)._d, datapoint.machine_count];
+                    return [moment.utc(datapoint.date).toDate(), datapoint.machine_count];
                 });
             }
             
@@ -1448,12 +1464,15 @@ mist-insights {
                 usageListByTag;
 
             if (history) {
-                this.setXAxisMinMax();
+                if (history[0])
+                    this.setXAxisMinMax(history[0].date,history[history.length-1].date);
+                else
+                    this.setXAxisMinMax();
                 usageData = history.map(function(datapoint) {
-                    return [moment(datapoint.date)._d, datapoint.load];
+                    return [moment.utc(datapoint.date).toDate(), datapoint.load];
                 });
                 coresData = history.map(function(datapoint) {
-                    return [moment(datapoint.date)._d, datapoint.cores];
+                    return [moment.utc(datapoint.date).toDate(), datapoint.cores];
                 });
             }
 
@@ -1761,11 +1780,10 @@ mist-insights {
             }
         },
 
-        setXAxisMinMax: function(){
+        setXAxisMinMax: function(datamin, datamax){
             var timewindow = this.timeParams.window,
                 timepast = this.timeParams.past;
-            var min, max, reference = moment().utc();
-
+            var min, max, reference = moment.utc();
             if (timewindow == 'hour'){
                 if (timepast)
                     reference.subtract(timepast, 'H')
@@ -1782,16 +1800,13 @@ mist-insights {
                 if (timepast)
                     reference.subtract(timepast, 'quarter')
             }
-
-            console.log('time min max ref', timewindow, reference._d, reference.endOf(timewindow), reference.startOf(timewindow));
-
-            if (timewindow == 'week'){
-                this.setXAxisMax(reference.endOf(timewindow).toDate());
-                this.setXAxisMin(reference.startOf(timewindow).add(1,'d').toDate());
-            }
-            else {
-                this.setXAxisMax(reference.endOf(timewindow).toDate());
-                this.setXAxisMin(reference.startOf(timewindow).toDate());
+            var start = reference.startOf(timewindow), end = moment(start).endOf(timewindow);
+            if (datamax && datamin){
+                this.setXAxisMax(moment.max(end, moment.utc(datamax)).toDate());
+                this.setXAxisMin(moment.min(start, moment.utc(datamin)).toDate());
+            } else {
+                this.setXAxisMax(end.toDate());
+                this.setXAxisMin(start.toDate());
             }
         },
 
@@ -1840,6 +1855,7 @@ mist-insights {
         },
 
         updateChartWidth: function() {
+            console.log('updateChartWidth');
             var parentWidth = this.$.graphRow.offsetWidth - 50;
 
             if (parentWidth / 2 > 400) {
