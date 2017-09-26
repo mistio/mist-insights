@@ -1134,7 +1134,7 @@ mist-insights {
         ]
     };
     var MACHINES_GRAPH_OPTIONS = {
-        color: ["rgba(0,155,155,0.2)"],
+        borderColor: ["rgba(0,155,155,1)"],
         tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -1158,22 +1158,28 @@ mist-insights {
             }
         }],
         yAxis: [{
-            type: 'value',
-            offset: 11
+            type: 'value'
         }],
         series: [{
             name: 'machines',
-            type: 'bar',
-            barMaxWidth: "20px",
-            data: [],
+            type: 'line',
+            // step: 'middle',
+            areaStyle: {
+                normal: {
+                    color: "rgba(0,155,155,0.2)"
+                }
+            },
+            lineStyle: {
+                normal: {
+                    color: "rgba(0,155,155,1)"
+                }
+            },
             itemStyle: {
                 normal: {
-                    barBorderColor: ["rgba(0,155,155,1)"]
-                },
-                emphasis: {
-                    color: ["rgba(0,155,155,0.4)"]
+                    borderColor: "rgba(0,155,155,1)"
                 }
-            }
+            },
+            data: []
         }]
     };
     Polymer({
@@ -1800,7 +1806,8 @@ mist-insights {
                 if (timepast)
                     reference.subtract(timepast, 'Q')
             }
-            var start = reference.startOf(timewindow), end = moment(start).endOf(timewindow);
+
+            var start = reference.startOf(timewindow.replace("week", "isoWeek")), end = moment(start).endOf(timewindow.replace("week", "isoWeek"));
             if (datamax && datamin){
                 this.setXAxisMax(moment.max(end, moment.utc(datamax)).toDate());
                 this.setXAxisMin(moment.min(start, moment.utc(datamin)).toDate());
