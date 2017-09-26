@@ -1158,13 +1158,13 @@ mist-insights {
             }
         }],
         yAxis: [{
-            type: 'value'
+            type: 'value',
+            offset: 11
         }],
         series: [{
             name: 'machines',
             type: 'bar',
-            barMaxWidth: "60px",
-            barGap:'-100%',
+            barMaxWidth: "20px",
             data: [],
             itemStyle: {
                 normal: {
@@ -1786,7 +1786,7 @@ mist-insights {
             var min, max, reference = moment.utc();
             if (timewindow == 'hour'){
                 if (timepast)
-                    reference.subtract(timepast, 'H')
+                    reference.subtract(timepast, 'h')
             } else if (timewindow == 'day'){
                 if (timepast)
                     reference.subtract(timepast, 'd')
@@ -1795,10 +1795,10 @@ mist-insights {
                     reference.subtract(timepast, 'w');
             } else if (timewindow == 'month'){
                 if (timepast)
-                    reference.subtract(timepast, 'month')
+                    reference.subtract(timepast, 'M')
             } else if (timewindow == 'quarter'){
                 if (timepast)
-                    reference.subtract(timepast, 'quarter')
+                    reference.subtract(timepast, 'Q')
             }
             var start = reference.startOf(timewindow), end = moment(start).endOf(timewindow);
             if (datamax && datamin){
