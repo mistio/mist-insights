@@ -1314,8 +1314,8 @@ mist-insights {
             },
             showClear: {
                 type: Boolean,
-                computed: '_computeShowClear(allowFilter, filterby.id.length)',
-                value: true
+                computed: '_computeShowClear(allowFilter, filterby.id, filterby.id.length)',
+                value: false
             },
             stackTerm: {
                 type: String,
@@ -1378,7 +1378,8 @@ mist-insights {
             this.set('allowFilter', cloud || stack || tag ? false : true);
         },
 
-        _computeShowClear: function(allowFilter, idLength) {
+        _computeShowClear: function(allowFilter, filterId, idLength) {
+            console.log('allowFilter', allowFilter, idLength)
             return allowFilter && idLength;
         },
 
