@@ -962,7 +962,7 @@ mist-insights {
     var COST_GRAPH_OPTIONS = {
         tooltip: {
             trigger: 'axis',
-            formatter: "{a}{b}:{c}",
+            // formatter: "{a}{b}:{c}",
             axisPointer: {
                 type: 'cross',
                 label: {
@@ -1020,8 +1020,8 @@ mist-insights {
     };
     var DRILL_COST_GRAPH_OPTIONS = {
         tooltip: {
-            trigger: 'item',
-            formatter: "{b} {a}: <br/>${c} ({d}%)"
+            trigger: 'item'
+            // formatter: "{b} {a}: <br/>${c} ({d}%)"
         },
         legend: {
             orient: 'vertical',
@@ -1029,7 +1029,7 @@ mist-insights {
             data: []
         },
         series: [{
-            name: 'cost',
+            name: 'Cost',
             type: 'pie',
             center: ['65%', '40%'],
             radius: ['50%', '70%'],
