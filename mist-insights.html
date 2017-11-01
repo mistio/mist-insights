@@ -1448,7 +1448,7 @@ mist-insights {
                     this.setXAxisMinMax();
                 console.log('history[0]',history[0]);
                 costData = history.map(function(datapoint) {
-                    return [moment.utc(datapoint.date).toDate(), datapoint.cost];
+                    return [moment.utc(datapoint.date).toDate(), datapoint.cost_per_month.mean];
                 });
                 machinesData = history.map(function(datapoint) {
                     return [moment.utc(datapoint.date).toDate(), datapoint.machine_count];
