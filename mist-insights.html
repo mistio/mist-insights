@@ -69,7 +69,7 @@ mist-insights {
 <dom-module id="mist-insights">
     <template>
         <style include="iron-flex iron-flex-alignment iron-flex-factors">
-         :host {
+        :host {
             display: block;
             /*--insights-general-font: {
                     font-family: 'Roboto', 'Noto', sans-serif;
@@ -167,33 +167,38 @@ mist-insights {
             --insights-legends-text-transform: none;
         }
 
-         :host(.cloudify) paper-input-container:hover {
+        :host(.cloudify) paper-input-container:hover {
             border-color: rgba(34, 36, 38, .35);
         }
 
-         :host(.cloudify) .smaller {
+        :host(.cloudify) .smaller {
             text-transform: none;
             font-size: 14px;
             color: black;
             font-weight: 700;
         }
 
-         :host(.cloudify) .infotext {
+        :host(.cloudify) .infotext {
             text-transform: none;
             font-size: 14px;
             color: black;
         }
 
-         :host(.cloudify) h2 {
+        :host(.cloudify) h2 {
             font-weight: bold;
             text-transform: none;
         }
 
-         :host(.cloudify) paper-material.section+paper-material {
+        :host paper-button.clear {
+            padding: 3px;
+            white-space: nowrap;
+        }
+
+        :host(.cloudify) paper-material.section+paper-material {
             border-top: 1px solid #ddd;
         }
 
-         :host(.cloudify) paper-button.clear {
+        :host(.cloudify) paper-button.clear {
             color: rgba(0, 0, 0, .6);
             box-shadow: 0 0 0 1px rgba(34, 36, 38, .15) inset;
             border-radius: 3px;
@@ -202,7 +207,7 @@ mist-insights {
             vertical-align: bottom;
         }
 
-         :host(.cloudify) paper-button.clear iron-icon {
+        :host(.cloudify) paper-button.clear iron-icon {
             width: 16px;
             margin-right: 8px;
         }
@@ -1314,7 +1319,7 @@ mist-insights {
             },
             showClear: {
                 type: Boolean,
-                computed: '_computeShowClear(allowFilter, filterby.id.length)',
+                computed: '_computeShowClear(allowFilter, filterby.*)',
                 value: true
             },
             stackTerm: {
@@ -1379,7 +1384,8 @@ mist-insights {
         },
 
         _computeShowClear: function(allowFilter, idLength) {
-            return allowFilter && idLength;
+            console.log('_computeShowClear', this.allowFilter, this.filterby.id.length );
+            return this.filterby.id.length > 0 && this.allowFilter;
         },
 
         initCharts: function() {
