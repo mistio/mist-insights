@@ -14,6 +14,8 @@
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
 <script src="../moment/min/moment-with-locales.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.8.5/echarts.min.js" integrity="sha256-7aRWxAaH0PFLbAt5oJLWIliWFHPZWuFbCGchtzd6njk=" crossorigin="anonymous"></script>
+
 <!--
 `mist-insights`
 usage example:
@@ -1348,12 +1350,14 @@ mist-insights {
         ],
 
         attached: function() {
-            if (typeof echarts == 'undefined')
+            /*if (typeof echarts == 'undefined' || typeof echarts.version == 'undefined')
                 this.importHref(this.resolveUrl('echarts-import.html'), this.initCharts, function(e) {
                     console.error('Failed to load echarts', e);
                 }, true);
             else
-                this.initCharts();
+                this.initCharts();*/
+
+            this.initCharts();
 
             if (!this.token)
                 this.uri = '';
