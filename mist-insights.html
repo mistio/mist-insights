@@ -1694,21 +1694,25 @@ mist-insights {
             } else if (this.model) {
                 clouds = this.model.cloudsArray;
                 stacks = this.model.stacksArray;
-                tags = this.model.machinesArray.filter(function(m) {
+                tags = [];
+                var taggedMachines = this.model.machinesArray && this.model.machinesArray.filter(function(m) {
                     return m.tags.length > 0
-                }).map(function(m) {
-                    for (var i = 0; i < m.tags.length; i++) {
-                        var postfix = '';
-                        if (m.tags[i].value != '') {
-                            postfix = '=' + m.tags[i].value;
-                        }
-                        return {
-                            'name': m.tags[i].key + postfix,
-                            'id': m.tags[i].key + postfix,
-                            'val': m.tags[i].val
-                        };
-                    }
                 });
+                if (taggedMachines) 
+                    taggedMachines.forEach(function(m) {
+                        console.log(m.tags.length)
+                        for (var i = 0; i < m.tags.length; i++) {
+                            var postfix = '';
+                            if (m.tags[i].value != '') {
+                                postfix = '=' + m.tags[i].value;
+                            }
+                            tags.push({
+                                'name': m.tags[i].key + postfix,
+                                'id': m.tags[i].key + postfix,
+                                'val': m.tags[i].val
+                            });
+                        }
+                    });
                 var names = tags.map(function(t) {
                     return t.name;
                 });
