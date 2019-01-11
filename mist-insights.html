@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../paper-styles/paper-styles.html">
 <link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../paper-button/paper-button.html">
@@ -63,6 +64,8 @@ mist-insights {
         /*--material-css*/
         --material-css-padding: 24px;
         --material-css-margin-bottom: 16px;
+        --paper-material-bg-color: #fff;
+        --paper-material-box-shadow: 0 none;
 
         --red-color: #e82438;
         --green-color: #38b549;
@@ -299,6 +302,8 @@ mist-insights {
             /*@apply --material-css;*/
             @apply --material-shadow;
             padding: var(--material-css-padding);
+            background-color: var(--paper-material-bg-color, #fff);
+            box-shadow: var(--paper-material-box-shadow, var(--shadow-elevation-2dp_-_box-shadow));
         }
 
         paper-material.margin-bottom {
