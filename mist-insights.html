@@ -1580,12 +1580,10 @@ mist-insights {
             var rate = rate || 1,
                 ratedArray = [];
             if (arrayCosts && arrayCosts.length) {
-                // ratedArray = arrayCosts.map(x => x / rate);
                 for (var i = 0; i < arrayCosts.length; i++) {
                     if (arrayCosts[i].length) {
                         arrayCosts[i][1] = this._ratedCost(arrayCosts[i][1],rate);
-                    }
-                    else if (arrayCosts[i].value != undefined) {
+                    } else if (arrayCosts[i].value != undefined) {
                         arrayCosts[i].value = this._ratedCost(arrayCosts[i].value,rate);
                     }
                     ratedArray.push(arrayCosts[i]);
@@ -1595,8 +1593,7 @@ mist-insights {
         },
 
         _ratedCost: function(cost, rate) {
-            var rate = rate || 1;
-            return cost ? cost/rate : cost;
+            return cost * (rate || 1);
         },
 
         sortByMachineCount: function (array) {
@@ -1955,7 +1952,7 @@ mist-insights {
             var decimals = decimals || 0;
             if (inp != undefined && inp != NaN) {
                 if (type == 'cost') {
-                    inp = inp/this.currency.rate;
+                    inp = inp * this.currency.rate;
                 }
                 return inp.formatLargeNumber(decimals);
             } else {
