@@ -25,7 +25,8 @@ usage example:
         stack-term="deployment"
         cloud="cloud_id"
         uri="http://localhost"
-        token="token_string">
+        token="token_string"
+        currency=[[currency]]>
     </mist-insights>
 
 period: month, day, week, quarter
@@ -33,6 +34,7 @@ filter: cloud="cloud_id"
         stack="stack_id"
         tag="tag"
 stack-term="deployment"
+currency: Object ex1. {sign: "$", rate: 1}, ex2. {sign: '₹', rate:0.014}
 
 @demo demo/index.html
 -->
@@ -515,7 +517,7 @@ mist-insights {
             <div id="quick-overview-data" class="quick-overview container layout horizontal">
                 <div id="quick-overview-cost" class="flex-1">
                     <div class="smaller">Cost</div>
-                    <h2 class="cost" hidden$="[[isNull(costReport.cost)]]"><span class="sup">$</span>[[_formatLargeNumber(costReport.cost)]]</h2>
+                    <h2 class="cost" hidden$="[[isNull(costReport.cost)]]"><span class="sup">[[currency.sign]]</span>[[_formatLargeNumber(costReport.cost,2,'cost')]]</h2>
                     <div class="no-data" hidden$="[[!isNull(costReport.cost)]]">No data</div>
                     <div class="smaller" hidden$="[[isNull(costReport.comparative_cost)]]">
                         <span class$="[[percentageSignToText(costReport.comparative_cost)]]">
@@ -563,7 +565,7 @@ mist-insights {
                 </div>
                 <div class="current-value">
                     <div class="subtitle smaller">Cost [[timeToText(pastItems,timeParams.past)]]</div>
-                    <h2 class="cost"><span class="sup">$</span>[[_formatLargeNumber(costReport.cost)]]</h2>
+                    <h2 class="cost"><span class="sup">[[currency.sign]]</span>[[_formatLargeNumber(costReport.cost,2,'cost')]]</h2>
                 </div>
             </div>
         </paper-material>
@@ -574,7 +576,7 @@ mist-insights {
             <div>
                 <div class="comparative flexchild" hidden$="[[isEmpty(costReport.history)]]">
                     <div class="infotext inline">
-                        <strong>$[[lastValue(costReport.history,'cost_per_month')]]</strong><span class="lowercase">/month</span> run rate
+                        <strong>[[currency.sign]][[lastValue(costReport.history,'cost_per_month')]]</strong><span class="lowercase">/month</span> run rate
                     </div>
                     <div class="infotext inline" hidden$="[[isNull(costReport.comparative_cost)]]">
                         <span class$="[[percentageSignToText(costReport.comparative_cost)]]">
@@ -583,14 +585,14 @@ mist-insights {
                         </span>
                         previous [[timeParams.window]]
                     </div>
-                    <div class="infotext inline"> Cost max: $[[_formatLargeNumber(costReport.cost_per_month.max)]]/<span class="lowercase">month</span>,
-                        avg: $[[_formatLargeNumber(costReport.cost_per_month.mean)]]/<span class="lowercase">month</span>,
-                        min: $[[_formatLargeNumber(costReport.cost_per_month.min)]]/<span class="lowercase">month</span>
+                    <div class="infotext inline"> Cost max: [[currency.sign]][[_formatLargeNumber(costReport.cost_per_month.max,2,'cost')]]/<span class="lowercase">month</span>,
+                        avg: [[currency.sign]][[_formatLargeNumber(costReport.cost_per_month.mean,2,'cost')]]/<span class="lowercase">month</span>,
+                        min: [[currency.sign]][[_formatLargeNumber(costReport.cost_per_month.min,2,'cost')]]/<span class="lowercase">month</span>
                     </div>
                 </div>
                 <div class="layout horizontal wrap">
                     <div class="graphArea flex-1">
-                        <div class="smaller">Run Rate ($/<span class="lowercase">month</span>)</div>
+                        <div class="smaller">Run Rate ([[currency.sign]]/<span class="lowercase">month</span>)</div>
                         <div class="no-data" hidden$="[[!isEmpty(costReport.history)]]">No cost data available</div>
                         <div id="costGraph" class="graph" style$="width: [[costWidth]]px;"></div>
                     </div>
@@ -613,7 +615,7 @@ mist-insights {
                                                     [[item.machine_count.unique]] machines
                                                 </div>
                                                 <span class="cost-column">
-                                                $[[_formatLargeNumber(item.cost)]]
+                                                [[currency.sign]][[_formatLargeNumber(item.cost,2,'cost')]]
                                             </span>
                                             </div>
                                         </template>
@@ -638,7 +640,7 @@ mist-insights {
                                                 [[item.machine_count.unique]] machines
                                             </div>
                                             <span class="cost-column">
-                                            $[[_formatLargeNumber(item.cost)]]
+                                            $[[_formatLargeNumber(item.cost,2,'cost')]]
                                         </span>
                                         </div>
                                     </template>
@@ -660,7 +662,7 @@ mist-insights {
                                                 [[item.machine_count.unique]] machines
                                             </div>
                                             <span class="cost-column">
-                                                $[[_formatLargeNumber(item.cost)]]
+                                                $[[_formatLargeNumber(item.cost,2,'cost')]]
                                             </span>
                                         </div>
                                     </template>
@@ -911,7 +913,7 @@ mist-insights {
                                             [[item.machine_count.unique]] machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[_formatLargeNumber(item.cost)]]
+                                            $[[_formatLargeNumber(item.cost,2,'cost')]]
                                         </span>
                                     </div>
                                 </template>
@@ -933,7 +935,7 @@ mist-insights {
                                             [[item.machine_count.unique]] machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[_formatLargeNumber(item.cost)]]
+                                            $[[_formatLargeNumber(item.cost,2,'cost')]]
                                         </span>
                                     </div>
                                 </template>
@@ -955,7 +957,7 @@ mist-insights {
                                             [[item.machine_count.unique]] machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[_formatLargeNumber(item.cost)]]
+                                            $[[_formatLargeNumber(item.cost,2,'cost')]]
                                         </span>
                                     </div>
                                 </template>
@@ -1336,6 +1338,9 @@ mist-insights {
             retryCount: {
                 type: Number,
                 value: 0
+            },
+            currency: {
+                type: Object
             }
         },
 
@@ -1345,22 +1350,25 @@ mist-insights {
 
         observers: [
             '_computePastItems(timeParams.*)',
-            '_updateCostData(costReport.history)',
+            '_updateCostData(costReport.history, currency)',
             '_updateUsageData(usageReport.history)',
             '_computeFilterbyItems(filterby.*)',
             '_updateCombinedParams(timeParams.*, filterby.*)',
-            '_updateCostDrillData(costReport.group_by, filterby.id)',
+            '_updateCostDrillData(costReport.group_by, filterby.id, currency)',
             '_updateTenant(tenant)',
             '_updateFilterByStackName(stackName)'
         ],
 
+        ready: function() {},
+
         attached: function() {
-            /*if (typeof echarts == 'undefined' || typeof echarts.version == 'undefined')
-                this.importHref(this.resolveUrl('echarts-import.html'), this.initCharts, function(e) {
-                    console.error('Failed to load echarts', e);
-                }, true);
-            else
-                this.initCharts();*/
+            // if (typeof echarts == 'undefined' || typeof echarts.version == 'undefined') {
+            //     this.importHref(this.resolveUrl('echarts-import.html'), this.initCharts, function(e) {
+            //         console.error('Failed to load echarts', e);
+            //     }, true);
+            // } else {
+            //     this.initCharts();
+            // }
 
             this.initCharts();
 
@@ -1452,7 +1460,7 @@ mist-insights {
                 return perc > 0 ? 'icons:arrow-upward' : 'icons:arrow-downward'
         },
 
-        _updateCostData: function (history) {
+        _updateCostData: function (history, currency) {
             var costData = [],
                 machinesData = [];
 
@@ -1470,7 +1478,7 @@ mist-insights {
                 });
             }
             
-            this.set('costGraphOptions.series.0.data', costData);
+            this.set('costGraphOptions.series.0.data', this._ratedCosts(costData, this.currency.rate));
             if (this.costGraph)
                 this.costGraph.setOption(this.costGraphOptions);
 
@@ -1525,7 +1533,7 @@ mist-insights {
             console.log('updated usage data');
         },
 
-        _updateCostDrillData: function (groupby, filterbyname) {
+        _updateCostDrillData: function (groupby, filterbyname, currency) {
             var costRingData = [],
                 costRingLabels = [],
                 costListByCloud,
@@ -1555,7 +1563,7 @@ mist-insights {
             }
 
             // fill in ring
-            this.set('drillcostgraphOptions.series.0.data', costRingData);
+            this.set('drillcostgraphOptions.series.0.data', this._ratedCosts(costRingData,this.currency.rate));
             this.set('drillcostgraphOptions.legend.data', costRingLabels);
             console.log('this.drillcostgraphOptions', this.drillcostgraphOptions);
             if (this.drillcostgraph && this.drillcostgraphOptions)
@@ -1566,6 +1574,26 @@ mist-insights {
             this.set('costListByStack', costListByStack || false);
             this.set('costListByTag', costListByTag || false);
 
+        },
+
+        _ratedCosts: function(arrayCosts, rate) {
+            var rate = rate || 1,
+                ratedArray = [];
+            if (arrayCosts && arrayCosts.length) {
+                for (var i = 0; i < arrayCosts.length; i++) {
+                    if (arrayCosts[i].length) {
+                        arrayCosts[i][1] = this._ratedCost(arrayCosts[i][1],rate);
+                    } else if (arrayCosts[i].value != undefined) {
+                        arrayCosts[i].value = this._ratedCost(arrayCosts[i].value,rate);
+                    }
+                    ratedArray.push(arrayCosts[i]);
+                }
+            }
+            return ratedArray;
+        },
+
+        _ratedCost: function(cost, rate) {
+            return cost * (rate || 1);
         },
 
         sortByMachineCount: function (array) {
@@ -1919,12 +1947,17 @@ mist-insights {
             return ind + 1;
         },
 
-        _formatLargeNumber: function(inp) {
+        _formatLargeNumber: function(inp,decimals,type) {
             // console.log('inp', typeof(inp), inp);
-            if (inp != undefined && inp != NaN)
-                return inp.formatLargeNumber(2);
-            else
+            var decimals = decimals || 0;
+            if (inp != undefined && inp != NaN) {
+                if (type == 'cost') {
+                    inp = inp * this.currency.rate;
+                }
+                return inp.formatLargeNumber(decimals);
+            } else {
                 return '';
+            }
         },
 
         _formatLargeInteger: function(inp) {
@@ -1957,21 +1990,27 @@ mist-insights {
             if (e.detail.xhr.response && e.detail.xhr.response.history && e.detail.xhr.response.history.length){
                 this.set('costReport', e.detail.xhr.response);
                 this.$.usageReportAjax.generateRequest();
-            }
-            else
+            } else {
                 this.clearData();
+            }
 
-            if (this.filterby.type == '')
+            if (this.filterby.type == '') {
                 this.updateFilterItems(this.costReport.group_by);
+            }
+
+            this.resizeGraphs();
 
         },
 
         handleResponseUsageReport: function(e) {
             console.log('handleResponseUsageReport');
-            if (e.detail.xhr.response && e.detail.xhr.response.history && e.detail.xhr.response.history.length)
+            if (e.detail.xhr.response && e.detail.xhr.response.history && e.detail.xhr.response.history.length) {
                 this.set('usageReport', e.detail.xhr.response);
-            else 
+            } else {
                 this.clearData('usage');
+            }
+
+            this.resizeGraphs();
         },
 
         handleError: function(e) {
@@ -2005,7 +2044,7 @@ mist-insights {
         },
 
         lastValue: function(history, val){
-            return history.length > 1 ? this._formatLargeNumber(history[history.length-1][val]) : '';
+            return history.length > 1 ? this._formatLargeNumber(history[history.length-1][val],2,'cost') : '';
         },
 
         _updateTenant: function(tenant) {
