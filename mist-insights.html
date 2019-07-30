@@ -517,7 +517,7 @@ mist-insights {
             <div id="quick-overview-data" class="quick-overview container layout horizontal">
                 <div id="quick-overview-cost" class="flex-1">
                     <div class="smaller">Cost</div>
-                    <h2 class="cost" hidden$="[[isNull(costReport.cost)]]"><span class="sup">[[currency.sign]]</span>[[_formatLargeNumber(costReport.cost,2,'cost')]]</h2>
+                    <h2 class="cost" hidden$="[[isNull(costReport.cost)]]"><span class="sup">[[currency.sign]]</span>[[_convertCurrency(costReport.cost,currency.rate,2)]]</h2>
                     <div class="no-data" hidden$="[[!isNull(costReport.cost)]]">No data</div>
                     <div class="smaller" hidden$="[[isNull(costReport.comparative_cost)]]">
                         <span class$="[[percentageSignToText(costReport.comparative_cost)]]">
@@ -565,7 +565,7 @@ mist-insights {
                 </div>
                 <div class="current-value">
                     <div class="subtitle smaller">Cost [[timeToText(pastItems,timeParams.past)]]</div>
-                    <h2 class="cost"><span class="sup">[[currency.sign]]</span>[[_formatLargeNumber(costReport.cost,2,'cost')]]</h2>
+                    <h2 class="cost"><span class="sup">[[currency.sign]]</span>[[_convertCurrency(costReport.cost,currency.rate,2)]]</h2>
                 </div>
             </div>
         </paper-material>
@@ -585,9 +585,9 @@ mist-insights {
                         </span>
                         previous [[timeParams.window]]
                     </div>
-                    <div class="infotext inline"> Cost max: [[currency.sign]][[_formatLargeNumber(costReport.cost_per_month.max,2,'cost')]]/<span class="lowercase">month</span>,
-                        avg: [[currency.sign]][[_formatLargeNumber(costReport.cost_per_month.mean,2,'cost')]]/<span class="lowercase">month</span>,
-                        min: [[currency.sign]][[_formatLargeNumber(costReport.cost_per_month.min,2,'cost')]]/<span class="lowercase">month</span>
+                    <div class="infotext inline"> Cost max: [[currency.sign]][[_convertCurrency(costReport.cost_per_month.max,currency.rate,2)]]/<span class="lowercase">month</span>,
+                        avg: [[currency.sign]][[_convertCurrency(costReport.cost_per_month.mean,currency.rate,2)]]/<span class="lowercase">month</span>,
+                        min: [[currency.sign]][[_convertCurrency(costReport.cost_per_month.min,currency.rate,2)]]/<span class="lowercase">month</span>
                     </div>
                 </div>
                 <div class="layout horizontal wrap">
@@ -615,7 +615,7 @@ mist-insights {
                                                     [[item.machine_count.unique]] machines
                                                 </div>
                                                 <span class="cost-column">
-                                                [[currency.sign]][[_formatLargeNumber(item.cost,2,'cost')]]
+                                                [[currency.sign]][[_convertCurrency(item.cost,currency.rate,2)]]
                                             </span>
                                             </div>
                                         </template>
@@ -640,7 +640,7 @@ mist-insights {
                                                 [[item.machine_count.unique]] machines
                                             </div>
                                             <span class="cost-column">
-                                            $[[_formatLargeNumber(item.cost,2,'cost')]]
+                                            [[currency.sign]][[_convertCurrency(item.cost,currency.rate,2)]]
                                         </span>
                                         </div>
                                     </template>
@@ -662,7 +662,7 @@ mist-insights {
                                                 [[item.machine_count.unique]] machines
                                             </div>
                                             <span class="cost-column">
-                                                $[[_formatLargeNumber(item.cost,2,'cost')]]
+                                                [[currency.sign]][[_convertCurrency(item.cost,currency.rate,2)]]
                                             </span>
                                         </div>
                                     </template>
@@ -913,7 +913,7 @@ mist-insights {
                                             [[item.machine_count.unique]] machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[_formatLargeNumber(item.cost,2,'cost')]]
+                                            [[currency.sign]][[_convertCurrency(item.cost,currency.rate,2)]]
                                         </span>
                                     </div>
                                 </template>
@@ -935,7 +935,7 @@ mist-insights {
                                             [[item.machine_count.unique]] machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[_formatLargeNumber(item.cost,2,'cost')]]
+                                            [[currency.sign]][[_convertCurrency(item.cost,currency.rate,2)]]
                                         </span>
                                     </div>
                                 </template>
@@ -957,7 +957,7 @@ mist-insights {
                                             [[item.machine_count.unique]] machines
                                         </div>
                                         <span class="cost-column">
-                                            $[[_formatLargeNumber(item.cost,2,'cost')]]
+                                            [[currency.sign]][[_convertCurrency(item.cost,currency.rate,2)]]
                                         </span>
                                     </div>
                                 </template>
@@ -1951,14 +1951,18 @@ mist-insights {
             // console.log('inp', typeof(inp), inp);
             var decimals = decimals || 0;
             if (inp != undefined && inp != NaN) {
-                if (type == 'cost') {
-                    inp = inp * this.currency.rate;
-                }
                 return inp.formatLargeNumber(decimals);
             } else {
                 return '';
             }
         },
+
+        _convertCurrency: function(cost,rate,decimals) {
+            var rate = rate || 1,
+                converted = cost * rate,
+                decimals = decimals || 2;
+            return converted.formatLargeNumber(decimals);
+        }, 
 
         _formatLargeInteger: function(inp) {
             // console.log('inp', typeof(inp), inp);
