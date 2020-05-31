@@ -1563,7 +1563,7 @@ mist-insights {
             }
 
             // fill in ring
-            this.set('drillcostgraphOptions.series.0.data', this._ratedCosts(costRingData,this.currency.rate));
+            this.set('drillcostgraphOptions.series.0.data', this._ratedCosts(costRingData, this.currency && this.currency.rate || 1));
             this.set('drillcostgraphOptions.legend.data', costRingLabels);
             console.log('this.drillcostgraphOptions', this.drillcostgraphOptions);
             if (this.drillcostgraph && this.drillcostgraphOptions)
