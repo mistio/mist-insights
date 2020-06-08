@@ -2198,7 +2198,7 @@ mist-insights {
 
                     // fetching the by tag cost list and if there are entries placing them in the pdf
                     var sortedByTagList = graphs.querySelector('#costListByTag').querySelector(".list").querySelectorAll('.layout.horizontal');
-                    if(sortedByTagList.length >= 0){
+                    if(sortedByTagList.length > 0){
                         offset += 8;
                         pdf.setTextColor(128);
                         pdf.setFontSize(14);
