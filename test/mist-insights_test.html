@@ -9,7 +9,7 @@
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <link rel="import" href="../mist-insights.html">
+    <script type="module" src="../mist-insights.js"></script>
   </head>
   <body>
     <test-fixture id="basic">
@@ -18,13 +18,14 @@
       </template>
     </test-fixture>
 
-    <script>
-      suite('mist-insights', function() {
-        test('instantiating the element works', function() {
-          var element = fixture('basic');
-          assert.equal(element.is, 'mist-insights');
-        });
-      });
-    </script>
+    <script type="module">
+import '../mist-insights.js';
+suite('mist-insights', function() {
+  test('instantiating the element works', function() {
+    var element = fixture('basic');
+    assert.equal(element.is, 'mist-insights');
+  });
+});
+</script>
   </body>
 </html>

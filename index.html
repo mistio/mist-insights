@@ -8,9 +8,13 @@
 
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
 
-    <link rel="import" href="../iron-component-page/iron-component-page.html">
+    
   </head>
   <body>
-    <iron-component-page src="mist-insights.html"></iron-component-page>
+    <script type="module">
+      import "@polymer/iron-component-page/iron-component-page"
+      import "mist-insights.js"
+      <iron-component-page src="mist-insights.js"></iron-component-page>  
+    </script>
   </body>
 </html>
