@@ -1,14 +1,12 @@
 {
-  "entrypoint": "mist-insights.html",
+  "entrypoint": "index.html",
+  "shell": "mist-insights.js",
   "sources": [
     "src/**/*",
     "data/**/*",
-    "images/**/*",
-    "bower.json"
+    "images/**/*"
   ],
   "extraDependencies": [
-    "echarts-import.html",
-    "bower_components/echarts/dist/echarts.min.js"
   ],
   "builds": [{
     "name": "bundled",
@@ -24,7 +22,7 @@
   }],
   "lint": {
     "rules": [
-      "polymer-2-hybrid"
+      "polymer-3"
     ]
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@polymer/mist-insights",
+  "name": "@mistio/mist-insights",
   "version": "3.0.0-beta",
   "resolutions": {
     "inherits": "2.0.3",
