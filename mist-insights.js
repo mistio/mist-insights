@@ -1611,7 +1611,7 @@ Polymer({
 
   _computePastItems: function (timeParamsChangeRecord) {
       // console.log("loadingData", this.loadingData);
-      const items = [];
+      let items = [];
       if (this.timeParams.window == "hour") {
           items.push({
               value: 0,
