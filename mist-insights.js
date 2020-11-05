@@ -7,12 +7,10 @@ import "@polymer/paper-icon-button/paper-icon-button.js";
 import "@polymer/paper-spinner/paper-spinner.js";
 import "@polymer/paper-listbox/paper-listbox.js";
 import "@polymer/paper-dropdown-menu/paper-dropdown-menu.js";
-import "@polymer/paper-spinner/paper-spinner.js";
-import "@polymer/paper-styles/paper-styles.js";
 import "@polymer/iron-icons/iron-icons.js";
 import "@polymer/iron-flex-layout/iron-flex-layout-classes.js";
 import "@polymer/iron-media-query/iron-media-query.js";
-import "@polymer/iron-resizable-behavior/iron-resizable-behavior.js";
+import { IronResizableBehavior } from "@polymer/iron-resizable-behavior/iron-resizable-behavior.js";
 import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import moment from 'moment/src/moment.js';
@@ -75,7 +73,7 @@ mist-insights {
         --green-color: #38b549;
       }
  */
-var COST_GRAPH_OPTIONS = {
+const COST_GRAPH_OPTIONS = {
     tooltip: {
         trigger: 'axis',
         // formatter: "{a}{b}:{c}",
@@ -1206,7 +1204,7 @@ Polymer({
 
   properties: {
       behaviors: [
-          Polymer.IronResizableBehavior
+        IronResizableBehavior
       ],
       model: {
           type: Object,
@@ -1456,8 +1454,8 @@ Polymer({
   },
 
   _updateCostData: function (history, currency) {
-      const costData = [];
-      const machinesData = [];
+      let costData = [];
+      let machinesData = [];
 
       if (history) {
           if (history[0])
@@ -1482,8 +1480,8 @@ Polymer({
           this.machinesGraph.setOption(this.machinesGraphOptions);
   },
 
-  _updateUsageData: function (history) {
-      const usageData = [];
+  _updateUsageData(history) {
+      let usageData = [];
       let coresData = [];
       let usageListByCloud;
       let usageListByStack;
@@ -1529,8 +1527,8 @@ Polymer({
   },
 
   _updateCostDrillData (groupby, filterbyname, currency) {
-      const costRingData = [];
-      const costRingLabels = [];
+      let costRingData = [];
+      let costRingLabels = [];
       let costListByCloud;
       let costListByStack;
       let costListByTag;
@@ -1572,7 +1570,7 @@ Polymer({
   },
 
   _ratedCosts(arrayCosts, rate) {
-      const rate = rate || 1;
+      rate = rate || 1;
       const ratedArray = [];
       if (arrayCosts && arrayCosts.length) {
           for (let i = 0; i < arrayCosts.length; i++) {
@@ -1943,7 +1941,7 @@ Polymer({
 
   _formatLargeNumber: function(inp,decimals,type) {
       // console.log('inp', typeof(inp), inp);
-      let decimals = decimals || 0;
+      decimals = decimals || 0;
       if (inp != undefined && inp != NaN) {
           return inp.formatLargeNumber(decimals);
       } else {
@@ -1951,11 +1949,12 @@ Polymer({
       }
   },
 
-  _convertCurrency: function(cost,rate,decimals) {
-      let rate = rate || 1;
+  _convertCurrency(cost,rate,decimals) {
+      rate = rate || 1;
       const converted = cost * rate;
-      let decimals = decimals || 2;
-      return converted.formatLargeNumber(decimals);
+      decimals = decimals || 2;
+      if (converted != undefined && !Number.isNaN(converted))
+        return converted.formatLargeNumber(decimals);
   },
 
   _formatLargeInteger: function(inp) {
