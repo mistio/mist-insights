@@ -6,11 +6,15 @@
 
     <title>mist-insights</title>
 
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
 
-    <link rel="import" href="../iron-component-page/iron-component-page.html">
   </head>
   <body>
-    <iron-component-page src="mist-insights.html"></iron-component-page>
+    <script type="module">
+      import "./mist-insights.js"
+    </script>
+    <mist-insights period="month" stack-term="" cloud="es123232"
+                   uri=""
+                   token="token"
+                   currency="$"></mist-insights>
   </body>
 </html>
