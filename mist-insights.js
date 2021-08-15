@@ -723,7 +723,7 @@ Polymer({
                     <paper-dropdown-menu id="filterbyNameDd" no-label-float="" noink="">
                         <paper-listbox id="filterbyName" slot="dropdown-content" class="dropdown-content" attr-for-selected="value" selected="{{filterby.id}}">
                             <template is="dom-repeat" items="{{filterbyItems}}">
-                                <paper-item value="[[item.id]]" data-name\$="[[item.name]][[item.title]]">[[item.name]][[item.title]]</paper-item>
+                                <paper-item value="[[item.id]]" data-name\$="[[item.name]]">[[item.name]]</paper-item>
                             </template>
                             <paper-item disabled="" hidden\$="[[!filterbyDisable]]">
                                 <span hidden\$="[[!filterby.type]]">no [[_display(filterby.type)]]s</span>
@@ -1875,7 +1875,7 @@ Polymer({
               return id;
           } else if (this.filterby.type == 'cloud') {
               if (!this.token)
-                  return this.model.clouds[id].title;
+                  return this.model.clouds[id].name;
               else
                   return this.clouds && this.clouds.find(function(c) {
                       return c.id == id;
